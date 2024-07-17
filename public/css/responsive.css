@@ -1,0 +1,520 @@
+@media screen and (max-width:1024px){
+    .menu-toggle{
+        display: flex;
+        width: 43%;
+    }
+
+    .header-nav-section .nav-menu{
+        top:100px;
+        left: 0px;
+        position: absolute!important;
+        width: 100%;
+        flex-direction: column;
+        gap:15px;
+        padding:0px 20px;
+        background-color: #053944;
+        border-radius: 20px;
+        height: 0px;
+        overflow: hidden;
+    }
+
+    .header-nav-section .nav-menu.open{
+        padding:30px 20px;
+        height: auto;
+    }
+
+    .header-brand{
+        width: 30%;
+    }
+
+    .haeder-search form{
+        gap:0px;
+        padding:10px 7px 10px 15px;
+    }
+
+    .banner{
+        height: 550px;
+    }
+
+    .inner-banner-sec{
+        height: 300px;
+    }
+
+    .search-btn{
+        width: 20%;
+    }
+
+    .banner-title{
+        text-align: center;
+        line-height: 1.2em;
+    }
+
+    .dropdown-field{
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .select-view{
+        width:100%;
+        margin-top:-50px;
+    }
+
+    .list-filtering{
+        gap:25px;
+        flex-direction: column-reverse;
+    }
+
+    .dropdown-field select{
+        width: 30%;
+    }
+
+    .listing-filter{
+        padding:40px 20px;
+    }
+
+    .dropdown-field .result-btn{
+        width: 33.3%;
+    }
+
+    .dropdown-field .result-btn img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .dropdown-field .result-btn input[type="button"]{
+        padding:10px;
+    }
+
+    .result-btn input[type="button"]{
+        text-align: left;
+    }
+
+
+
+    .listing-result{
+        flex-direction: column;
+    }
+
+    .list-items{
+        width: 100%;
+        align-items: center;
+    }
+
+    .listing-map{
+        width: 100%!important;
+    }
+
+
+
+    .top-footer{
+        padding:40px 20px;
+        flex-direction: column;
+        gap:40px;
+    }
+
+    .top-footer .footer-content{
+        width: 100%;
+        align-items: center;
+    }
+
+    .footerForm{
+        width: 70%;
+    }
+
+    .footerForm .result-btn input[type="submit"]{
+        text-align: left;
+    }
+
+    .top-footer .footer-content h2{
+        text-align: center;
+    }
+
+    .footer-cont-top{
+        align-items: center;
+    }
+
+    .footer-cont-top .footer-info p {
+        text-align: center;
+    }
+
+    .social-icons{
+        justify-content: center;
+    }
+
+
+
+
+
+
+
+
+    /* Inner Listing */
+
+
+
+    .list-content{
+        flex-direction: column;
+    }
+
+
+    .listing-info, .listing-sidebar{
+        width: 100%;
+    }
+
+    .subs-sec-content{
+        flex-direction: column-reverse;
+    }
+
+    .subs-sec-content img, .subs-text-sec{
+        width: 100%;
+    }
+
+    .subs-text-sec{
+        padding:30px;
+    }
+
+    .subs-btn img{
+        width: 15%;
+    }
+
+    .lead-prop .agent-img, .agent-list ul li img{
+        width: 10%;
+    }
+
+
+
+
+    .nav-menu li a{
+        pointer-events: none;
+    }
+
+    .contactMenu{
+        pointer-events: visible!important;
+    }
+
+
+
+    .menu-dropdown{
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 0px;
+        overflow: hidden;
+        transition: .4s;
+    }
+
+
+    .nav-menu li:hover .menu-dropdown{
+        height: auto;
+    }
+
+    .footer-cont-top .nav-menu li{
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+
+    .prop-type{
+        width: 18%;
+    }
+
+    .prop-list.tenant{
+        width: 160px;
+    }
+
+    .prop-list.loc li{
+        display: flex!important;
+        flex-direction: column;
+        gap:10px;
+    }
+
+    .prop-list.loc input[name="zip-code"]{
+        width: 100%!important;
+    }
+
+
+}
+
+
+@media screen and (max-width:500px) {
+    .menu-toggle{
+        width: 80px;
+        padding: 15px;
+        align-items: center;
+    }
+
+    .header-search{
+        font-size:0px;
+        position: absolute;
+        width: 40px;
+        height: 40px;
+    }
+
+    .header-search::placeholder{
+        font-size: 0px;
+    }
+
+    .haeder-search{
+        width: 60px;
+    }
+
+    .haeder-search .search-btn{
+        width: 40px;
+    }
+
+    .haeder-search form {
+        position: relative;
+        gap:0px;
+        padding:7px;
+    }
+
+    .header-nav-section{
+        gap:20px;
+    }
+
+    .header-brand{
+        width:55%;
+    }
+
+
+    .banner-title{
+        font-size: 40px;
+    }
+
+    .search-section{
+        width: 100%;
+        flex-direction: column;
+        gap:20px;
+    }
+
+    .banner-search{
+        width: 100%;
+    }
+
+
+    .select-view{
+        margin: 0px;
+    }
+
+    .list-filtering{
+        flex-direction: column;
+    }
+
+    .dropdown-field select, .dropdown-field .result-btn{
+        width: 100%;
+    }
+
+    .listing-filter{
+        gap:30px;
+    }
+
+
+    .listing-filter h3{
+        text-align: center;
+        line-height: 1.2em;
+    }
+
+    .list-item{
+        width: 95%;
+    }
+
+    iframe{
+        height: 400px;
+    }
+
+
+    .top-footer .footer-content .footerLogo{
+        width: 200px;
+    }
+
+    .top-footer .footer-content h2{
+        font-size: 35px;
+    }
+
+    .top-footer .footer-content p{
+        text-align: center;
+    }
+
+    .footerForm{
+        flex-direction: column;
+        width: 100%;
+        background-color: transparent;
+        gap:10px;
+    }
+
+    .footerForm input[type="email"]{
+        padding:15px;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 50px;
+        font-size: 15px;
+    }
+
+    .footerForm .result-btn{
+        width: 100%;
+    }
+
+    .footer-cont-top .nav-menu{
+        flex-direction: column;
+        gap:10px;
+        border-radius: 20px;
+        align-items: center;
+    }
+
+    .bot-footer{
+        flex-direction: column;
+        gap:10px;
+    }
+
+    .bot-footer h5{
+        text-align: center;
+    }
+
+    .bot-footer ul{
+        justify-content: center;
+    }
+
+
+
+
+
+    /* Inner Listing */
+
+    .prop-header{
+        flex-direction: column;
+    }
+
+    .prop-title, .prop-price{
+        width: 100%;
+    }
+
+    .prop-price{
+        align-items: center;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+    .prop-title{
+        display: flex;
+        flex-direction: column;
+        gap:10px;
+    }
+
+
+    .list-table{
+        min-width: 100%;
+    }
+
+
+    .list-table thead {
+        display: none;
+    }
+
+    .list-table, .list-table tbody, .list-table tr, .list-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .list-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    .list-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+
+
+    .listing-info .prop-image{
+        height: 300px;
+    }
+
+    .record-items{
+        flex-direction: column;
+    }
+
+    .record-items ul{
+        width: 100%;
+    }
+
+    .subs-text-sec{
+        align-items: center;
+    }
+
+
+    .subs-text-sec h2{
+        font-size: 35px;
+        text-align: center;
+    }
+
+    .subs-sec-content img{
+        height: 300px;
+        margin-top: 0px;
+    }
+
+    .subs-btn img{
+        height: auto;
+    }
+
+    .prop-title h3, .prop-price h3{
+        font-size: 35px;
+    }
+
+
+    .list-description{
+        padding: 20px;
+    }
+
+
+    .list-description h4, .list-record h4{
+        font-size: 25px;
+    }
+
+
+    .list-record{
+        gap:20px;
+        padding:20px;
+    }
+
+
+    .prop-type{
+        width: 100%;
+    }
+
+    .prop-list{
+        width: 100%!important;
+    }
+
+    .prop-name h5{
+        font-size: 14px;
+        width: 95%;
+    }
+
+    .chevo{
+        width: 5%;
+    }
+
+
+    .main-prop-list{
+        width: 100%;
+        flex-direction: row;
+        height: 300px;
+        overflow: auto;
+    }
+
+    .main-prop-list li {
+        width: 100%;
+    }
+
+}
