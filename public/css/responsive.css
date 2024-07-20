@@ -517,4 +517,35 @@
         width: 100%;
     }
 
+
+    .location-input{
+        flex-direction: column;
+    }
+
+    .location-search, .location-input .result-btn{
+        width: 100%;
+    }
+
+
+    .inner-listing-image-slider{
+        height: 250px;
+    }
+
+    .inner-listing-image-slider .carousel-inner{
+        height: 250px;
+    }
+
+
+    .prev, .next{
+        font-size: 13px!important;
+    }
+
+    .inner-listing-image-slider .prev, .inner-listing-image-slider .next {
+        width: 45px;
+        height: 45px;
+        font-size:15px!important;
+    }
+
+    
+
 }

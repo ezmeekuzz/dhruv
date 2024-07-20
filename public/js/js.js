@@ -32,6 +32,8 @@ $(document).ready(function(){
         $('.grid').css('display', 'flex');
         $('.listing-map').css('width', '35%');
         $('.list-items').css('display', 'flex');
+        $('.listing-map iframe').css('position', 'absolute');
+        $('.map-toggle img').css('display', 'block');
     });
 
     $('#list').click(function() {
@@ -39,6 +41,8 @@ $(document).ready(function(){
         $('.list').css('display', 'block');
         $('.listing-map').css('width', '35%');
         $('.list-items').css('display', 'flex');
+        $('.listing-map iframe').css('position', 'absolute');
+        $('.map-toggle img').css('display', 'block');
     });
 
     $('#map').click(function() {
@@ -46,8 +50,46 @@ $(document).ready(function(){
         $('.list').css('display', 'none');
         $('.listing-map').css('width', '100%');
         $('.list-items').css('display', 'none');
+        $('.listing-map iframe').css('position', 'relative');
+        $('.map-toggle img').css('display', 'none');
     });
 
+
+
+    $('.map-toggle img').click(function(){
+        $('.listing-map iframe').toggleClass('closeMap');
+        $('.listing-map').toggleClass('closeMap');
+        $('.list-items').toggleClass('list-itemmapClose');
+        $('.list-item').toggleClass('list-itemMapClose');
+        $('.map-toggle img').toggleClass('mapImg');
+    });
+
+
+
+    $('.carousel').each(function() {
+        let $carousel = $(this);
+        let $inner = $carousel.find('.carousel-inner');
+        let $items = $carousel.find('.carousel-item');
+        let totalSlides = $items.length;
+        let slideIndex = 0;
+
+        function updateSlidePosition() {
+            let newTransformValue = -slideIndex * 100 / totalSlides;
+            $inner.css('transform', `translateX(${newTransformValue}%)`);
+        }
+
+        $carousel.find('.next').click(function() {
+            slideIndex = (slideIndex + 1) % totalSlides;
+            updateSlidePosition();
+        });
+
+        $carousel.find('.prev').click(function() {
+            slideIndex = (slideIndex - 1 + totalSlides) % totalSlides;
+            updateSlidePosition();
+        });
+
+        updateSlidePosition();
+    });
 
 
     var navbar = $('#navbar');

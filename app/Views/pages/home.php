@@ -27,6 +27,13 @@
     <div class="main-inner-sec listing-content">
         <form class="listing-filter" id="filterForm">
             <h3>Find a Property</h3>
+            <div class="location-input">
+                <input type="text" class="location-search" placeholder="Search By Location">
+                <div class="result-btn">
+                    <input type="button" value="Search">
+                    <img src="images/colored-btn.png">
+                </div>
+            </div>
             <div class="list-filtering">
                 <div class="dropdown-field">
                     <div class="prop-type">
@@ -50,8 +57,8 @@
                             <img class="chevo" src="images/Polygon.png">
                         </div>
                         <ul class="prop-list min-max">
-                            <li>Min<input type="text" name="min_price"></li>
-                            <li>Max<input type="text" name="max_price"></li>
+                            <li>Min<input type="text" name="min_price" placeholder="$"></li>
+                            <li>Max<input type="text" name="max_price" placeholder="$"></li>
                             <input type="submit" value="APPLY">
                         </ul>
                     </div>
@@ -118,17 +125,17 @@
                     </div>
 
                     <div class="result-btn">
-                        <input type="button" value="Clear Filter" id="clearFilter">
+                        <input type="button" value="Clear Filter">
                         <img src="images/colored-btn.png">
                     </div>
                 </div>
-                <div class="select-view">
-                    <h5>SELECT VIEW</h5>
-                    <div class="view-sel">
-                        <img id="grid" src="images/grid.svg">
-                        <img id="list" src="images/list-solid.svg">
-                        <img id="map" src="images/map-solid.svg">
-                    </div>
+            </div>
+            <div class="select-view">
+                <h5>SELECT VIEW</h5>
+                <div class="view-sel">
+                    <img id="grid" src="images/grid.svg">
+                    <img id="list" src="images/list-solid.svg">
+                    <img id="map" src="images/map-solid.svg">
                 </div>
             </div>
         </form>
@@ -142,6 +149,7 @@
                         <thead>
                             <tr>
                                 <th>Property Name</th>
+                                <th>Location</th>
                                 <th>Cap Rate</th>
                                 <th>Price</th>
                                 <th>Type</th>
@@ -155,7 +163,10 @@
                 <button class="view-more" id="viewMoreButton">View More <img src="images/colored-btn.png"></button>
             </div>
             <div class="listing-map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.1815412175465!2d75.79079398611258!3d26.86597270197075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db42f4d8d62a3%3A0x5492a559e14bd6b0!2sDhruv%20Reality%20%26%20Marketing!5e0!3m2!1sen!2sph!4v1720105099225!5m2!1sen!2sph" width="100%" height="810" style="border:0; border-radius:20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="map-toggle">
+                    <img src="images/maptoggle.png">
+                </div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3514.3558105848006!2d-82.71037352451286!3d28.25722597587179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2904600b15555%3A0x69ada1cc8b402578!2sDhruv%20Management!5e0!3m2!1sen!2sph!4v1721245807024!5m2!1sen!2sph" width="100%" height="810" style="border:0; border-radius:20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
         <img src="images/bot-Line.png">
@@ -194,14 +205,31 @@ $(document).ready(function(){
                 $.each(response, function(index, property) {
                     // Populate Grid View
                     $('#propertyGrid').append(
-                        '<div class="list-item" style="background-image: url(\'' + property.backgroundimage + '\');">' +
+                        '<div class="list-item" style="background-image: url(\'images/city1.png\');">' +
                         '<a class="list-tag">New</a>' +
+                        '<div class="carousel">' +
+                        '<div class="carousel-inner">' +
+                        '<div class="carousel-item">' +
+                        '<img src="images/city1.png" alt="Image 1">' +
+                        '</div>' +
+                        '<div class="carousel-item">' +
+                        '<img src="images/city2.png" alt="Image 2">' +
+                        '</div>' +
+                        '<div class="carousel-item">' +
+                        '<img src="images/city3.png" alt="Image 3">' +
+                        '</div>' +
+                        '</div>' +
+                        '<a class="prev">&#10094;</a>' +
+                        '<a class="next">&#10095;</a>' +
+                        '</div>' +
+                        '<div class="list-info-sec">' +
                         '<div class="item-info">' +
                         '<h3><a href="/' + property.slug + '">' + property.property_name + '</a></h3>' +
                         '<p>Cap Rate: ' + property.caprate + '%</p>' +
                         '<div class="item-price">' +
                         '<h5>Price: $' + numberWithCommas(property.price) + '</h5>' +
                         '<span>Type: ' + property.property_type + '</span>' +
+                        '</div>' +
                         '</div>' +
                         '</div>' +
                         '</div>'
@@ -211,6 +239,7 @@ $(document).ready(function(){
                     $('#propertyListBody').append(
                         '<tr>' +
                         '<td><a href="/' + property.slug + '">' + property.property_name + '</a></td>' +
+                        '<td>' + property.state_name + ', ' + property.cityname + '</td>' +
                         '<td>' + property.caprate + '%</td>' +
                         '<td>$' + numberWithCommas(property.price) + '</td>' +
                         '<td>' + property.property_type + '</td>' +

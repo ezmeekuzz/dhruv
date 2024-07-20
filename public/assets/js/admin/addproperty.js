@@ -1,9 +1,6 @@
 $(document).ready(function() {
     $('#addproperty').submit(function(event) {
-        // Prevent default form submission
         event.preventDefault();
-
-        // Create FormData object
         var formData = new FormData(this);
 
         // Perform client-side validation
@@ -21,7 +18,6 @@ $(document).ready(function() {
         });
 
         if (!isValid) {
-            // Show error using SweetAlert2
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -34,12 +30,11 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             url: '/admin/addproperty/insert',
-            data: formData, // Use FormData object
+            data: formData,
             dataType: 'json',
-            processData: false, // Do not process data
-            contentType: false, // Do not set contentType
+            processData: false,
+            contentType: false,
             beforeSend: function() {
-                // Show loading effect
                 Swal.fire({
                     title: 'Saving...',
                     allowOutsideClick: false,
@@ -50,7 +45,6 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.success) {
-                    // Reset form and show success message
                     $('#addproperty')[0].reset();
                     $('.chosen-select').trigger('chosen:updated');
                     Swal.fire({
@@ -58,12 +52,8 @@ $(document).ready(function() {
                         title: 'Success',
                         text: response.message,
                     });
-
-                    // Remove dynamically added investment highlights and retain default
                     $('.investmenthighlights').empty();
-
                 } else {
-                    // Show error message
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -72,7 +62,6 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                // Handle AJAX errors
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -85,7 +74,6 @@ $(document).ready(function() {
 
     $('#state_id').on('change', function() {
         let stateId = $(this).val();
-
         if (stateId) {
             $.ajax({
                 url: `/admin/addproperty/getCities/${stateId}`,
@@ -93,16 +81,13 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(data) {
                     let citySelect = $('#city_id');
-                    citySelect.empty(); // Clear previous options
+                    citySelect.empty();
                     citySelect.append('<option hidden></option><option disabled></option>');
-
                     if (data && data.length > 0) {
                         $.each(data, function(index, city) {
                             citySelect.append(`<option value="${city.city_id}">${city.cityname}</option>`);
                         });
                     }
-
-                    // If you are using Chosen jQuery plugin, you need to trigger an update
                     citySelect.trigger("chosen:updated");
                 },
                 error: function(xhr, status, error) {
@@ -129,16 +114,68 @@ $(document).ready(function() {
         });
     }
 
-    // Manually trigger filtering function on keyup event
     $('#searchlistingagent').on('keyup', filter);
-
-    // Initial filtering
     filter();
+    
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileSelectBtn = document.getElementById('fileSelectBtn');
+    const fileList = document.getElementById('fileList');
+
+    const acceptedFileTypes = ['png', 'jpg', 'webp', 'jpeg', 'PNG', 'JPG', 'WEBP', 'JPEG'];
+
+    uploadArea.addEventListener('dragover', function(event) {
+        event.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function(event) {
+        event.preventDefault();
+        uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', function(event) {
+        event.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        handleFiles(event.dataTransfer.files);
+    });
+
+    fileSelectBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+        handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+        fileList.innerHTML = '';
+        let invalidFiles = [];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (!acceptedFileTypes.includes(fileExtension)) {
+                invalidFiles.push(file.name);
+                continue;
+            }
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.textContent = `File Name: ${file.name}, File Size: ${(file.size / 1024).toFixed(2)} KB`;
+            fileList.appendChild(fileItem);
+        }
+        if (invalidFiles.length > 0) {
+            Swal.fire('Error', `Invalid file type(s): ${invalidFiles.join(', ')}. Only PNG, JPG, WEBP, and JPEG files are allowed.`, 'error');
+            return;
+        }
+        let formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files[]', files[i]);
+        }
+    }
 });
 
 function addinvestmenthighlight() {
-    var elem = "";
-    elem += '<div class="InvestmentHighlightLists"><div class="form-group"><label for="content" style="float: left;">Investment Highlight</label><div style="float: right;"><a href="javascript:void(0);" onclick="addinvestmenthighlight();" title="Add Investment Highlight"><i class="fa fa-plus-circle" style="font-size: 18px; color: blue;"></i></a><a href="javascript:void(0);" style="color: red; font-size: 18px;" class="remove-investment-highlight"><i class="fa fa-trash"></i></a></div><input type="text" name="title[]" id="title" class="form-control mb-3" placeholder="Enter Title"><textarea class="form-control" id="content" name="content[]" placeholder="Content" style="resize: none; min-height: 80px;"></textarea></div></div>';
+    var elem = '<div class="InvestmentHighlightLists"><div class="form-group"><label for="content" style="float: left;">Investment Highlight</label><div style="float: right;"><a href="javascript:void(0);" onclick="addinvestmenthighlight();" title="Add Investment Highlight"><i class="fa fa-plus-circle" style="font-size: 18px; color: blue;"></i></a><a href="javascript:void(0);" style="color: red; font-size: 18px;" class="remove-investment-highlight"><i class="fa fa-trash"></i></a></div><input type="text" name="title[]" id="title" class="form-control mb-3" placeholder="Enter Title"><textarea class="form-control" id="content" name="content[]" placeholder="Content" style="resize: none; min-height: 80px;"></textarea></div></div>';
     $('.investmenthighlights').append(elem);
 }
 $('.investmenthighlights').on('click', '.remove-investment-highlight', function() {

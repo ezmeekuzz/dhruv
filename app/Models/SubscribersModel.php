@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Models\Admin;
+namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PropertiesModel extends Model
+class SubscribersModel extends Model
 {
-    protected $table            = 'properties';
-    protected $primaryKey       = 'property_id';
+    protected $table            = 'subscribers';
+    protected $primaryKey       = 'subscriber_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'property_name', 'slug', 'real_estate_type', 'property_type_id', 'listing_agent_id', 'price', 'price_per_sf', 'state_id', 'city_id', 'zipcode', 'caprate', 'tenancy', 'buildingsize', 'yearbuilt', 'location', 'backgroundimage', 'offering_memorandum', 'publishstatus'
+        'emailaddress'
     ];
 
     protected bool $allowEmptyInserts = false;

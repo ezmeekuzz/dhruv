@@ -84,6 +84,7 @@ class EditPropertyController extends SessionController
         ];
 
         $file = $this->request->getFile('backgroundimage');
+        $file2 = $this->request->getFile('offering_memorandum');
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $uploadPath = FCPATH . 'uploads';
             if (!is_dir($uploadPath)) {
@@ -99,6 +100,22 @@ class EditPropertyController extends SessionController
             $newFileName = $file->getRandomName();
             $file->move($uploadPath, $newFileName);
             $propertyData['backgroundimage'] = 'uploads/' . $newFileName;
+        }
+        if ($file2 && $file2->isValid() && !$file2->hasMoved()) {
+            $uploadPath2 = FCPATH . 'uploads/offering-memorandum/';
+            if (!is_dir($uploadPath2)) {
+                mkdir($uploadPath2, 0755, true);
+            }
+    
+            // Delete existing background image if it exists
+            $existingProperty2 = $propertiesModel->find($propertyId);
+            if (!empty($existingProperty2['offering_memorandum']) && file_exists(FCPATH . $existingProperty2['offering_memorandum'])) {
+                unlink(FCPATH . $existingProperty2['offering_memorandum']);
+            }
+    
+            $newFileName2 = $file2->getRandomName();
+            $file2->move($uploadPath2, $newFileName2);
+            $propertyData['offering_memorandum'] = 'uploads/offering-memorandum/' . $newFileName2;
         }
 
         $propertiesModel->update($propertyId, $propertyData);

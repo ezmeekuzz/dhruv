@@ -16,6 +16,7 @@
     <link href="<?=base_url();?>assets/css/customstyle.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
     <style>
         body, select, input, textarea, .js-basic-single, label {
             color: #000;
@@ -29,6 +30,65 @@
         }
         .is-invalid {
             border-color: red;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .upload-area h2 {
+            margin: 0;
+        }
+
+        .upload-area p {
+            margin: 10px 0;
+        }
+
+        .upload-area button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .upload-area button:hover {
+            background-color: #0056b3;
+        }
+
+        #fileList {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            margin-bottom: 10px;
+        }
+        canvas {
+            display: block; 
+        }
+        .file-icon {
+            max-width: 100%;
+        }
+        @media (min-width: 768px) {
+            .file-container {
+                margin-bottom: 150px;
+            }
+            .file-icon {
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .file-container {
+                margin-bottom: 150px;
+            }
+            .file-icon {
+                max-width: 60%;
+            }
         }
     </style>
 </head>

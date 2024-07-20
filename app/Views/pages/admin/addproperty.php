@@ -76,8 +76,8 @@
                                     <select class="form-control chosen-select" name="listing_agent_id" id="listing_agent_id" data-placeholder="Choose a Listing Agents...">
                                         <option hidden></option>
                                         <option disabled></option>
-                                        <?php if($listinAgentList) : ?>
-                                        <?php foreach($listinAgentList as $list) : ?>
+                                        <?php if($listingAgentList) : ?>
+                                        <?php foreach($listingAgentList as $list) : ?>
                                         <option value="<?=$list['listing_agent_id'];?>"><?=$list['fullname'].' - '.$list['position'];?></option>
                                         <?php endforeach; ?>
                                         <?php endif; ?>
@@ -146,6 +146,24 @@
                                         <input type="file" class="custom-file-input" id="backgroundimage" name="backgroundimage" accept="image/png, image/gif, image/jpeg, image/webp">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="offering_memorandum">Offering Memorandum</label>
+                                    <div class="custom-file">
+                                        <label class="custom-file-label" for="offering_memorandum">Choose file</label>
+                                        <input type="file" class="custom-file-input" id="offering_memorandum" name="offering_memorandum" accept="application/pdf">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoicefile">Drop Files</label>
+                                    <div class="upload-area" id="uploadArea">
+                                        <h2>Drag & Drop Images</h2>
+                                        <p>or</p>
+                                        <button type="button" id="fileSelectBtn">Select Files</button>
+                                        <input type="file" id="fileInput" name="files[]" multiple hidden accept=".jpg, .png, .jpeg, .webp, .JPG, .PNG, .JPEG, .WEBP">
+
+                                        <div id="fileList"></div>
+                                    </div>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
@@ -166,8 +184,8 @@
                                     <label class="control-label" for="categorylist"> Listing Agent List</label>
                                     <div class="listingAgentList" style="max-height: 220px !important; overflow: auto;">
                                         <ul class="list-group" id="agentlist">
-                                            <?php if(COUNT($listinAgentList)) : ?>
-                                            <?php foreach($listinAgentList as $list) : ?>
+                                            <?php if(COUNT($listingAgentList)) : ?>
+                                            <?php foreach($listingAgentList as $list) : ?>
                                             <li class="list-group-item">
                                                 <div class="form-group form-check">
                                                     <input type="checkbox" class="form-check-input" id="additional_listing_agent_id<?=$list['listing_agent_id'];?>" value = "<?=$list['listing_agent_id'];?>" name = "additional_listing_agent_id[]">

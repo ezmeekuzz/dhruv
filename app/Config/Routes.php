@@ -55,6 +55,12 @@ $routes->delete('/admin/propertymasterlist/delete/(:num)', 'Admin\PropertyMaster
 $routes->get('/admin/propertymasterlist/propertyDetails', 'Admin\PropertyMasterlistController::propertyDetails');
 $routes->get('/admin/edit-property/(:num)', 'Admin\EditPropertyController::index/$1');
 $routes->post('admin/editproperty/update/(:num)', 'Admin\EditPropertyController::update/$1');
+$routes->get('/admin/messages', 'Admin\MessagesController::index');
+$routes->get('/admin/messages/getData', 'Admin\MessagesController::getData');
+$routes->delete('/admin/messages/delete/(:num)', 'Admin\MessagesController::delete/$1');
+$routes->get('/admin/subscribers', 'Admin\SubscribersController::index');
+$routes->get('/admin/subscribers/getData', 'Admin\SubscribersController::getData');
+$routes->delete('/admin/subscribers/delete/(:num)', 'Admin\SubscribersController::delete/$1');
 /*Administrator*/
 $routes->get('/', 'HomeController::index');
 $routes->post('/propertydetails/sendMessage', 'PropertyDetailsController::sendMessage');

@@ -63,7 +63,7 @@ class PropertyDetailsController extends BaseController
         $content .= "Note : " . $data['note'] . "<br/>";
         // Email sending code
         $email = \Config\Services::email();
-        $email->setTo('rustomcodilan@gmail.com');
+        $email->setTo('interested@dhruvcommercial.com');
         $email->setSubject('I am interested in this property!');
         $email->setMessage($content);
 

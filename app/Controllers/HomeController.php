@@ -31,7 +31,10 @@ class HomeController extends BaseController
             $filters = $this->request->getPost();
 
             $propertiesModel = new PropertiesModel();
-            $builder = $propertiesModel->join('property_types', 'property_types.property_type_id = properties.property_type_id', 'left');
+            $builder = $propertiesModel
+            ->join('states', 'states.state_id = properties.state_id', 'left')
+            ->join('cities', 'cities.city_id = properties.city_id', 'left')
+            ->join('property_types', 'property_types.property_type_id = properties.property_type_id', 'left');
 
             // Apply filters
             if (!empty($filters['property_type_id'])) {

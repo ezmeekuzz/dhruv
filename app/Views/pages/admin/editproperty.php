@@ -160,6 +160,13 @@
                                         </div>
                                     <?php endif; ?>
                                 </div>
+                                <div class="form-group">
+                                    <label for="offering_memorandum">Offering Memorandum</label>
+                                    <div class="custom-file">
+                                        <label class="custom-file-label" for="offering_memorandum">Choose file</label>
+                                        <input type="file" class="custom-file-input" id="offering_memorandum" name="offering_memorandum" accept="application/pdf">
+                                    </div>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </div>
