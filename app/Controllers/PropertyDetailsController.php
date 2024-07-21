@@ -8,6 +8,7 @@ use App\Models\Admin\PropertiesModel;
 use App\Models\Admin\ListingAgentsModel;
 use App\Models\Admin\AdditionalListingAgentsModel;
 use App\Models\Admin\InvestmentHighlightsModel;
+use App\Models\Admin\PropertyGalleriesModel;
 use App\Models\MessagesModel;
 
 class PropertyDetailsController extends BaseController
@@ -17,6 +18,7 @@ class PropertyDetailsController extends BaseController
         $propertiesModel = new PropertiesModel();
         $additionalListingAgentsModel = new AdditionalListingAgentsModel();
         $investmentHighlightsModel = new InvestmentHighlightsModel();
+        $propertyGalleryModel = new PropertyGalleriesModel();
         $propertyDetails = $propertiesModel
         ->join('property_types', 'property_types.property_type_id=properties.property_type_id', 'left')
         ->join('listing_agents', 'listing_agents.listing_agent_id=properties.listing_agent_id', 'left')
@@ -32,12 +34,17 @@ class PropertyDetailsController extends BaseController
         $investmentHighlightLists = $investmentHighlightsModel
         ->where('property_id', $id)
         ->findAll();
+        
+        $propertyGallery = $propertyGalleryModel
+        ->where('property_id', $id)
+        ->findAll();
 
         $data = [
             'title' => $propertyDetails['property_name']. ' | DHRUV Realty',
             'propertyDetails' => $propertyDetails,
             'additionaListingAgentLists' => $additionaListingAgentLists,
             'investmentHighlightLists' => $investmentHighlightLists,
+            'propertyGallery' => $propertyGallery,
         ];
         return view('pages/propertydetails', $data);
     }

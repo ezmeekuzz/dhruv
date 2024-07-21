@@ -81,9 +81,10 @@
     </footer>   
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/js.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 $(document).ready(function() {
     $('#subscribe').on('submit', function(event) {
@@ -138,56 +139,55 @@ $(document).ready(function() {
     });
     
     var typingTimer;
-        var doneTypingInterval = 300; // Time in ms, adjust as needed
+    var doneTypingInterval = 300; // Time in ms, adjust as needed
 
-        // On keyup, start the countdown
-        $('input[name="query"]').on('keyup', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(doneTyping, doneTypingInterval);
-        });
+    // On keyup, start the countdown
+    $('input[name="query"]').on('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
 
-        // On keydown, clear the countdown 
-        $('input[name="query"]').on('keydown', function() {
-            clearTimeout(typingTimer);
-        });
+    // On keydown, clear the countdown 
+    $('input[name="query"]').on('keydown', function() {
+        clearTimeout(typingTimer);
+    });
 
-        // User is "finished typing," send the AJAX request
-        function doneTyping() {
-            var query = $('input[name="query"]').val();
+    // User is "finished typing," send the AJAX request
+    function doneTyping() {
+        var query = $('input[name="query"]').val();
 
-            if (query.trim() === '') {
-                $('#dropdownResults').hide();
-                return;
-            }
-
-            $.ajax({
-                url: '<?= base_url('search') ?>',
-                method: 'POST',
-                data: { query: query },
-                success: function(response) {
-                    var results = response.results;
-                    var html = '';
-
-                    if (results.length > 0) {
-                        results.forEach(function(result) {
-                            html += '<div class="result-item">';
-                            html += '<h4><a href="' + result.slug + '" target="_blank">' + result.property_name + '</a></h4>';
-                            html += '</div>';
-                        });
-                        $('#dropdownResults').html(html).show();
-                    } else {
-                        $('#dropdownResults').html('<div class="result-item">No results found.</div>').show();
-                    }
-                }
-            });
+        if (query.trim() === '') {
+            $('#dropdownResults').hide();
+            return;
         }
 
-        $(document).on('click', function(event) {
-            if (!$(event.target).closest('.haeder-search').length) {
-                $('#dropdownResults').hide();
+        $.ajax({
+            url: '<?= base_url('search') ?>',
+            method: 'POST',
+            data: { query: query },
+            success: function(response) {
+                var results = response.results;
+                var html = '';
+
+                if (results.length > 0) {
+                    results.forEach(function(result) {
+                        html += '<div class="result-item">';
+                        html += '<h4><a href="' + result.slug + '" target="_blank">' + result.property_name + '</a></h4>';
+                        html += '</div>';
+                    });
+                    $('#dropdownResults').html(html).show();
+                } else {
+                    $('#dropdownResults').html('<div class="result-item">No results found.</div>').show();
+                }
             }
         });
+    }
 
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.haeder-search').length) {
+            $('#dropdownResults').hide();
+        }
+    });
 });
 </script>
 </html>

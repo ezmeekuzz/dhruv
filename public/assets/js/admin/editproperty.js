@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    let selectedFiles = []; // Global variable to store selected files
     $('#editproperty').submit(function(event) {
         // Prevent default form submission
         event.preventDefault();
@@ -32,6 +33,11 @@ $(document).ready(function() {
                 text: 'Please fill in all the required fields!',
             });
             return;
+        }
+
+        // Append the selected files to formData
+        for (let i = 0; i < selectedFiles.length; i++) {
+            formData.append('files[]', selectedFiles[i]);
         }
 
         // Send AJAX request
@@ -138,6 +144,61 @@ $(document).ready(function() {
 
     // Initial filtering
     filter();
+
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileSelectBtn = document.getElementById('fileSelectBtn');
+    const fileList = document.getElementById('fileList');
+
+    const acceptedFileTypes = ['png', 'jpg', 'webp', 'jpeg', 'PNG', 'JPG', 'WEBP', 'JPEG'];
+
+    uploadArea.addEventListener('dragover', function(event) {
+        event.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function(event) {
+        event.preventDefault();
+        uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', function(event) {
+        event.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        handleFiles(event.dataTransfer.files);
+    });
+
+    fileSelectBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+        handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+        fileList.innerHTML = '';
+        let invalidFiles = [];
+        selectedFiles = []; // Clear the previously selected files
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (!acceptedFileTypes.includes(fileExtension)) {
+                invalidFiles.push(file.name);
+                continue;
+            }
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.textContent = `File Name: ${file.name}, File Size: ${(file.size / 1024).toFixed(2)} KB`;
+            fileList.appendChild(fileItem);
+            selectedFiles.push(file); // Add the file to the selectedFiles array
+        }
+
+        if (invalidFiles.length > 0) {
+            Swal.fire('Error', `Invalid file type(s): ${invalidFiles.join(', ')}. Only PNG, JPG, WEBP, and JPEG files are allowed.`, 'error');
+        }
+    }
 });
 
 function addinvestmenthighlight() {

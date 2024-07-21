@@ -53,6 +53,7 @@ $routes->get('/admin/property-masterlist', 'Admin\PropertyMasterlistController::
 $routes->get('/admin/propertymasterlist/getData', 'Admin\PropertyMasterlistController::getData');
 $routes->delete('/admin/propertymasterlist/delete/(:num)', 'Admin\PropertyMasterlistController::delete/$1');
 $routes->get('/admin/propertymasterlist/propertyDetails', 'Admin\PropertyMasterlistController::propertyDetails');
+$routes->delete('admin/propertymasterlist/deleteImage/(:num)', 'Admin\PropertyMasterlistController::deleteImage/$1');
 $routes->get('/admin/edit-property/(:num)', 'Admin\EditPropertyController::index/$1');
 $routes->post('admin/editproperty/update/(:num)', 'Admin\EditPropertyController::update/$1');
 $routes->get('/admin/messages', 'Admin\MessagesController::index');

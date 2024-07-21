@@ -11,6 +11,7 @@ use App\Models\Admin\StatesModel;
 use App\Models\Admin\CitiesModel;
 use App\Models\Admin\ListingAgentsModel;
 use App\Models\Admin\InvestmentHighlightsModel;
+use App\Models\Admin\PropertyGalleriesModel;
 
 class EditPropertyController extends SessionController
 {
@@ -58,6 +59,8 @@ class EditPropertyController extends SessionController
         $propertiesModel = new PropertiesModel();
         $additionalListingAgentsModel = new AdditionalListingAgentsModel();
         $investmentHighlightsModel = new InvestmentHighlightsModel();
+        $propertyGalleriesModel = new PropertyGalleriesModel();
+        $files = $this->request->getFiles();
 
         $propertyName = $this->request->getPost('propertyname');
         $propertyData = [
@@ -85,6 +88,7 @@ class EditPropertyController extends SessionController
 
         $file = $this->request->getFile('backgroundimage');
         $file2 = $this->request->getFile('offering_memorandum');
+        $file3 = $this->request->getFiles(); // Multiple files
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $uploadPath = FCPATH . 'uploads';
             if (!is_dir($uploadPath)) {
@@ -119,6 +123,25 @@ class EditPropertyController extends SessionController
         }
 
         $propertiesModel->update($propertyId, $propertyData);
+
+        if ($file3) {
+            foreach ($file3['files'] as $fileGallery) {
+                if ($fileGallery->isValid() && !$fileGallery->hasMoved()) {
+                    $uploadPath3 = FCPATH . 'uploads/property-gallery/';
+                    if (!is_dir($uploadPath3)) {
+                        mkdir($uploadPath3, 0755, true);
+                    }
+                    $newFileName3 = $fileGallery->getRandomName();
+                    $fileGallery->move($uploadPath3, $newFileName3);
+                    $propertyGalleriesModel->insert([
+                        'property_id' => $propertyId,
+                        'location' => 'uploads/property-gallery/' . $newFileName3,
+                        'file_name' => $newFileName3,
+                        'original_name' => $fileGallery->getClientName() // Save original file name
+                    ]);
+                }
+            }
+        }
 
         $additionalListingAgentsModel->where('property_id', $propertyId)->delete();
         $selectedListingAgents = $this->request->getPost('additional_listing_agent_id');

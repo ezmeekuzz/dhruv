@@ -72,13 +72,14 @@ class AddPropertyController extends SessionController
             'buildingsize' => $this->request->getPost('buildingsize'),
             'yearbuilt' => $this->request->getPost('yearbuilt'),
             'location' => $this->request->getPost('location'),
-            'publishstatus' => ($this->request->getPost('publishstatus') == 'Yes') ? 'Published' : 'Draft'
+            'publishstatus' => ($this->request->getPost('publishstatus') == 'Yes') ? 'Published' : 'Draft',
+            'dateadded' => date('Y-m-d')
         ];
     
         // Handle file uploads
         $file = $this->request->getFile('backgroundimage');
         $file2 = $this->request->getFile('offering_memorandum');
-        $file3 = $this->request->getFiles('files'); // Multiple files
+        $file3 = $this->request->getFiles(); // Multiple files
     
         // Validate single file uploads
         if ($file && $file->isValid() && !$file->hasMoved()) {
@@ -104,20 +105,22 @@ class AddPropertyController extends SessionController
         $propertyId = $propertiesModel->insert($propertyData);
     
         if ($propertyId) {
-            foreach ($file3 as $fileGallery) {
-                if ($fileGallery->isValid() && !$fileGallery->hasMoved()) {
-                    $uploadPath3 = FCPATH . 'uploads/property-gallery/';
-                    if (!is_dir($uploadPath3)) {
-                        mkdir($uploadPath3, 0755, true);
+            if ($file3) {
+                foreach ($file3['files'] as $fileGallery) {
+                    if ($fileGallery->isValid() && !$fileGallery->hasMoved()) {
+                        $uploadPath3 = FCPATH . 'uploads/property-gallery/';
+                        if (!is_dir($uploadPath3)) {
+                            mkdir($uploadPath3, 0755, true);
+                        }
+                        $newFileName3 = $fileGallery->getRandomName();
+                        $fileGallery->move($uploadPath3, $newFileName3);
+                        $propertyGalleriesModel->insert([
+                            'property_id' => $propertyId,
+                            'location' => 'uploads/property-gallery/' . $newFileName3,
+                            'file_name' => $newFileName3,
+                            'original_name' => $fileGallery->getClientName() // Save original file name
+                        ]);
                     }
-                    $newFileName3 = $fileGallery->getRandomName();
-                    $fileGallery->move($uploadPath3, $newFileName3);
-                    $propertyGalleriesModel->insert([
-                        'property_id' => $propertyId,
-                        'location' => 'uploads/property-gallery/' . $newFileName3,
-                        'file_name' => $newFileName3,
-                        'original_name' => $fileGallery->getClientName() // Save original file name
-                    ]);
                 }
             }
     

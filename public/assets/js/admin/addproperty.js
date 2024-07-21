@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    let selectedFiles = []; // Global variable to store selected files
+
     $('#addproperty').submit(function(event) {
         event.preventDefault();
         var formData = new FormData(this);
@@ -24,6 +26,11 @@ $(document).ready(function() {
                 text: 'Please fill in all the required fields!',
             });
             return;
+        }
+
+        // Append the selected files to formData
+        for (let i = 0; i < selectedFiles.length; i++) {
+            formData.append('files[]', selectedFiles[i]);
         }
 
         // Send AJAX request
@@ -53,6 +60,7 @@ $(document).ready(function() {
                         text: response.message,
                     });
                     $('.investmenthighlights').empty();
+                    $('#fileList').empty();
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -116,7 +124,7 @@ $(document).ready(function() {
 
     $('#searchlistingagent').on('keyup', filter);
     filter();
-    
+
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const fileSelectBtn = document.getElementById('fileSelectBtn');
@@ -151,6 +159,8 @@ $(document).ready(function() {
     function handleFiles(files) {
         fileList.innerHTML = '';
         let invalidFiles = [];
+        selectedFiles = []; // Clear the previously selected files
+
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const fileExtension = file.name.split('.').pop().toLowerCase();
@@ -162,14 +172,11 @@ $(document).ready(function() {
             fileItem.className = 'file-item';
             fileItem.textContent = `File Name: ${file.name}, File Size: ${(file.size / 1024).toFixed(2)} KB`;
             fileList.appendChild(fileItem);
+            selectedFiles.push(file); // Add the file to the selectedFiles array
         }
+
         if (invalidFiles.length > 0) {
             Swal.fire('Error', `Invalid file type(s): ${invalidFiles.join(', ')}. Only PNG, JPG, WEBP, and JPEG files are allowed.`, 'error');
-            return;
-        }
-        let formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files[]', files[i]);
         }
     }
 });

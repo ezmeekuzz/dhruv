@@ -13,7 +13,7 @@ class PropertiesModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'property_name', 'slug', 'real_estate_type', 'property_type_id', 'listing_agent_id', 'price', 'price_per_sf', 'state_id', 'city_id', 'zipcode', 'caprate', 'tenancy', 'buildingsize', 'yearbuilt', 'location', 'backgroundimage', 'offering_memorandum', 'publishstatus'
+        'property_name', 'slug', 'real_estate_type', 'property_type_id', 'listing_agent_id', 'price', 'price_per_sf', 'state_id', 'city_id', 'zipcode', 'caprate', 'tenancy', 'buildingsize', 'yearbuilt', 'location', 'backgroundimage', 'offering_memorandum', 'publishstatus', 'dateadded'
     ];
 
     protected bool $allowEmptyInserts = false;

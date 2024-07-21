@@ -3,30 +3,6 @@ $(document).ready(function(){
         $('.nav-menu').toggleClass('open');
     });
 
-
-
-
-    // $('.prop-type').click(function(){
-    //     $('.prop-list').addClass('active');
-    //     $('.prop-type').addClass('prop-type-active');
-    // });
-
-
-    // $('.prop-type').click(function(event){
-    //     event.stopPropagation(); // Prevent the click event from propagating to the document
-    //     $('.prop-list').addClass('active');
-    //     $('.prop-type').addClass('prop-type-active');
-    // });
-
-    // $(document).click(function(event) {
-    //     if (!$(event.target).closest('.prop-type, .prop-list').length) {
-    //         // Remove the .active and .prop-type-active classes
-    //         $('.prop-list').removeClass('active');
-    //         $('.prop-type').removeClass('prop-type-active');
-    //     }
-    // });
-
-
     $('#grid').click(function() {
         $('.list').css('display', 'none');
         $('.grid').css('display', 'flex');
@@ -54,8 +30,6 @@ $(document).ready(function(){
         $('.map-toggle img').css('display', 'none');
     });
 
-
-
     $('.map-toggle img').click(function(){
         $('.listing-map iframe').toggleClass('closeMap');
         $('.listing-map').toggleClass('closeMap');
@@ -63,8 +37,6 @@ $(document).ready(function(){
         $('.list-item').toggleClass('list-itemMapClose');
         $('.map-toggle img').toggleClass('mapImg');
     });
-
-
 
     $('.carousel').each(function() {
         let $carousel = $(this);
@@ -91,40 +63,19 @@ $(document).ready(function(){
         updateSlidePosition();
     });
 
-
     var navbar = $('#navbar');
-    var sticky = navbar.offset().top;
+    if (navbar.length) {
+        var sticky = navbar.offset().top;
 
-    $(window).scroll(function() {
-        if (window.pageYOffset >= sticky) {
-            navbar.addClass('sticky');
-        } else {
-            navbar.removeClass('sticky');
-        }
-    });
-
-
-
+        $(window).scroll(function() {
+            if (window.pageYOffset >= sticky) {
+                navbar.addClass('sticky');
+            } else {
+                navbar.removeClass('sticky');
+            }
+        });
+    }
 });
-
-
-
-// const dropdowns = document.querySelectorAll('.prop-type');
-
-
-// dropdowns.forEach(dropdown => {
-//     const select = dropdown.querySelector('.prop-name');
-//     const chevo = dropdown.querySelector('.chevo');
-//     const menuOpt = dropdown.querySelector('.prop-list');
-
-
-//     select.addEventListener('click', () =>{
-//         menuOpt.classList.toggle('prop-list-active');
-//         chevo.classList.toggle('chevo-active');
-//     })
-// })
-
-
 
 const dropdowns = document.querySelectorAll('.prop-type');
 

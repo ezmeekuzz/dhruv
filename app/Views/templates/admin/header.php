@@ -7,7 +7,7 @@
     <meta content="Empowering clients through integrity and personalized service, Dhurv is dedicated to exceeding expectations in real estate transactions. With a commitment to trust and transparency, we aim to build lasting relationships based on exceptional results and client satisfaction." name="description" />
     <meta content="Rustom Codilan" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="<?=base_url();?>images/szs.png">
+    <link rel="shortcut icon" href="<?=base_url();?>images/favIcon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nanum+Gothic&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Ruda:wght@400..900&display=swap" rel="stylesheet">
@@ -89,6 +89,29 @@
             .file-icon {
                 max-width: 60%;
             }
+        }
+        .delete-image-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px; /* Adjust size as needed */
+            height: 40px; /* Adjust size as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px; /* Adjust size as needed */
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-item:hover .delete-image-btn {
+            opacity: 1;
         }
     </style>
 </head>

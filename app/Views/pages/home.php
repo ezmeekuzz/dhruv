@@ -3,22 +3,6 @@
 <section class="main-section banner" style="background-image: url('images/image1.webp');">
     <div class="main-inner-sec inner-banner-sec">
         <h2 class="banner-title">Explore Our Listings</h2>
-        <!--<div class="search-section">
-            <form class="banner-search">
-                <input type="text" placeholder="Commercial">
-                <div class="search-btn">
-                    <input type="submit">
-                    <img src="images/wthIcon.png">
-                </div>
-            </form>
-            <form class="banner-search">
-                <input type="text" placeholder="Residential">
-                <div class="search-btn">
-                    <input type="submit">
-                    <img src="images/wthIcon.png">
-                </div>
-            </form>
-        </div>-->
     </div>
     <img src="images/bot-Line.png">
 </section>
@@ -36,6 +20,7 @@
             </div>
             <div class="list-filtering">
                 <div class="dropdown-field">
+                    <!-- Property Type Filter -->
                     <div class="prop-type">
                         <div class="prop-name">
                             <h5>Property Type</h5>
@@ -51,6 +36,8 @@
                             <input type="submit" class="apply" value="APPLY">
                         </ul>
                     </div>
+
+                    <!-- Price Filter -->
                     <div class="prop-type">
                         <div class="prop-name">
                             <h5>Price</h5>
@@ -63,6 +50,7 @@
                         </ul>
                     </div>
 
+                    <!-- Location Filter -->
                     <div class="prop-type">
                         <div class="prop-name">
                             <h5>Location</h5>
@@ -72,7 +60,7 @@
                             <li>
                                 State
                                 <select name="state_id" id="state_id">
-                                    <option value="">Select</option> <!-- Change hidden to an empty value -->
+                                    <option value="">Select</option>
                                     <?php if($statesList) : ?>
                                         <?php foreach($statesList as $list) : ?>
                                             <option value="<?=$list['state_id'];?>"><?=$list['state_name'];?></option>
@@ -83,7 +71,7 @@
                             <li>
                                 City
                                 <select name="city_id" id="city_id">
-                                    <option value="">Select</option> <!-- Change hidden to an empty value -->
+                                    <option value="">Select</option>
                                 </select>
                             </li>
                             <li>
@@ -94,6 +82,7 @@
                         </ul>
                     </div>
 
+                    <!-- Cap Rate Filter -->
                     <div class="prop-type">
                         <div class="prop-name">
                             <h5>Cap Rate</h5>
@@ -106,6 +95,7 @@
                         </ul>
                     </div>
 
+                    <!-- Tenancy Filter -->
                     <div class="prop-type">
                         <div class="prop-name">
                             <h5>Tenancy</h5>
@@ -125,7 +115,7 @@
                     </div>
 
                     <div class="result-btn">
-                        <input type="button" value="Clear Filter">
+                        <input type="button" id="clearFilter" value="Clear Filter">
                         <img src="images/colored-btn.png">
                     </div>
                 </div>
@@ -176,7 +166,7 @@
 <?=$this->include('templates/footer');?>
 
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
     var currentPage = 1; // Track current page
     var maxPages = 1; // Track maximum pages available, initially 1
 
@@ -185,7 +175,7 @@ $(document).ready(function(){
 
     function fetchProperties(filters = {}, page = 1) {
         $.ajax({
-            url: '/home/getProperties?page=' + page, // Add page parameter
+            url: `/home/getProperties?page=${page}`, // Add page parameter
             method: 'POST',
             data: filters,
             dataType: 'json',
@@ -202,50 +192,69 @@ $(document).ready(function(){
                 // Update maxPages based on actual data received
                 maxPages = page;
 
-                $.each(response, function(index, property) {
-                    // Populate Grid View
-                    $('#propertyGrid').append(
-                        '<div class="list-item" style="background-image: url(\'images/city1.png\');">' +
-                        '<a class="list-tag">New</a>' +
-                        '<div class="carousel">' +
-                        '<div class="carousel-inner">' +
-                        '<div class="carousel-item">' +
-                        '<img src="images/city1.png" alt="Image 1">' +
-                        '</div>' +
-                        '<div class="carousel-item">' +
-                        '<img src="images/city2.png" alt="Image 2">' +
-                        '</div>' +
-                        '<div class="carousel-item">' +
-                        '<img src="images/city3.png" alt="Image 3">' +
-                        '</div>' +
-                        '</div>' +
-                        '<a class="prev">&#10094;</a>' +
-                        '<a class="next">&#10095;</a>' +
-                        '</div>' +
-                        '<div class="list-info-sec">' +
-                        '<div class="item-info">' +
-                        '<h3><a href="/' + property.slug + '">' + property.property_name + '</a></h3>' +
-                        '<p>Cap Rate: ' + property.caprate + '%</p>' +
-                        '<div class="item-price">' +
-                        '<h5>Price: $' + numberWithCommas(property.price) + '</h5>' +
-                        '<span>Type: ' + property.property_type + '</span>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                    );
+                // Ensure the response is an array
+                if (Array.isArray(response)) {
+                    $.each(response, function(index, property) {
+                        if (!property) {
+                            console.error('Property object is missing at index:', index);
+                            return;
+                        }
+                        var isNew = isRecent(property.dateadded);
+                        // Populate Grid View
+                        var carouselId = `carousel-${property.property_id}`;
+                        var carouselItems = '';
+
+                        $('#propertyGrid').append(`
+                            <div class="list-item">
+                                ${isNew ? '<a class="list-tag">New</a>' : ''}
+                                <div class="carousel" id="${carouselId}">
+                                    <div class="carousel-inner">
+                                        ${
+                                            Array.isArray(property.galleries) 
+                                            ? property.galleries.map((gallery, i) => {
+                                                var activeClass = i === 0 ? 'active' : '';
+                                                return `
+                                                    <div class="carousel-item ${activeClass}">
+                                                        <img src="${gallery.location}" alt="Image ${i + 1}">
+                                                    </div>`;
+                                            }).join('') 
+                                            : ''
+                                        }
+                                    </div>
+                                    <a class="prev">&#10094;</a>
+                                    <a class="next">&#10095;</a>
+                                </div>
+                                <div class="list-info-sec">
+                                    <div class="item-info">
+                                        <h3><a href="/${property.slug}">${property.property_name}</a></h3>
+                                        <p>Cap Rate: ${property.caprate}%</p>
+                                        <div class="item-price">
+                                            <h5>Price: $${property.price}</h5>
+                                            <span>Type: ${property.property_type}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
 
                     // Populate List View
-                    $('#propertyListBody').append(
-                        '<tr>' +
-                        '<td><a href="/' + property.slug + '">' + property.property_name + '</a></td>' +
-                        '<td>' + property.state_name + ', ' + property.cityname + '</td>' +
-                        '<td>' + property.caprate + '%</td>' +
-                        '<td>$' + numberWithCommas(property.price) + '</td>' +
-                        '<td>' + property.property_type + '</td>' +
-                        '</tr>'
-                    );
-                });
+                    $.each(response, function(index, property) {
+                        if (property) {
+                            $('#propertyListBody').append(`
+                                <tr>
+                                    <td><a href="/${property.slug}">${property.property_name}</a></td>
+                                    <td>${property.state_name}, ${property.cityname}</td>
+                                    <td>${property.caprate}%</td>
+                                    <td>$${numberWithCommas(property.price)}</td>
+                                    <td>${property.property_type}</td>
+                                </tr>
+                            `);
+                        }
+                    });
+                } else {
+                    console.error('Response is not an array:', response);
+                }
 
                 // Show or hide view more button based on current page and maxPages
                 if (page >= maxPages) {
@@ -253,7 +262,43 @@ $(document).ready(function(){
                 } else {
                     $('#viewMoreButton').show();
                 }
+
+                // Initialize carousels
+                initializeCarousels();
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
             }
+        });
+    }
+
+    function initializeCarousels() {
+        $('.carousel').each(function() {
+            var carousel = $(this);
+            var inner = carousel.find('.carousel-inner');
+            var items = inner.find('.carousel-item');
+            var totalSlides = items.length;
+            var slideIndex = 0;
+
+            function updateSlidePosition() {
+                inner.css('transform', `translateX(${-slideIndex * 100}%)`);
+            }
+
+            function showSlide(index) {
+                slideIndex = (index + totalSlides) % totalSlides;
+                updateSlidePosition();
+            }
+
+            carousel.find('.next').click(function() {
+                showSlide(slideIndex + 1);
+            });
+
+            carousel.find('.prev').click(function() {
+                showSlide(slideIndex - 1);
+            });
+
+            // Initialize the carousel to show the first slide
+            updateSlidePosition();
         });
     }
 
@@ -263,19 +308,19 @@ $(document).ready(function(){
     }
 
     // State and city dropdown handling
-    $('#state_id').change(function(){
+    $('#state_id').change(function() {
         var state_id = $(this).val();
-        if(state_id){
+        if (state_id) {
             $.ajax({
                 url: '/home/getCitiesByState',
                 method: 'POST',
                 data: { state_id: state_id },
                 dataType: 'json',
-                success: function(response){
+                success: function(response) {
                     $('#city_id').empty();
                     $('#city_id').append('<option value="">Select</option>');
-                    $.each(response, function(index, city){
-                        $('#city_id').append('<option value="'+city.city_id+'">'+city.cityname+'</option>');
+                    $.each(response, function(index, city) {
+                        $('#city_id').append(`<option value="${city.city_id}">${city.cityname}</option>`);
                     });
                 }
             });
@@ -307,6 +352,44 @@ $(document).ready(function(){
         fetchProperties();
         $('#viewMoreButton').show(); // Ensure view more button is visible after reset
     });
+    function isRecent(dateAdded) {
+        var dateAdded = new Date(dateAdded);
+        var today = new Date();
+        var twoWeeksAgo = new Date();
+        twoWeeksAgo.setDate(today.getDate() - 14);
+
+        return dateAdded >= twoWeeksAgo;
+    }
+});
+$(document).ready(function() {
+    function initCarousel() {
+        $('.carousel').each(function() {
+            var $carousel = $(this);
+            var $carouselInner = $carousel.find('.carousel-inner');
+            var $carouselItems = $carouselInner.find('.carousel-item');
+            var currentIndex = 0;
+            var itemCount = $carouselItems.length;
+
+            // Show the first item initially
+            $carouselItems.eq(currentIndex).addClass('active');
+
+            // Handle next button click
+            $carousel.find('.next').on('click', function() {
+                $carouselItems.eq(currentIndex).removeClass('active');
+                currentIndex = (currentIndex + 1) % itemCount; // Loop to the start
+                $carouselItems.eq(currentIndex).addClass('active');
+            });
+
+            // Handle prev button click
+            $carousel.find('.prev').on('click', function() {
+                $carouselItems.eq(currentIndex).removeClass('active');
+                currentIndex = (currentIndex - 1 + itemCount) % itemCount; // Loop to the end
+                $carouselItems.eq(currentIndex).addClass('active');
+            });
+        });
+    }
+
+    initCarousel(); // Initialize the carousel on page load
 });
 
 </script>

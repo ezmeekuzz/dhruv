@@ -26,7 +26,19 @@
         <div class="list-content">
             <div class="listing-info">
                 <a href="/">Back To Properties</a>
-                <img class="prop-image" src="<?=$propertyDetails['backgroundimage'];?>">
+                <div class="carousel inner-listing-image-slider">
+                    <div class="carousel-inner">
+                        <?php if($propertyGallery) : ?>
+                            <?php foreach($propertyGallery as $index => $list) : ?>
+                        <div class="carousel-item">
+                            <img src="/<?=$list['location'];?>" alt="Image <?=$index;?>">
+                        </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <a class="prev">&#10094;</a>
+                    <a class="next">&#10095;</a>
+                </div>
                 <div class="prop-header">
                     <div class="prop-title">
                         <h3><?=$propertyDetails['property_name'];?></h3>
