@@ -235,6 +235,8 @@
     </div>
 </section>
 <?=$this->include('templates/footer');?>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
 <script>
 $(document).ready(function() {
     $('#sendMessage').on('submit', function(event) {
@@ -323,11 +325,10 @@ $(document).ready(function() {
 
     $('.owl-prev').html('<span class="fa fa-chevron-left"></span>');
     $('.owl-next').html('<span class="fa fa-chevron-right"></span>');
-
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
-            // Show success popover using Tippy.js
-            tippy('#copyURL', {
+            // Initialize Tippy.js and show the tooltip
+            var tippyInstance = tippy('#copyURL', {
                 content: 'Copied!',
                 trigger: 'manual',
                 onShow(instance) {
@@ -335,11 +336,15 @@ $(document).ready(function() {
                         instance.hide();
                     }, 2000);
                 }
-            }).show();
+            });
+
+            // Show the tooltip
+            tippyInstance[0].show();
         }, function(err) {
             console.error('Could not copy text: ', err);
         });
     }
+
     document.getElementById('copyURL').addEventListener('click', function() {
         var url = window.location.href;
         copyToClipboard(url);
