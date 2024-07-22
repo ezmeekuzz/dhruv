@@ -38,31 +38,6 @@ $(document).ready(function(){
         $('.map-toggle img').toggleClass('mapImg');
     });
 
-    $('.carousel').each(function() {
-        let $carousel = $(this);
-        let $inner = $carousel.find('.carousel-inner');
-        let $items = $carousel.find('.carousel-item');
-        let totalSlides = $items.length;
-        let slideIndex = 0;
-
-        function updateSlidePosition() {
-            let newTransformValue = -slideIndex * 100 / totalSlides;
-            $inner.css('transform', `translateX(${newTransformValue}%)`);
-        }
-
-        $carousel.find('.next').click(function() {
-            slideIndex = (slideIndex + 1) % totalSlides;
-            updateSlidePosition();
-        });
-
-        $carousel.find('.prev').click(function() {
-            slideIndex = (slideIndex - 1 + totalSlides) % totalSlides;
-            updateSlidePosition();
-        });
-
-        updateSlidePosition();
-    });
-
     var navbar = $('#navbar');
     if (navbar.length) {
         var sticky = navbar.offset().top;

@@ -1,43 +1,73 @@
 <?=$this->include('templates/header');?>
 <style>
-.popover {
-    position: absolute;
-    display: none;
-    padding: 8px;
-    background: #333;
-    color: #fff;
-    border-radius: 4px;
-    font-size: 14px;
-    z-index: 1000;
-}
-.popover::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #333 transparent transparent transparent;
-}
+    .main-section.inner-list-section {
+        padding: 20px;
+    }
+
+    .list-content .owl-carousel .prop-image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .owl-carousel {
+        width: 100%;
+    }
+
+    .owl-nav button {
+        background-color: #000;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .owl-nav button.owl-prev {
+        left: 10px;
+    }
+
+    .owl-nav button.owl-next {
+        right: 10px;
+    }
+
+    .owl-nav button:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .owl-nav button {
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+        }
+    }
 </style>
 <section class="main-section inner-list-section">
     <div class="main-inner-sec inner-list-content">
         <div class="list-content">
             <div class="listing-info">
                 <a href="/">Back To Properties</a>
-                <div class="carousel inner-listing-image-slider">
-                    <div class="carousel-inner">
-                        <?php if($propertyGallery) : ?>
-                            <?php foreach($propertyGallery as $index => $list) : ?>
-                        <div class="carousel-item">
-                            <img src="/<?=$list['location'];?>" alt="Image <?=$index;?>">
-                        </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                    <a class="prev">&#10094;</a>
-                    <a class="next">&#10095;</a>
+                <div class="owl-carousel owl-theme">
+                    <?php if($propertyGallery) : ?>
+                        <?php foreach($propertyGallery as $list) : ?>
+                            <div class="item">
+                                <img class="prop-image" src="<?=$list['location'];?>">
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="prop-header">
                     <div class="prop-title">
@@ -45,8 +75,7 @@
                         <p><?=$propertyDetails['location'].', '.$propertyDetails['cityname'].', '.$propertyDetails['state_code'].' '.$propertyDetails['zipcode'];?></p>
                     </div>
                     <div class="prop-price">
-                        <img src="images/export-img.png" id="copy" style="cursor: pointer;">
-                        <div id="copy-popover" class="popover">URL copied to clipboard!</div>
+                        <img src="images/export-img.png" id="copyURL">
                         <h3>$<?=number_format($propertyDetails['price'], 2);?></h3>
                     </div>
                 </div>
@@ -88,23 +117,23 @@
                     <h4>Broker Of Record</h4>
                     <div class="record-items">
                         <ul>
-                            <li>Joe Caldarelli</li>
-                            <li>License No. BK3386144 (FL)</li>
-                            <li>(352) 293 - 5754</li>
+                            <li>Dhruv Realty</li>
+                            <li>License No. CQ1066435 (FL)</li>
+                            <li>(866) 889-0550</li>
                         </ul>
                         <ul>
                             <li>Dhruv Realty</li>
-                            <li>6903 Congress St, New Port Richey,</li>
-                            <li>FL 34653, United States</li>
+                            <li>1600 West End,</li>
+                            <li>Ste. 1500 Nashville, TN 37203</li>
                         </ul>
                     </div>
                 </div>
                 <div class="prop-listing-map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3514.3558105848006!2d-82.71037352451286!3d28.25722597587179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2904600b15555%3A0x69ada1cc8b402578!2sDhruv%20Management!5e0!3m2!1sen!2sph!4v1721245807024!5m2!1sen!2sph" width="100%" height="500" style="border:0; border-radius:20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.1815412175465!2d75.79079398611258!3d26.86597270197075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db42f4d8d62a3%3A0x5492a559e14bd6b0!2sDhruv%20Reality%20%26%20Marketing!5e0!3m2!1sen!2sph!4v1720105099225!5m2!1sen!2sph" width="100%" height="500" style="border:0; border-radius:20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div class="listing-sidebar">
-                <a href="<?=$propertyDetails['offering_memorandum'];?>" download class="offer-btn">
+                <a href="#" class="offer-btn">
                     <p>OFFERING MEMORANDUM</p>
                     <img src="images/colored-btn.png">
                 </a>
@@ -208,36 +237,6 @@
 <?=$this->include('templates/footer');?>
 <script>
 $(document).ready(function() {
-    // URL copy functionality
-    $('#copy').on('click', function() {
-        var url = window.location.href;
-        var tempInput = document.createElement('input');
-        tempInput.style.position = 'absolute';
-        tempInput.style.left = '-9999px';
-        tempInput.value = url;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-
-        // Show popover
-        var popover = $('#copy-popover');
-        var offset = $(this).offset();
-        // Position the popover
-        popover.css({
-            top: offset.top - popover.outerHeight() - 200,
-            left: offset.left + ($(this).outerWidth() / 0.5) - (popover.outerWidth() / 0.5)
-        });
-
-        // Display the popover
-        popover.fadeIn(200);
-
-        // Hide the popover after 2 seconds
-        setTimeout(function() {
-            popover.fadeOut(200);
-        }, 2000);
-    });
-
     $('#sendMessage').on('submit', function(event) {
         event.preventDefault();
 
@@ -263,12 +262,12 @@ $(document).ready(function() {
             icon: 'info',
             allowOutsideClick: false,
             didOpen: () => {
-                Swal.showLoading();
+                Swal.showLoading()
             }
         });
 
         $.ajax({
-            url: '/propertydetails/sendMessage',
+            url: '/propertydetails/sendMessage',  // Replace with the actual URL to your PHP script
             type: 'POST',
             data: {
                 fname: fname,
@@ -279,6 +278,7 @@ $(document).ready(function() {
                 note: note
             },
             success: function(response) {
+                // Handle the response from the server
                 Swal.fire({
                     icon: 'success',
                     title: 'Message Sent',
@@ -296,6 +296,53 @@ $(document).ready(function() {
                 });
             }
         });
+    });
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 10,
+        nav: true,
+        items: 1,
+        responsive: {
+            0: {
+                items: 1
+            },
+            768: {
+                items: 1
+            },
+            1000: {
+                items: 1
+            },
+            1200: {
+                items: 1
+            },
+            1600: {
+                items: 1
+            }
+        }
+    });
+
+    $('.owl-prev').html('<span class="fa fa-chevron-left"></span>');
+    $('.owl-next').html('<span class="fa fa-chevron-right"></span>');
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            // Show success popover using Tippy.js
+            tippy('#copyURL', {
+                content: 'Copied!',
+                trigger: 'manual',
+                onShow(instance) {
+                    setTimeout(() => {
+                        instance.hide();
+                    }, 2000);
+                }
+            }).show();
+        }, function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    }
+    document.getElementById('copyURL').addEventListener('click', function() {
+        var url = window.location.href;
+        copyToClipboard(url);
     });
 });
 </script>
