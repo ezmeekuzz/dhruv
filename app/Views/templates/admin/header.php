@@ -113,6 +113,37 @@
         .carousel-item:hover .delete-image-btn {
             opacity: 1;
         }
+        .file-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+            transition: all 0.3s ease;
+            cursor: move; /* Cursor change to indicate draggable */
+        }
+
+        .file-wrapper:hover .delete-btn-preview {
+            display: block;
+        }
+
+        .img-preview {
+            max-width: 100px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .delete-btn-preview {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: none;
+            background-color: red;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+        }
     </style>
 </head>
 

@@ -29,9 +29,13 @@ $(document).ready(function() {
         }
 
         // Append the selected files to formData
-        for (let i = 0; i < selectedFiles.length; i++) {
+        /*for (let i = 0; i < selectedFiles.length; i++) {
             formData.append('files[]', selectedFiles[i]);
-        }
+        }*/
+        selectedFiles.forEach((file, index) => {
+            formData.append(`files[]`, file);
+            formData.append(`order[]`, index); // Send the order with each file
+        });
 
         // Send AJAX request
         $.ajax({
@@ -157,27 +161,57 @@ $(document).ready(function() {
     });
 
     function handleFiles(files) {
-        fileList.innerHTML = '';
-        let invalidFiles = [];
-        selectedFiles = []; // Clear the previously selected files
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (!acceptedFileTypes.includes(fileExtension)) {
-                invalidFiles.push(file.name);
-                continue;
-            }
-            const fileItem = document.createElement('div');
-            fileItem.className = 'file-item';
-            fileItem.textContent = `File Name: ${file.name}, File Size: ${(file.size / 1024).toFixed(2)} KB`;
-            fileList.appendChild(fileItem);
+        const fileList = document.getElementById('fileList');
+        fileList.innerHTML = ''; // Clear previous previews
+        selectedFiles = []; // Reset the selected files array
+    
+        Array.from(files).forEach((file, index) => {
+            const fileWrapper = document.createElement('div');
+            fileWrapper.className = 'file-wrapper';
+            fileWrapper.dataset.index = index;
+    
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-preview';
+                fileWrapper.appendChild(img);
+    
+                const deleteBtn = document.createElement('span');
+                deleteBtn.className = 'delete-btn-preview';
+                deleteBtn.innerHTML = '&times;';
+                deleteBtn.onclick = function() {
+                    fileList.removeChild(fileWrapper);
+                    selectedFiles.splice(index, 1); // Remove from array
+                    updateFileSequence(); // Update sequence after removal
+                };
+                fileWrapper.appendChild(deleteBtn);
+    
+                fileList.appendChild(fileWrapper);
+            };
+            reader.readAsDataURL(file);
+    
             selectedFiles.push(file); // Add the file to the selectedFiles array
-        }
-
-        if (invalidFiles.length > 0) {
-            Swal.fire('Error', `Invalid file type(s): ${invalidFiles.join(', ')}. Only PNG, JPG, WEBP, and JPEG files are allowed.`, 'error');
-        }
+        });
+    
+        makeSortable();
+    }
+    
+    function makeSortable() {
+        $("#fileList").sortable({
+            update: function(event, ui) {
+                updateFileSequence();
+            }
+        }).disableSelection();
+    }
+    
+    function updateFileSequence() {
+        const updatedFiles = [];
+        $('#fileList .file-wrapper').each(function() {
+            const index = $(this).data('index');
+            updatedFiles.push(selectedFiles[index]);
+        });
+        selectedFiles = updatedFiles;
     }
 });
 

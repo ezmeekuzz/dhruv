@@ -46,6 +46,7 @@ class AddListingAgentController extends SessionController
             $phonenumber = $this->request->getPost('phonenumber');
             $mobilenumber = $this->request->getPost('mobilenumber');
             $position = $this->request->getPost('position');
+            $url = $this->request->getPost('url');
 
             // Data to be inserted into database
             $data = [
@@ -56,6 +57,7 @@ class AddListingAgentController extends SessionController
                 'mobilenumber' => $mobilenumber,
                 'position' => $position,
                 'profileimage' => 'uploads/profile-image/' . $newName, // Save the file name to database
+                'url' => $url,
             ];
 
             // Insert data into database

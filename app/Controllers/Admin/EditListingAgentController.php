@@ -55,6 +55,7 @@ class EditListingAgentController extends SessionController
                 'mobilenumber' => $this->request->getPost('mobilenumber'),
                 'position' => $this->request->getPost('position'),
                 'profileimage' => 'uploads/profile-image/' . $newName,
+                'url' => $this->request->getPost('url'),
             ];
 
             // Remove existing profile image if there was one
@@ -70,6 +71,7 @@ class EditListingAgentController extends SessionController
                 'phonenumber' => $this->request->getPost('phonenumber'),
                 'mobilenumber' => $this->request->getPost('mobilenumber'),
                 'position' => $this->request->getPost('position'),
+                'url' => $this->request->getPost('url'),
             ];
         }
 

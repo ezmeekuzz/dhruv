@@ -84,11 +84,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Price</label>
+                                    <label for="price">Asking Price</label>
                                     <input type="text" name="price" id="price" class="form-control" placeholder="Enter Price">
                                 </div>
                                 <div class="form-group">
-                                    <label for="price_per_sf">Price</label>
+                                    <label for="price_per_sf">Price Per SF</label>
                                     <input type="text" name="price_per_sf" id="price_per_sf" class="form-control" placeholder="Enter Price Per SF">
                                 </div>
                                 <div class="form-group">
@@ -138,6 +138,22 @@
                                 <div class="form-group">
                                     <label for="location">Location</label>
                                     <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location">
+                                </div>
+                                <div class="form-group">
+                                    <label for="askingcaprate">Asking Cap Rate</label>
+                                    <input type="text" name="askingcaprate" id="askingcaprate" class="form-control" placeholder="Enter Asking Cap Rate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="noi">NOI</label>
+                                    <input type="text" name="noi" id="noi" class="form-control" placeholder="Enter NOI">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leasestructure">Lease Structure</label>
+                                    <input type="text" name="leasestructure" id="leasestructure" class="form-control" placeholder="Enter Lease Structure">
+                                </div>
+                                <div class="form-group">
+                                    <label for="occupancy">Occupancy</label>
+                                    <input type="text" name="occupancy" id="occupancy" class="form-control" placeholder="Enter Occupancy">
                                 </div>
                                 <div class="form-group">
                                     <label for="backgroundimage">Background Image</label>
@@ -218,4 +234,5 @@
         </div>
     </div>
 </div><?=$this->include('templates/admin/footer');?>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/admin/addproperty.js"></script>

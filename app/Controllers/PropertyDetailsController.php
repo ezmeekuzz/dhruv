@@ -24,6 +24,7 @@ class PropertyDetailsController extends BaseController
         ->join('listing_agents', 'listing_agents.listing_agent_id=properties.listing_agent_id', 'left')
         ->join('states', 'states.state_id=properties.state_id', 'left')
         ->join('cities', 'cities.city_id=properties.city_id', 'left')
+        ->where('properties.publishstatus', 'Published')
         ->find($id);
         
         $additionaListingAgentLists = $additionalListingAgentsModel
@@ -55,6 +56,7 @@ class PropertyDetailsController extends BaseController
             'fname' => $this->request->getPost('fname'),
             'lname' => $this->request->getPost('lname'),
             'note' => $this->request->getPost('note'),
+            'phonenumber' => $this->request->getPost('phonenumber'),
             'property' => $this->request->getPost('property'),
             'link' => $this->request->getPost('link'),
             'emailaddress' => $this->request->getPost('email'),
@@ -63,6 +65,7 @@ class PropertyDetailsController extends BaseController
         $content = "";
 
         $content .= "Email : " . $data['emailaddress'] . "<br/>";
+        $content .= "Phone Number : " . $data['phonenumber'] . "<br/>";
         $content .= "First Name : " . $data['fname'] . "<br/>";
         $content .= "Last Name : " . $data['lname'] . "<br/>";
         $content .= "Property : " . $data['property'] . "<br/>";

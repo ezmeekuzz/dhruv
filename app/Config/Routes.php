@@ -67,6 +67,7 @@ $routes->get('/', 'HomeController::index');
 $routes->post('/propertydetails/sendMessage', 'PropertyDetailsController::sendMessage');
 $routes->post('/subscribe', 'SubscribeController::index');
 $routes->post('/home/getCitiesByState', 'HomeController::getCitiesByState');
-$routes->post('/home/getProperties', 'HomeController::getProperties');
+$routes->post('/home/getGridProperties', 'HomeController::getGridProperties');
+$routes->post('/home/getTabularProperties', 'HomeController::getTabularProperties');
 $routes->post('/search', 'SearchController::index');
 require APPPATH . 'Config/Propertyroutes.php';

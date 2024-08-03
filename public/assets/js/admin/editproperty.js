@@ -1,13 +1,11 @@
 $(document).ready(function() {
-    let selectedFiles = []; // Global variable to store selected files
-    $('#editproperty').submit(function(event) {
-        // Prevent default form submission
-        event.preventDefault();
+    let existingFiles = [];
+    let selectedFiles = [];
 
-        // Create FormData object
+    $('#editproperty').submit(function(event) {
+        event.preventDefault();
         var formData = new FormData(this);
 
-        // Perform client-side validation
         var requiredFields = [
             'propertyname', 'real_estate_type', 'property_type_id', 'listing_agent_id',
             'price', 'price_per_sf', 'caprate', 'state_id', 'city_id', 'zipcode', 'tenancy',
@@ -19,14 +17,13 @@ $(document).ready(function() {
             var fieldElement = $('[name="' + field + '"]');
             if (!formData.get(field)) {
                 isValid = false;
-                fieldElement.addClass('is-invalid'); // Add 'is-invalid' class to highlight the field
+                fieldElement.addClass('is-invalid');
             } else {
-                fieldElement.removeClass('is-invalid'); // Remove 'is-invalid' class if the field is valid
+                fieldElement.removeClass('is-invalid');
             }
         });
 
         if (!isValid) {
-            // Show error using SweetAlert2
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -35,61 +32,80 @@ $(document).ready(function() {
             return;
         }
 
-        // Append the selected files to formData
-        for (let i = 0; i < selectedFiles.length; i++) {
-            formData.append('files[]', selectedFiles[i]);
-        }
+        selectedFiles.forEach((file, index) => {
+            formData.append(`files[]`, file);
+            formData.append(`order[]`, index);
+        });
 
-        // Send AJAX request
-        $.ajax({
-            type: 'POST',
-            url: '/admin/editproperty/update/' + formData.get('property_id'),
-            data: formData, // Use FormData object
-            dataType: 'json',
-            processData: false, // Do not process data
-            contentType: false, // Do not set contentType
-            beforeSend: function() {
-                // Show loading effect
-                Swal.fire({
-                    title: 'Saving...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
+        let existingFilePromises = [];
+
+        document.querySelectorAll('.existing-image').forEach(function(imageElem) {
+            var fileName = imageElem.getAttribute('data-filename');
+            var filePath = imageElem.getAttribute('data-filepath');
+
+            let fetchPromise = fetch(filePath)
+                .then(response => response.blob())
+                .then(blob => {
+                    var file = new File([blob], fileName, { type: blob.type });
+                    formData.append('files[]', file);
                 });
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Reset form and show success message
-                    $('#editproperty')[0].reset();
-                    $('.chosen-select').trigger('chosen:updated');
+
+            existingFilePromises.push(fetchPromise);
+        });
+
+        // Wait for all existing files to be added to formData
+        Promise.all(existingFilePromises).then(() => {
+            // Log files before AJAX call
+            console.log("Selected Files:", selectedFiles);
+            console.log("Existing Files:", existingFiles);
+
+            $.ajax({
+                type: 'POST',
+                url: '/admin/editproperty/update/' + formData.get('property_id'),
+                data: formData,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
                     Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message,
+                        title: 'Saving...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
                     });
-
-                    // Remove dynamically added investment highlights and retain default
-                    $('.investmenthighlights').empty();
-
-                } else {
-                    // Show error message
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: response.message,
+                        text: 'An error occurred. Please try again later.',
                     });
+                    console.error(xhr.responseText);
                 }
-            },
-            error: function(xhr, status, error) {
-                // Handle AJAX errors
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'An error occurred. Please try again later.',
-                });
-                console.error(xhr.responseText);
-            }
+            });
+        }).catch(error => {
+            console.error('Error processing files:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred while processing files. Please try again.',
+            });
         });
     });
 
@@ -103,7 +119,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(data) {
                     let citySelect = $('#city_id');
-                    citySelect.empty(); // Clear previous options
+                    citySelect.empty();
                     citySelect.append('<option hidden></option><option disabled></option>');
 
                     if (data && data.length > 0) {
@@ -112,7 +128,6 @@ $(document).ready(function() {
                         });
                     }
 
-                    // If you are using Chosen jQuery plugin, you need to trigger an update
                     citySelect.trigger("chosen:updated");
                 },
                 error: function(xhr, status, error) {
@@ -139,10 +154,7 @@ $(document).ready(function() {
         });
     }
 
-    // Manually trigger filtering function on keyup event
     $('#searchlistingagent').on('keyup', filter);
-
-    // Initial filtering
     filter();
 
     const uploadArea = document.getElementById('uploadArea');
@@ -152,60 +164,127 @@ $(document).ready(function() {
 
     const acceptedFileTypes = ['png', 'jpg', 'webp', 'jpeg', 'PNG', 'JPG', 'WEBP', 'JPEG'];
 
+    $('#fileList .file-wrapper[data-type="existing"]').each(function() {
+        const index = $(this).data('index');
+        existingFiles.push({
+            id: $(this).data('id'),
+            index: index,
+            element: $(this)
+        });
+    });
+    
     uploadArea.addEventListener('dragover', function(event) {
         event.preventDefault();
         uploadArea.classList.add('drag-over');
     });
-
+    
     uploadArea.addEventListener('dragleave', function(event) {
         event.preventDefault();
         uploadArea.classList.remove('drag-over');
     });
-
+    
     uploadArea.addEventListener('drop', function(event) {
         event.preventDefault();
         uploadArea.classList.remove('drag-over');
         handleFiles(event.dataTransfer.files);
     });
-
+    
     fileSelectBtn.addEventListener('click', function() {
         fileInput.click();
     });
-
+    
     fileInput.addEventListener('change', function() {
         handleFiles(fileInput.files);
     });
-
+    
     function handleFiles(files) {
-        fileList.innerHTML = '';
-        let invalidFiles = [];
-        selectedFiles = []; // Clear the previously selected files
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (!acceptedFileTypes.includes(fileExtension)) {
-                invalidFiles.push(file.name);
-                continue;
+        Array.from(files).forEach((file, index) => {
+            if (acceptedFileTypes.includes(file.name.split('.').pop())) {
+                const fileWrapper = document.createElement('div');
+                fileWrapper.className = 'file-wrapper';
+                fileWrapper.dataset.index = index + existingFiles.length;
+                fileWrapper.dataset.type = 'new';
+    
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-preview';
+                    fileWrapper.appendChild(img);
+    
+                    const deleteBtn = document.createElement('span');
+                    deleteBtn.className = 'delete-btn-preview';
+                    deleteBtn.innerHTML = '&times;';
+                    deleteBtn.onclick = function() {
+                        fileList.removeChild(fileWrapper);
+                        selectedFiles = selectedFiles.filter((f, i) => i !== index);
+                        updateFileSequence();
+                    };
+                    fileWrapper.appendChild(deleteBtn);
+    
+                    fileList.appendChild(fileWrapper);
+                };
+                reader.readAsDataURL(file);
+    
+                selectedFiles.push(file);
+            } else {
+                alert("Unsupported file type.");
             }
-            const fileItem = document.createElement('div');
-            fileItem.className = 'file-item';
-            fileItem.textContent = `File Name: ${file.name}, File Size: ${(file.size / 1024).toFixed(2)} KB`;
-            fileList.appendChild(fileItem);
-            selectedFiles.push(file); // Add the file to the selectedFiles array
-        }
-
-        if (invalidFiles.length > 0) {
-            Swal.fire('Error', `Invalid file type(s): ${invalidFiles.join(', ')}. Only PNG, JPG, WEBP, and JPEG files are allowed.`, 'error');
-        }
+        });
+    
+        makeSortable();
+        // Log after handling new files
+        console.log("Selected Files after handling new files:", selectedFiles);
     }
-});
+    
+    function makeSortable() {
+        $("#fileList").sortable({
+            update: function(event, ui) {
+                updateFileSequence();
+            }
+        }).disableSelection();
+    }
+    
+    function updateFileSequence() {
+        let updatedExistingFiles = [];
+        let updatedSelectedFiles = [];
+    
+        $('#fileList .file-wrapper').each(function(index) {
+            const type = $(this).data('type');
+            const originalIndex = $(this).data('index');
+    
+            if (type === 'existing') {
+                updatedExistingFiles.push(existingFiles.find(file => file.index === originalIndex));
+            } else {
+                updatedSelectedFiles.push(selectedFiles[originalIndex - existingFiles.length]);
+            }
+    
+            $(this).attr('data-index', index);
+        });
+    
+        existingFiles = updatedExistingFiles;
+        selectedFiles = updatedSelectedFiles;
 
-function addinvestmenthighlight() {
-    var elem = "";
-    elem += '<div class="InvestmentHighlightLists"><div class="form-group"><label for="content" style="float: left;">Investment Highlight</label><div style="float: right;"><a href="javascript:void(0);" onclick="addinvestmenthighlight();" title="Add Investment Highlight"><i class="fa fa-plus-circle" style="font-size: 18px; color: blue;"></i></a><a href="javascript:void(0);" style="color: red; font-size: 18px;" class="remove-investment-highlight"><i class="fa fa-trash"></i></a></div><input type="text" name="title[]" id="title" class="form-control mb-3" placeholder="Enter Title"><textarea class="form-control" id="content" name="content[]" placeholder="Content" style="resize: none; min-height: 80px;"></textarea></div></div>';
-    $('.investmenthighlights').append(elem);
-}
-$('.investmenthighlights').on('click', '.remove-investment-highlight', function() {
-    $(this).closest('.InvestmentHighlightLists').remove();
+        // Log after updating file sequence
+        console.log("Existing Files after updating sequence:", existingFiles);
+        console.log("Selected Files after updating sequence:", selectedFiles);
+    }
+    
+    $("#fileList").on("click", ".delete-btn-preview", function () {
+        $(this).parent().remove();
+        const indexToRemove = $(this).parent().data('index');
+    
+        if ($(this).parent().data('type') === 'existing') {
+            existingFiles = existingFiles.filter(file => file.index !== indexToRemove);
+        } else {
+            selectedFiles = selectedFiles.filter((file, index) => index !== (indexToRemove - existingFiles.length));
+        }
+    
+        updateFileSequence();
+        // Log after deleting a file
+        console.log("Existing Files after deletion:", existingFiles);
+        console.log("Selected Files after deletion:", selectedFiles);
+    });
+    
+    makeSortable();
 });

@@ -50,7 +50,7 @@ class AddPropertyController extends SessionController
         $investmentHighlightsModel = new InvestmentHighlightsModel();
         $propertyGalleriesModel = new PropertyGalleriesModel();
         $files = $this->request->getFiles();
-        
+        $order = $_POST['order'];
         $propertyName = $this->request->getPost('propertyname');
         $propertyData = [
             'property_name' => $propertyName,
@@ -72,6 +72,10 @@ class AddPropertyController extends SessionController
             'buildingsize' => $this->request->getPost('buildingsize'),
             'yearbuilt' => $this->request->getPost('yearbuilt'),
             'location' => $this->request->getPost('location'),
+            'askingcaprate' => $this->request->getPost('askingcaprate'),
+            'noi' => $this->request->getPost('noi'),
+            'leasestructure' => $this->request->getPost('leasestructure'),
+            'occupancy' => $this->request->getPost('occupancy'),
             'publishstatus' => ($this->request->getPost('publishstatus') == 'Yes') ? 'Published' : 'Draft',
             'dateadded' => date('Y-m-d')
         ];

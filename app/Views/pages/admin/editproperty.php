@@ -86,11 +86,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Price</label>
+                                    <label for="price">Asking Price</label>
                                     <input type="text" name="price" id="price" class="form-control" placeholder="Enter Price" value="<?=$property['price'];?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="price_per_sf">Price</label>
+                                    <label for="price_per_sf">Price Per SF</label>
                                     <input type="text" name="price_per_sf" id="price_per_sf" class="form-control" placeholder="Enter Price Per SF" value="<?=$property['price_per_sf'];?>">
                                 </div>
                                 <div class="form-group">
@@ -149,16 +149,27 @@
                                     <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location" value="<?=$property['location'];?>">
                                 </div>
                                 <div class="form-group">
+                                    <label for="askingcaprate">Asking Cap Rate</label>
+                                    <input type="text" name="askingcaprate" id="askingcaprate" class="form-control" placeholder="Enter Asking Cap Rate" value="<?=$property['askingcaprate'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="noi">NOI</label>
+                                    <input type="text" name="noi" id="noi" class="form-control" placeholder="Enter NOI" value="<?=$property['noi'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leasestructure">Lease Structure</label>
+                                    <input type="text" name="leasestructure" id="leasestructure" class="form-control" placeholder="Enter Lease Structure" value="<?=$property['leasestructure'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="occupancy">Occupancy</label>
+                                    <input type="text" name="occupancy" id="occupancy" class="form-control" placeholder="Enter Occupancy" value="<?=$property['occupancy'];?>">
+                                </div>
+                                <div class="form-group">
                                     <label for="backgroundimage">Background Image</label>
                                     <div class="custom-file">
                                         <label class="custom-file-label" for="backgroundimage">Choose file</label>
                                         <input type="file" class="custom-file-input" id="backgroundimage" name="backgroundimage" accept="image/png, image/gif, image/jpeg, image/webp">
                                     </div>
-                                    <?php if (!empty($property['backgroundimage'])) : ?>
-                                        <div class="mt-2">
-                                            <img src="<?=base_url($property['backgroundimage']);?>" class="img-thumbnail" style="max-width: 200px;" alt="Current Image">
-                                        </div>
-                                    <?php endif; ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="offering_memorandum">Offering Memorandum</label>
@@ -175,7 +186,18 @@
                                         <button type="button" id="fileSelectBtn">Select Files</button>
                                         <input type="file" id="fileInput" name="files[]" multiple hidden accept=".jpg, .png, .jpeg, .webp, .JPG, .PNG, .JPEG, .WEBP">
 
-                                        <div id="fileList"></div>
+                                        <div id="fileList">
+                                            <?php if($propertyGalleries) : ?>
+                                                <?php foreach($propertyGalleries as $index => $list) : ?>
+                                                    <div class="file-wrapper" data-type="existing" data-index="<?=$index;?>" data-id="<?=$list['property_gallery_id'];?>" data-location="<?=$list['location'];?>">
+                                                        <img src="/<?=$list['location'];?>" alt="" class="img-preview">
+                                                        <span class="delete-btn-preview">&times;</span>
+                                                        <!-- Hidden inputs to store the file data -->
+                                                        <input type="hidden" class="existing-image" data-filename="<?=basename($list['location']);?>" data-filepath="/<?=$list['location'];?>">
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
