@@ -28,15 +28,6 @@ $(document).ready(function() {
             return;
         }
 
-        // Append the selected files to formData
-        /*for (let i = 0; i < selectedFiles.length; i++) {
-            formData.append('files[]', selectedFiles[i]);
-        }*/
-        selectedFiles.forEach((file, index) => {
-            formData.append(`files[]`, file);
-            formData.append(`order[]`, index); // Send the order with each file
-        });
-
         // Send AJAX request
         $.ajax({
             type: 'POST',
@@ -129,12 +120,89 @@ $(document).ready(function() {
     $('#searchlistingagent').on('keyup', filter);
     filter();
 
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const fileSelectBtn = document.getElementById('fileSelectBtn');
-    const fileList = document.getElementById('fileList');
+    function handleFiles(files) {
+        const fileList = document.getElementById('fileList');
+        fileList.innerHTML = ''; // Clear previous previews
+    
+        selectedFiles = selectedFiles.concat(Array.from(files));
+    
+        selectedFiles.forEach((file, index) => {
+            const fileWrapper = document.createElement('div');
+            fileWrapper.className = 'file-wrapper';
+            fileWrapper.dataset.index = index;
+    
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-preview';
+                fileWrapper.appendChild(img);
+    
+                const sequenceNumber = document.createElement('span');
+                sequenceNumber.className = 'sequence-number';
+                sequenceNumber.textContent = `#${index + 1}`;
+                fileWrapper.appendChild(sequenceNumber);
+    
+                const deleteBtn = document.createElement('span');
+                deleteBtn.className = 'delete-btn-preview';
+                deleteBtn.innerHTML = '&times;';
+                deleteBtn.onclick = function() {
+                    fileList.removeChild(fileWrapper);
+                    selectedFiles = selectedFiles.filter((_, i) => i !== index);
+                    updateFileSequence();
+                };
+                fileWrapper.appendChild(deleteBtn);
+    
+                fileList.appendChild(fileWrapper);
+    
+                // Create and append file input field to the fileWrapper
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.name = 'files[]';
+                fileInput.style.display = 'none'; // Hide the file input
+                fileInput.dataset.index = index; // Set the data-index attribute
+                fileInput.dataset.name = file.name; // Set the data-name attribute
+                fileWrapper.appendChild(fileInput);
+    
+                // Assign image data to the file input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+            };
+            reader.readAsDataURL(file);
+        });
+    
+        makeSortable(); // Initialize sorting functionality
+        updateFileSequence(); // Update sequence initially
+    }
 
-    const acceptedFileTypes = ['png', 'jpg', 'webp', 'jpeg', 'PNG', 'JPG', 'WEBP', 'JPEG'];
+    function makeSortable() {
+        $("#fileList").sortable({
+            update: function(event, ui) {
+                const newIndex = ui.item.index();
+                const oldIndex = ui.item.data('index');
+                const movedFile = selectedFiles.splice(oldIndex, 1)[0];
+                selectedFiles.splice(newIndex, 0, movedFile);
+
+                updateFileSequence(); // Update index after rearrangement
+            }
+        }).disableSelection();
+    }
+
+    function updateFileSequence() {
+        const fileWrappers = document.querySelectorAll('.file-wrapper');
+        fileWrappers.forEach((wrapper, index) => {
+            wrapper.dataset.index = index;
+            const sequenceNumber = wrapper.querySelector('.sequence-number');
+            sequenceNumber.textContent = `#${index + 1}`;
+
+            // Update file input data-index
+            const fileInput = wrapper.querySelector('input[type="file"]');
+            if (fileInput) {
+                fileInput.dataset.index = index;
+            }
+        });
+    }
 
     uploadArea.addEventListener('dragover', function(event) {
         event.preventDefault();
@@ -153,66 +221,18 @@ $(document).ready(function() {
     });
 
     fileSelectBtn.addEventListener('click', function() {
+        // Open file dialog to select files
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.style.display = 'none';
+
+        fileInput.addEventListener('change', function() {
+            handleFiles(fileInput.files);
+        });
+
         fileInput.click();
     });
-
-    fileInput.addEventListener('change', function() {
-        handleFiles(fileInput.files);
-    });
-
-    function handleFiles(files) {
-        const fileList = document.getElementById('fileList');
-        fileList.innerHTML = ''; // Clear previous previews
-        selectedFiles = []; // Reset the selected files array
-    
-        Array.from(files).forEach((file, index) => {
-            const fileWrapper = document.createElement('div');
-            fileWrapper.className = 'file-wrapper';
-            fileWrapper.dataset.index = index;
-    
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'img-preview';
-                fileWrapper.appendChild(img);
-    
-                const deleteBtn = document.createElement('span');
-                deleteBtn.className = 'delete-btn-preview';
-                deleteBtn.innerHTML = '&times;';
-                deleteBtn.onclick = function() {
-                    fileList.removeChild(fileWrapper);
-                    selectedFiles.splice(index, 1); // Remove from array
-                    updateFileSequence(); // Update sequence after removal
-                };
-                fileWrapper.appendChild(deleteBtn);
-    
-                fileList.appendChild(fileWrapper);
-            };
-            reader.readAsDataURL(file);
-    
-            selectedFiles.push(file); // Add the file to the selectedFiles array
-        });
-    
-        makeSortable();
-    }
-    
-    function makeSortable() {
-        $("#fileList").sortable({
-            update: function(event, ui) {
-                updateFileSequence();
-            }
-        }).disableSelection();
-    }
-    
-    function updateFileSequence() {
-        const updatedFiles = [];
-        $('#fileList .file-wrapper').each(function() {
-            const index = $(this).data('index');
-            updatedFiles.push(selectedFiles[index]);
-        });
-        selectedFiles = updatedFiles;
-    }
 });
 
 function addinvestmenthighlight() {

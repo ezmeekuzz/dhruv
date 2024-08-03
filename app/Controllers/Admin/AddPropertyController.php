@@ -50,7 +50,6 @@ class AddPropertyController extends SessionController
         $investmentHighlightsModel = new InvestmentHighlightsModel();
         $propertyGalleriesModel = new PropertyGalleriesModel();
         $files = $this->request->getFiles();
-        $order = $_POST['order'];
         $propertyName = $this->request->getPost('propertyname');
         $propertyData = [
             'property_name' => $propertyName,
@@ -110,7 +109,7 @@ class AddPropertyController extends SessionController
     
         if ($propertyId) {
             if ($file3) {
-                foreach ($file3['files'] as $fileGallery) {
+                foreach ($file3['files'] as $index => $fileGallery) {
                     if ($fileGallery->isValid() && !$fileGallery->hasMoved()) {
                         $uploadPath3 = FCPATH . 'uploads/property-gallery/';
                         if (!is_dir($uploadPath3)) {
@@ -118,11 +117,13 @@ class AddPropertyController extends SessionController
                         }
                         $newFileName3 = $fileGallery->getRandomName();
                         $fileGallery->move($uploadPath3, $newFileName3);
+                        $sequence = $index + 1;
                         $propertyGalleriesModel->insert([
                             'property_id' => $propertyId,
                             'location' => 'uploads/property-gallery/' . $newFileName3,
                             'file_name' => $newFileName3,
-                            'original_name' => $fileGallery->getClientName() // Save original file name
+                            'original_name' => $fileGallery->getClientName(), // Save original file name
+                            'order_sequence' => $sequence
                         ]);
                     }
                 }

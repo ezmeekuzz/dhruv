@@ -113,13 +113,6 @@
         .carousel-item:hover .delete-image-btn {
             opacity: 1;
         }
-        .file-wrapper {
-            position: relative;
-            display: inline-block;
-            margin: 10px;
-            transition: all 0.3s ease;
-            cursor: move; /* Cursor change to indicate draggable */
-        }
 
         .file-wrapper:hover .delete-btn-preview {
             display: block;
@@ -143,6 +136,33 @@
             border-radius: 50%;
             cursor: pointer;
             font-size: 12px;
+        }
+        .file-order {
+            display: block;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        .file-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .file-wrapper img.img-preview {
+            display: block;
+            max-width: 100px; /* Adjust as needed */
+            max-height: 100px; /* Adjust as needed */
+        }
+
+        .file-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
     </style>
 </head>

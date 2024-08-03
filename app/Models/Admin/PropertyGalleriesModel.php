@@ -13,7 +13,7 @@ class PropertyGalleriesModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'property_id', 'file_name', 'original_name', 'location'
+        'property_id', 'file_name', 'original_name', 'location', 'order_sequence'
     ];
 
     protected bool $allowEmptyInserts = false;

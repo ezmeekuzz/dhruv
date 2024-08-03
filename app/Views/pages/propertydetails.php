@@ -266,7 +266,7 @@
                         </tbody>
                     </table>
 
-                    <a href="/images/Offering Memorandum Template.pdf" target="_blank" class="offer-btn mobile">
+                    <a href="<?=$propertyDetails['offering_memorandum'];?>" target="_blank" class="offer-btn mobile">
                         <p>OFFERING MEMORANDUM</p>
                         <img src="images/colored-btn.png">
                     </a>
@@ -609,6 +609,7 @@ $('#sendMessage').on('submit', function(event) {
                 fname: fname,
                 lname: lname,
                 email: email,
+                phonenumber: phonenumber,
                 link: link,
                 property: property,
                 note: note
@@ -670,6 +671,7 @@ $('#sendMessage').on('submit', function(event) {
                 fname: fname,
                 lname: lname,
                 email: email,
+                phonenumber: phonenumber,
                 link: link,
                 property: property,
                 note: note
