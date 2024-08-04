@@ -184,8 +184,6 @@
                                         <h2>Drag & Drop Images</h2>
                                         <p>or</p>
                                         <button type="button" id="fileSelectBtn">Select Files</button>
-                                        <input type="file" id="fileInput" name="files[]" multiple hidden accept=".jpg, .png, .jpeg, .webp, .JPG, .PNG, .JPEG, .WEBP">
-
                                         <div id="fileList">
                                             <?php if($propertyGalleries) : ?>
                                                 <?php foreach($propertyGalleries as $index => $list) : ?>

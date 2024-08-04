@@ -173,15 +173,17 @@ class EditPropertyController extends SessionController
             $propertyGalleriesModel->where('property_id', $propertyId)->delete();
         
             // Step 2: Handle new file uploads
-            foreach ($uploadedFiles as $uploadedFile) {
+            foreach ($uploadedFiles as $index => $uploadedFile) {
                 if ($uploadedFile->isValid() && !$uploadedFile->hasMoved()) {
                     $newFileName3 = $uploadedFile->getRandomName();
                     $uploadedFile->move($uploadPath3, $newFileName3);
+                    $sequence = $index + 1;
                     $propertyGalleriesModel->insert([
                         'property_id' => $propertyId,
                         'location' => 'uploads/property-gallery/' . $newFileName3,
                         'file_name' => $newFileName3,
-                        'original_name' => $uploadedFile->getClientName() // Save original file name
+                        'original_name' => $uploadedFile->getClientName(), // Save original file name
+                        'order_sequence' => $sequence
                     ]);
                 }
             }
