@@ -13,7 +13,7 @@ class MessagesModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'fname', 'lname', 'emailaddress', 'note', 'link', 'property'
+        'fname', 'lname', 'emailaddress', 'phonenumber', 'note', 'link', 'property'
     ];
 
     protected bool $allowEmptyInserts = false;

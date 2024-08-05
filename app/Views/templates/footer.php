@@ -1,57 +1,61 @@
-<footer class="main-section footer-section">
-    <div class="main-inner-sec footer-inner-sec">
-        <div class="top-footer">
-            <div class="footer-content">
-                <img class="footerLogo" src="images/szs.png">
-                <h2>
-                    Request A<br>
-                    Free Quote,<br>
-                    Contact Us Now
-                </h2>
-                <p>Get Customized Property And Industry News Sent Right To Your Inbox!</p>
-                <form class="footerForm" id="subscribe">
-                    <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address">
-                    <div class="result-btn">
-                        <input type="submit" value="Learn More">
-                        <img src="images/colored-btn.png">
-                    </div>
-                </form>
-            </div>
-            <div class="footer-content footer-menu">
-                <div class="footer-cont-top">
+    <footer class="main-section footer-section">
+        <div class="main-inner-sec footer-inner-sec">
+            <div class="top-footer">
+                <div class="footer-content">
+                    <a href=""><img class="footerLogo" src="images/szs.png"></a>
+                    <h2>
+                        Request a Free <br>
+                        Property Analysis,<br>
+                        Contact Us Now
+                    </h2>
+                    <p>Get Customized Property And Industry News Sent Right To Your Inbox!</p>
+                    <form class="footerForm" id="subscribe">
+                        <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address">
+                        <div class="result-btn">
+                            <input type="submit" value="Learn More">
+                            <img src="images/colored-btn.png">
+                        </div>
+                    </form>
+                </div>
+                <div class="footer-content footer-menu">
+                   <div class="footer-cont-top">
                     <ul class="nav-menu">
                         <li>
-                            <a href="/listing.html">Properties <img src="images/drop-Icon.png"></a>
+                            <a class="menuList" >Properties <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/properties-main-page/">Residential</a></li>
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/properties-hide-map/">Commercial</a></li>
+                                <!-- <li><a href="https://app.dhruv-realty.com/listing.html">Residential</a></li> -->
+                                <li><a href="https://app.dhruv-realty.com/listing.html">Commercial Listings</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#">Services <img src="images/drop-Icon.png"></a>
+                            <a class="menuList" >Services <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/investment-sales/">Investment Sales</a></li>
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/leasing/">Leasing</a></li>
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/1031-exchange/">1031 Exchange</a></li>
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/consulting/">Consulting</a></li>
+                                <li><a href="https://dhruv-realty.com/investment-sales/">Investment Sales</a></li>
+                                <li><a href="https://dhruv-realty.com/leasing/">Leasing</a></li>
+                                <li><a href="https://dhruv-realty.com/1031-exchange/">1031 Exchange</a></li>
+                                <li><a href="https://dhruv-realty.com/consulting/">Consulting</a></li>
+                                <li><a href="https://dhruv-realty.com/other-services/">Other Services</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#">Insights <img src="images/drop-Icon.png"></a>
+                            <a class="menuList" >Insights <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/insights-inner/">In The News</a></li>
+                                <li><a href="https://dhruv-realty.com/insights-inner/">In The News</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#">The Brokerage <img src="images/drop-Icon.png"></a>
+                            <a class="menuList" >The Brokerage <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/company/">Company</a></li>
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/leadership/">Leadership</a></li>
-                                <li><a href="https://riftofheroes.com/programming/dhruvinternational/our-agents/">Our Agents</a></li>
+                                <li><a href="https://dhruv-realty.com/company/">Company</a></li>
+                                <li><a href="https://dhruv-realty.com/leadership/">Leadership</a></li>
+                                <li><a href="https://dhruv-realty.com/our-agents/">Our Agents</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="https://riftofheroes.com/programming/dhruvinternational/our-agents/">Contact</a>
+                            <a class="contactMenu menuList" >Contact Us <i class="fas fa-chevron-down"></i></a>
+                            <ul class="menu-dropdown">
+                                <li><a class="contactMenu" href="https://dhruv-realty.com/contact-us/">Contact Us</a></li>
+                            </ul>
                         </li>
                     </ul>
                         <div class="footer-info">
@@ -73,17 +77,17 @@
             <div class="bot-footer">
                 <h5>© Dhurv Realty. 2024 all rights reserved</h5>
                 <ul>
-                    <li><a href="#">Privacy Policy </a></li>
-                    <li><a href="#">Terms & conditions</a></li>
+                    <li><a href="https://dhruv-realty.com/privacy-policy/">Privacy Policy </a></li>
+                    <li><a href="https://dhruv-realty.com/terms-and-conditions/">Terms & conditions</a></li>
                 </ul>
             </div>
         </div>
-    </footer>   
+    </footer>  
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="js/js.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#subscribe').on('submit', function(event) {
@@ -138,56 +142,55 @@ $(document).ready(function() {
     });
     
     var typingTimer;
-        var doneTypingInterval = 300; // Time in ms, adjust as needed
+    var doneTypingInterval = 300; // Time in ms, adjust as needed
 
-        // On keyup, start the countdown
-        $('input[name="query"]').on('keyup', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(doneTyping, doneTypingInterval);
-        });
+    // On keyup, start the countdown
+    $('input[name="query"]').on('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
 
-        // On keydown, clear the countdown 
-        $('input[name="query"]').on('keydown', function() {
-            clearTimeout(typingTimer);
-        });
+    // On keydown, clear the countdown 
+    $('input[name="query"]').on('keydown', function() {
+        clearTimeout(typingTimer);
+    });
 
-        // User is "finished typing," send the AJAX request
-        function doneTyping() {
-            var query = $('input[name="query"]').val();
+    // User is "finished typing," send the AJAX request
+    function doneTyping() {
+        var query = $('input[name="query"]').val();
 
-            if (query.trim() === '') {
-                $('#dropdownResults').hide();
-                return;
-            }
-
-            $.ajax({
-                url: '<?= base_url('search') ?>',
-                method: 'POST',
-                data: { query: query },
-                success: function(response) {
-                    var results = response.results;
-                    var html = '';
-
-                    if (results.length > 0) {
-                        results.forEach(function(result) {
-                            html += '<div class="result-item">';
-                            html += '<h4><a href="' + result.slug + '" target="_blank">' + result.property_name + '</a></h4>';
-                            html += '</div>';
-                        });
-                        $('#dropdownResults').html(html).show();
-                    } else {
-                        $('#dropdownResults').html('<div class="result-item">No results found.</div>').show();
-                    }
-                }
-            });
+        if (query.trim() === '') {
+            $('#dropdownResults').hide();
+            return;
         }
 
-        $(document).on('click', function(event) {
-            if (!$(event.target).closest('.haeder-search').length) {
-                $('#dropdownResults').hide();
+        $.ajax({
+            url: '<?= base_url('search') ?>',
+            method: 'POST',
+            data: { query: query },
+            success: function(response) {
+                var results = response.results;
+                var html = '';
+
+                if (results.length > 0) {
+                    results.forEach(function(result) {
+                        html += '<div class="result-item">';
+                        html += '<h4><a href="' + result.slug + '" target="_blank">' + result.property_name + '</a></h4>';
+                        html += '</div>';
+                    });
+                    $('#dropdownResults').html(html).show();
+                } else {
+                    $('#dropdownResults').html('<div class="result-item">No results found.</div>').show();
+                }
             }
         });
+    }
 
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.haeder-search').length) {
+            $('#dropdownResults').hide();
+        }
+    });
 });
 </script>
 </html>

@@ -13,7 +13,7 @@ class ListingAgentsModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'fullname', 'email', 'licenseno', 'phonenumber', 'mobilenumber', 'position', 'profileimage'
+        'fullname', 'email', 'licenseno', 'phonenumber', 'mobilenumber', 'position', 'profileimage', 'url'
     ];
 
     protected bool $allowEmptyInserts = false;

@@ -76,19 +76,19 @@
                                     <select class="form-control chosen-select" name="listing_agent_id" id="listing_agent_id" data-placeholder="Choose a Listing Agents...">
                                         <option hidden></option>
                                         <option disabled></option>
-                                        <?php if($listinAgentList) : ?>
-                                        <?php foreach($listinAgentList as $list) : ?>
+                                        <?php if($listingAgentList) : ?>
+                                        <?php foreach($listingAgentList as $list) : ?>
                                         <option value="<?=$list['listing_agent_id'];?>"><?=$list['fullname'].' - '.$list['position'];?></option>
                                         <?php endforeach; ?>
                                         <?php endif; ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Price</label>
+                                    <label for="price">Asking Price</label>
                                     <input type="text" name="price" id="price" class="form-control" placeholder="Enter Price">
                                 </div>
                                 <div class="form-group">
-                                    <label for="price_per_sf">Price</label>
+                                    <label for="price_per_sf">Price Per SF</label>
                                     <input type="text" name="price_per_sf" id="price_per_sf" class="form-control" placeholder="Enter Price Per SF">
                                 </div>
                                 <div class="form-group">
@@ -140,10 +140,42 @@
                                     <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location">
                                 </div>
                                 <div class="form-group">
+                                    <label for="askingcaprate">Asking Cap Rate</label>
+                                    <input type="text" name="askingcaprate" id="askingcaprate" class="form-control" placeholder="Enter Asking Cap Rate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="noi">NOI</label>
+                                    <input type="text" name="noi" id="noi" class="form-control" placeholder="Enter NOI">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leasestructure">Lease Structure</label>
+                                    <input type="text" name="leasestructure" id="leasestructure" class="form-control" placeholder="Enter Lease Structure">
+                                </div>
+                                <div class="form-group">
+                                    <label for="occupancy">Occupancy</label>
+                                    <input type="text" name="occupancy" id="occupancy" class="form-control" placeholder="Enter Occupancy">
+                                </div>
+                                <div class="form-group">
                                     <label for="backgroundimage">Background Image</label>
                                     <div class="custom-file">
                                         <label class="custom-file-label" for="backgroundimage">Choose file</label>
                                         <input type="file" class="custom-file-input" id="backgroundimage" name="backgroundimage" accept="image/png, image/gif, image/jpeg, image/webp">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="offering_memorandum">Offering Memorandum</label>
+                                    <div class="custom-file">
+                                        <label class="custom-file-label" for="offering_memorandum">Choose file</label>
+                                        <input type="file" class="custom-file-input" id="offering_memorandum" name="offering_memorandum" accept="application/pdf">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoicefile">Drop Files</label>
+                                    <div class="upload-area" id="uploadArea">
+                                        <h2>Drag & Drop Images</h2>
+                                        <p>or</p>
+                                        <button type="button" id="fileSelectBtn">Select Files</button>
+                                        <div id="fileList"></div>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -166,8 +198,8 @@
                                     <label class="control-label" for="categorylist"> Listing Agent List</label>
                                     <div class="listingAgentList" style="max-height: 220px !important; overflow: auto;">
                                         <ul class="list-group" id="agentlist">
-                                            <?php if(COUNT($listinAgentList)) : ?>
-                                            <?php foreach($listinAgentList as $list) : ?>
+                                            <?php if(COUNT($listingAgentList)) : ?>
+                                            <?php foreach($listingAgentList as $list) : ?>
                                             <li class="list-group-item">
                                                 <div class="form-group form-check">
                                                     <input type="checkbox" class="form-check-input" id="additional_listing_agent_id<?=$list['listing_agent_id'];?>" value = "<?=$list['listing_agent_id'];?>" name = "additional_listing_agent_id[]">
@@ -200,4 +232,5 @@
         </div>
     </div>
 </div><?=$this->include('templates/admin/footer');?>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/admin/addproperty.js"></script>

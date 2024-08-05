@@ -4,11 +4,13 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\SubscribersModel;
 
 class SubscribeController extends BaseController
 {
     public function index()
     {
+        $subscribersModel = new SubscribersModel();
         $data = [
             'emailaddress' => $this->request->getPost('emailaddress')
         ];
@@ -18,11 +20,12 @@ class SubscribeController extends BaseController
         $content .= "Email : " . $data['emailaddress'] . "<br/>";
         // Email sending code
         $email = \Config\Services::email();
-        $email->setTo('rustomcodilan@gmail.com');
+        $email->setTo('subscribe@dhruvcommercial.com');
         $email->setSubject('New subscriber!');
         $email->setMessage($content);
 
         if ($email->send()) {
+            $subscribersModel->insert($data);
             $response = [
                 'success' => 'success',
                 'message' => 'We will get back at you soon!',

@@ -70,6 +70,10 @@
                                         <input type="file" class="custom-file-input" id="profileimage" name="profileimage" accept="image/png, image/gif, image/jpeg, image/webp">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="url">URL</label>
+                                    <input type="text" value="<?=$details['url'];?>" name="url" id="url" class="form-control" placeholder="Enter URL">
+                                </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                         </div>

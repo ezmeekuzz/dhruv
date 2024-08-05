@@ -7,7 +7,7 @@
     <meta content="Empowering clients through integrity and personalized service, Dhurv is dedicated to exceeding expectations in real estate transactions. With a commitment to trust and transparency, we aim to build lasting relationships based on exceptional results and client satisfaction." name="description" />
     <meta content="Rustom Codilan" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="<?=base_url();?>images/szs.png">
+    <link rel="shortcut icon" href="<?=base_url();?>images/favIcon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nanum+Gothic&family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Ruda:wght@400..900&display=swap" rel="stylesheet">
@@ -16,6 +16,7 @@
     <link href="<?=base_url();?>assets/css/customstyle.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
     <style>
         body, select, input, textarea, .js-basic-single, label {
             color: #000;
@@ -29,6 +30,139 @@
         }
         .is-invalid {
             border-color: red;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .upload-area h2 {
+            margin: 0;
+        }
+
+        .upload-area p {
+            margin: 10px 0;
+        }
+
+        .upload-area button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .upload-area button:hover {
+            background-color: #0056b3;
+        }
+
+        #fileList {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            margin-bottom: 10px;
+        }
+        canvas {
+            display: block; 
+        }
+        .file-icon {
+            max-width: 100%;
+        }
+        @media (min-width: 768px) {
+            .file-container {
+                margin-bottom: 150px;
+            }
+            .file-icon {
+                max-width: 60%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .file-container {
+                margin-bottom: 150px;
+            }
+            .file-icon {
+                max-width: 60%;
+            }
+        }
+        .delete-image-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px; /* Adjust size as needed */
+            height: 40px; /* Adjust size as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px; /* Adjust size as needed */
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-item:hover .delete-image-btn {
+            opacity: 1;
+        }
+
+        .file-wrapper:hover .delete-btn-preview {
+            display: block;
+        }
+
+        .img-preview {
+            max-width: 100px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .delete-btn-preview {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: none;
+            background-color: red;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .file-order {
+            display: block;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        .file-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .file-wrapper img.img-preview {
+            display: block;
+            max-width: 100px; /* Adjust as needed */
+            max-height: 100px; /* Adjust as needed */
+        }
+
+        .file-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
     </style>
 </head>

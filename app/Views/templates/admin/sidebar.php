@@ -66,6 +66,8 @@
                                     <li class="<?php if($currentpage === 'propertymasterlist') { echo 'active'; } ?>"> <a href='/admin/property-masterlist'>Property Masterlist</a></li>
                                 </ul>
                             </li>
+                            <li class="<?php if($currentpage === 'messages') { echo 'active'; } ?>"><a href="/admin/messages"><i class="nav-icon ti ti-envelope"></i><span class="nav-title">Messages</span></a> </li>
+                            <li class="<?php if($currentpage === 'subscribers') { echo 'active'; } ?>"><a href="/admin/subscribers"><i class="nav-icon ti ti-user"></i><span class="nav-title">Subscribers</span></a> </li>
                             <li>
                                 <a href="<?=base_url()?>admin/logout" aria-expanded="false">
                                     <i class="nav-icon ti ti-power-off"></i>

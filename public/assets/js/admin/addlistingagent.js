@@ -11,9 +11,10 @@ $(document).ready(function() {
         var mobilenumber = $('#mobilenumber').val();
         var position = $('#position').val();
         var profileimage = $('#profileimage').prop('files')[0]; // Get selected file
+        var url = $('#url').val();
 
         // Perform client-side validation
-        if (fullname.trim() === '' || email.trim() === '' || position.trim() === '' || licenseno.trim() === '' || phonenumber.trim() === '' || mobilenumber.trim() === '' || !profileimage) {
+        if (fullname.trim() === '' || url.trim() === '' || email.trim() === '' || position.trim() === '' || licenseno.trim() === '' || phonenumber.trim() === '' || mobilenumber.trim() === '' || !profileimage) {
             // Show error using SweetAlert2
             Swal.fire({
                 icon: 'error',

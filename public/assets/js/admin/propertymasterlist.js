@@ -83,8 +83,8 @@ $(document).ready(function () {
             success: function (response) {
                 // Access specific properties from the response object
                 let fullname = response.fullname;
-                let imageUrl = response.backgroundimage; // Assuming you have an image URL property
-                let property_name = response.property_name; // Assuming you have an image URL property
+                let images = response.property_galleries; // Assuming `response.images` is an array of image URLs
+                let property_name = response.property_name;
                 let location = response.location;
                 let real_estate_type = response.real_estate_type;
                 let price = response.price;
@@ -95,33 +95,65 @@ $(document).ready(function () {
                 let tenancy = response.tenancy;
                 let buildingsize = response.buildingsize;
                 let yearbuilt = response.yearbuilt;
-    
+        
+                // Generate carousel indicators and items dynamically
+                let indicators = '';
+                let carouselItems = '';
+                images.forEach((imageUrl, index) => {
+                    indicators += `<li data-target="#carouselExampleIndicators" data-slide-to="${index}" class="${index === 0 ? 'active' : ''}"></li>`;
+                    carouselItems += `
+                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                            <img class="d-block w-100" src="/${imageUrl.location}" alt="Slide ${index + 1}">
+                            <button class="btn btn-danger btn-sm position-absolute delete-image-btn" style="top: 10px; right: 10px;" data-id="${imageUrl.property_gallery_id}"><i class="fa fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+        
                 // Format the content as HTML using template literals
                 let htmlContent = `
-                    <div class="book-layout">
-                        <img src="/${imageUrl}" class="book-cover" alt="Book Cover" style="width: 100%;">
-                        <div class="property-details mt-3">
-                            <div>
-                                <p><span class="font-weight-bold">Listing Agent</span>: ${fullname}</p>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            ${indicators}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="firstSlide" class=""></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            ${carouselItems}
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="/${response.backgroundimage}" alt="Slide firstSlide">
                             </div>
-                            <div class="content mt-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Real Estate Type</span>: ${real_estate_type}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Price</span>: ${price}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>States</span>: ${state_name}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>City</span>: ${cityname}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Zip Code</span>: ${zipcode}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Cap Rate</span>: ${caprate}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Tenancy</span>: ${tenancy}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Building Size</span>: ${buildingsize}</p></li>
-                                    <li class="list-group-item"><span class="font-weight-bold"><p>Year Built</span>: ${yearbuilt}</p></li>
-                                </ul>
-                            </div>
-                            <div class="additional-listing-agents mt-3">
-                                <h4>Additional Listing Agents</h4>
-                                <ul class="list-group">
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                    <div class="property-details mt-3">
+                        <div>
+                            <p><span class="font-weight-bold">Listing Agent</span>: ${fullname}</p>
+                        </div>
+                        <div class="content mt-3">
+                            <ul class="list-group">
+                                <li class="list-group-item"><span class="font-weight-bold">Real Estate Type</span>: ${real_estate_type}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Price</span>: ${price}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">States</span>: ${state_name}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">City</span>: ${cityname}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Zip Code</span>: ${zipcode}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Cap Rate</span>: ${caprate}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Tenancy</span>: ${tenancy}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Building Size</span>: ${buildingsize}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Year Built</span>: ${yearbuilt}</li>
+                                <li class="list-group-item"><span class="font-weight-bold">Offering Memorandum</span>: <a href="/${response.offering_memorandum}" target="_blank" class="btn btn-primary"><i class="fa fa-share"></i> Open</a></li>
+                            </ul>
+                        </div>
+                        <div class="additional-listing-agents mt-3">
+                            <h4>Additional Listing Agents</h4>
+                            <ul class="list-group">
                 `;
-    
+        
                 // Append additional listing agents
                 response.additional_listing_agents.forEach(agent => {
                     htmlContent += `
@@ -131,15 +163,15 @@ $(document).ready(function () {
                         </li>
                     `;
                 });
-    
+        
                 htmlContent += `
-                                </ul>
-                            </div>
-                            <div class="investment-highlights mt-3">
-                                <h4>Investment Highlights</h4>
-                                <ul class="list-group">
+                            </ul>
+                        </div>
+                        <div class="investment-highlights mt-3">
+                            <h4>Investment Highlights</h4>
+                            <ul class="list-group">
                 `;
-    
+        
                 // Append investment highlights
                 response.investment_highlights.forEach(highlight => {
                     htmlContent += `
@@ -149,27 +181,87 @@ $(document).ready(function () {
                         </li>
                     `;
                 });
-    
+        
                 htmlContent += `
-                                </ul>
-                            </div>
+                            </ul>
                         </div>
                     </div>
                 `;
-    
+        
                 // Display the formatted content in the #displayDetails div
                 $("#displayDetails").html(htmlContent);
                 $("#propertyTitle").html(`
                     <h3><i class="fa fa-map-pin"></i> ${property_name}</h3><br/>
                     <span>${location}</span>
                 `);
-    
+        
                 // Show the modal
                 $("#propertyDetails").modal("show");
             },
             error: function () {
                 console.error("Error fetching data");
             }
+        });        
+    });    
+    $(document).on('click', '.delete-image-btn', function (event) {
+        event.preventDefault(); // Prevent default action
+        event.stopPropagation(); // Stop event from bubbling up
+
+        var imageId = $(this).data('id');
+        var button = this;
+        
+        deleteImage(imageId, button);
+    });       
+    // Function to delete an image
+    function deleteImage(imageId, button) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/admin/propertymasterlist/deleteImage/' + imageId,
+                    method: 'DELETE',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            // Remove the carousel item
+                            $(button).closest('.carousel-item').remove();
+    
+                            // If the deleted item was active, make the first item active
+                            if ($(button).closest('.carousel-item').hasClass('active')) {
+                                $('.carousel-item').first().addClass('active');
+                            }
+    
+                            // Update the indicators
+                            $('.carousel-indicators li').each(function (index) {
+                                $(this).attr('data-slide-to', index);
+                            });
+    
+                            $('.carousel-indicators li').first().addClass('active');
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            });
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong with the request!',
+                        });
+                    }
+                });
+            }
         });
-    });           
+    }
+    
 });

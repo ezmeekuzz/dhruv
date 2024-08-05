@@ -4,10 +4,10 @@
     <title><?=$title;?></title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Admin template that can be used to build dashboards for CRM, CMS, etc." />
+    <meta name="description" content="Empowering clients through integrity and personalized service, Dhurv is dedicated to exceeding expectations in real estate transactions. With a commitment to trust and transparency, we aim to build lasting relationships based on exceptional results and client satisfaction." />
     <meta name="author" content="Potenza Global Solutions" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="<?=base_url();?>images/szs.png">
+    <link rel="shortcut icon" href="<?=base_url();?>images/favIcon.jpg">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/vendors.css" />
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/style.css" />
