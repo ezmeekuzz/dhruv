@@ -98,6 +98,7 @@ class PropertyMasterlistController extends SessionController
 
         $propertyGalleries = $propertyGalleryModel
         ->where('property_id', $propertyId)
+        ->orderBy('order_sequence', 'asc')
         ->findAll();
 
         $propertyDetails['additional_listing_agents'] = $additionalListingAgents;

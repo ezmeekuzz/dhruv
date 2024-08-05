@@ -33,7 +33,10 @@ class EditPropertyController extends SessionController
         $property = $propertiesModel->find($propertyId);
         $additionalListingAgents = $additionalListingAgentsModel->where('property_id', $propertyId)->findAll();
         $investmentHighlights = $investmentHighlightsModel->where('property_id', $propertyId)->findAll();
-        $propertyGalleries = $propertyGalleriesModel->where('property_id', $propertyId)->findAll();
+        $propertyGalleries = $propertyGalleriesModel
+        ->where('property_id', $propertyId)
+        ->orderBy('order_sequence', 'asc')
+        ->findAll();
 
         $data = [
             'title' => 'DHRUV Realty | Edit Property',
@@ -64,6 +67,7 @@ class EditPropertyController extends SessionController
         $investmentHighlightsModel = new InvestmentHighlightsModel();
         $propertyGalleriesModel = new PropertyGalleriesModel();
         $files = $this->request->getFiles();
+        $orderSequence = $this->request->getPost('order_sequence');
     
         // Handle form data
         $propertyName = $this->request->getPost('propertyname');
@@ -177,7 +181,7 @@ class EditPropertyController extends SessionController
                 if ($uploadedFile->isValid() && !$uploadedFile->hasMoved()) {
                     $newFileName3 = $uploadedFile->getRandomName();
                     $uploadedFile->move($uploadPath3, $newFileName3);
-                    $sequence = $index + 1;
+                    $sequence = $orderSequence[$index];
                     $propertyGalleriesModel->insert([
                         'property_id' => $propertyId,
                         'location' => 'uploads/property-gallery/' . $newFileName3,

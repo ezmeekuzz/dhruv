@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2024 at 10:55 PM
+-- Generation Time: Aug 04, 2024 at 11:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `additional_listing_agents` (
 --
 
 INSERT INTO `additional_listing_agents` (`additional_listing_agent_id`, `listing_agent_id`, `property_id`) VALUES
-(22, 3, 31);
+(112, 3, 86);
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE `investment_highlights` (
 --
 
 INSERT INTO `investment_highlights` (`investment_highlight_id`, `title`, `content`, `property_id`) VALUES
-(46, 'CENTRAL HUB', 'sdasdasd', 31);
+(154, 'CENTRAL HUB', 'jhghjj', 86);
 
 -- --------------------------------------------------------
 
@@ -118,6 +118,7 @@ CREATE TABLE `messages` (
   `fname` varchar(50) NOT NULL,
   `lname` varchar(50) NOT NULL,
   `emailaddress` varchar(100) NOT NULL,
+  `phonenumber` varchar(15) NOT NULL,
   `link` varchar(110) NOT NULL,
   `property` varchar(110) NOT NULL,
   `note` longtext DEFAULT NULL
@@ -127,8 +128,8 @@ CREATE TABLE `messages` (
 -- Dumping data for table `messages`
 --
 
-INSERT INTO `messages` (`message_id`, `fname`, `lname`, `emailaddress`, `link`, `property`, `note`) VALUES
-(4, 'Rustom', 'Codilan', 'rustomcodilan@gmail.com', 'http://localhost:8080//westgate-office', 'Westgate Office', 'I want this property!');
+INSERT INTO `messages` (`message_id`, `fname`, `lname`, `emailaddress`, `phonenumber`, `link`, `property`, `note`) VALUES
+(4, 'Rustom', 'Codilan', 'rustomcodilan@gmail.com', '', 'http://localhost:8080//westgate-office', 'Westgate Office', 'I want this property!');
 
 -- --------------------------------------------------------
 
@@ -148,12 +149,12 @@ CREATE TABLE `properties` (
   `state_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
   `zipcode` varchar(10) NOT NULL,
-  `caprate` int(11) NOT NULL,
+  `caprate` varchar(5) NOT NULL,
   `tenancy` varchar(30) NOT NULL,
   `buildingsize` varchar(30) NOT NULL,
   `yearbuilt` year(4) NOT NULL,
   `location` varchar(250) NOT NULL,
-  `askingcaprate` int(11) NOT NULL,
+  `askingcaprate` varchar(5) NOT NULL,
   `noi` double(16,2) NOT NULL,
   `leasestructure` varchar(50) NOT NULL,
   `occupancy` int(11) NOT NULL,
@@ -168,7 +169,7 @@ CREATE TABLE `properties` (
 --
 
 INSERT INTO `properties` (`property_id`, `property_name`, `slug`, `real_estate_type`, `property_type_id`, `listing_agent_id`, `price`, `price_per_sf`, `state_id`, `city_id`, `zipcode`, `caprate`, `tenancy`, `buildingsize`, `yearbuilt`, `location`, `askingcaprate`, `noi`, `leasestructure`, `occupancy`, `backgroundimage`, `offering_memorandum`, `publishstatus`, `dateadded`) VALUES
-(31, 'Westgate Office', 'westgate-office', 'Commercial', 9, 2, 150.00, 150.00, 73, 19823, '9000', 9000, 'Multi-Tenant', '47,089 SF', '2008', '5749 Westgate Drive, Orlando, FL 32835', 15, 1453431.00, 'NA', 1, 'uploads/1721551772_e16326687b0bfdb8b2cc.jpg', 'uploads/offering-memorandum/1721551772_70728c2badc507f6be4d.pdf', 'Draft', '2024-07-21');
+(86, 'Empress Cape of May', 'empress-cape-of-may', 'Commercial', 3, 2, 9000000.00, 150.00, 73, 19823, '9000', '9000', 'Single Tenant', '47,089 SF', '2008', '5749 Westgate Drive, Orlando, FL 32835', '9000', 1453431.00, 'NNN', 100, 'uploads/1722742501_4632064b05fe8fc08aec.png', 'uploads/offering-memorandum/1722742501_5eaac8acdff705107bc8.pdf', 'Draft', '2024-08-04');
 
 -- --------------------------------------------------------
 
@@ -181,20 +182,18 @@ CREATE TABLE `property_galleries` (
   `property_id` int(11) NOT NULL,
   `location` varchar(110) NOT NULL,
   `file_name` varchar(110) NOT NULL,
-  `original_name` varchar(110) NOT NULL
+  `original_name` varchar(110) NOT NULL,
+  `order_sequence` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `property_galleries`
 --
 
-INSERT INTO `property_galleries` (`property_gallery_id`, `property_id`, `location`, `file_name`, `original_name`) VALUES
-(13, 31, 'uploads/property-gallery/1721567546_4f15ad9ff92b7fb2df83.png', '1721567546_4f15ad9ff92b7fb2df83.png', 'city1.png'),
-(14, 31, 'uploads/property-gallery/1721567546_b1c37970d766f798d8af.png', '1721567546_b1c37970d766f798d8af.png', 'city2.png'),
-(15, 31, 'uploads/property-gallery/1721567546_47d456652c9464456d9c.png', '1721567546_47d456652c9464456d9c.png', 'city3.png'),
-(16, 31, 'uploads/property-gallery/1721567546_3cc6b616594c8b35dd43.png', '1721567546_3cc6b616594c8b35dd43.png', 'city4.png'),
-(17, 31, 'uploads/property-gallery/1721567546_ac74cb8d3fe381b1defa.png', '1721567546_ac74cb8d3fe381b1defa.png', 'city5.png'),
-(18, 31, 'uploads/property-gallery/1721567546_05abe8d65794fc000c83.png', '1721567546_05abe8d65794fc000c83.png', 'city6.png');
+INSERT INTO `property_galleries` (`property_gallery_id`, `property_id`, `location`, `file_name`, `original_name`, `order_sequence`) VALUES
+(430, 86, 'uploads/property-gallery/1722762386_558bd03a30f8f17d5738.png', '1722762386_558bd03a30f8f17d5738.png', '1722762215_90d0cc5fbb4357bc5167.png', 1),
+(431, 86, 'uploads/property-gallery/1722762386_b62e014edc7c010f4721.png', '1722762386_b62e014edc7c010f4721.png', '1722762215_33cac52064655fc6e4ca.png', 2),
+(432, 86, 'uploads/property-gallery/1722762386_f97362566b7265efc96a.png', '1722762386_f97362566b7265efc96a.png', '1722762215_1df7c9ac7cdab32f4bac.png', 3);
 
 -- --------------------------------------------------------
 
@@ -383,7 +382,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `additional_listing_agents`
 --
 ALTER TABLE `additional_listing_agents`
-  MODIFY `additional_listing_agent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `additional_listing_agent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -395,7 +394,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `investment_highlights`
 --
 ALTER TABLE `investment_highlights`
-  MODIFY `investment_highlight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `investment_highlight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `listing_agents`
@@ -413,13 +412,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `property_galleries`
 --
 ALTER TABLE `property_galleries`
-  MODIFY `property_gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `property_gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=433;
 
 --
 -- AUTO_INCREMENT for table `property_types`

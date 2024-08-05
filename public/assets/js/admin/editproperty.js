@@ -1,11 +1,26 @@
 $(document).ready(function() {
-    let existingFiles = [];
     let selectedFiles = [];
 
+    // Submit form handler
     $('#editproperty').submit(function(event) {
         event.preventDefault();
         var formData = new FormData(this);
 
+        // Add order_sequence inputs based on the current sequence in the DOM
+        $('#fileList .file-wrapper').each(function() {
+            let dataIndex = $(this).data('index');
+            let hiddenInput = $('<input>').attr({
+                type: 'hidden',
+                name: 'order_sequence[]',
+                value: dataIndex
+            });
+            formData.append(hiddenInput.attr('name'), hiddenInput.val());
+
+            let fileName = $(this).find('.existing-image').data('filename');
+            console.log(`${fileName} => ${dataIndex}`);
+        });
+
+        // Validate required fields
         var requiredFields = [
             'propertyname', 'real_estate_type', 'property_type_id', 'listing_agent_id',
             'price', 'price_per_sf', 'caprate', 'state_id', 'city_id', 'zipcode', 'tenancy',
@@ -32,29 +47,28 @@ $(document).ready(function() {
             return;
         }
 
+        // Handle existing files
         let existingFilePromises = [];
 
-        document.querySelectorAll('.existing-image').forEach(function(element, index) {
-            var fileName = element.dataset.filename;
-            var filePath = element.dataset.filepath;
-            var sequenceNumber = index + 1; // Sequence based on position
-        
+        $('#fileList .file-wrapper[data-type="existing"]').each(function() {
+            var fileName = $(this).find('.existing-image').data('filename');
+            var filePath = $(this).find('.existing-image').data('filepath');
+
             let fetchPromise = fetch(filePath)
                 .then(response => response.blob())
                 .then(blob => {
                     var file = new File([blob], fileName, { type: blob.type });
                     formData.append('files[]', file);
+                })
+                .catch(err => {
+                    console.error(`Error fetching file ${fileName}:`, err);
                 });
-        
+
             existingFilePromises.push(fetchPromise);
         });
 
-        // Wait for all existing files to be added to formData
+        // Submit after processing existing files
         Promise.all(existingFilePromises).then(() => {
-            // Log files before AJAX call
-            console.log("Selected Files:", selectedFiles);
-            console.log("Existing Files:", existingFiles);
-
             $.ajax({
                 type: 'POST',
                 url: '/admin/editproperty/update/' + formData.get('property_id'),
@@ -92,7 +106,7 @@ $(document).ready(function() {
                         title: 'Oops...',
                         text: 'An error occurred. Please try again later.',
                     });
-                    console.error(xhr.responseText);
+                    console.error('Error:', xhr.responseText);
                 }
             });
         }).catch(error => {
@@ -105,91 +119,23 @@ $(document).ready(function() {
         });
     });
 
-    function initializeFileSequences() {
-        $('#fileList .file-wrapper').each(function(index) {
-            $(this).data('index', index);
-            $(this).attr('data-index', index);
-
-            const sequenceNumber = $(this).find('.sequence-number');
-            if (sequenceNumber.length) {
-                sequenceNumber.text(`#${index + 1}`);
-            } else {
-                $('<span class="sequence-number">#' + (index + 1) + '</span>').appendTo($(this));
-            }
-        });
-    }
-
-    initializeFileSequences();
-
-    $('#fileList').sortable({
-        update: function(event, ui) {
-            const sortedIds = $('#fileList .file-wrapper').map(function() {
-                return $(this).data('index');
-            }).get();
-
-            existingFiles.forEach(file => {
-                file.index = sortedIds.indexOf(file.index);
-            });
-
-            $('#fileList .file-wrapper').each(function(index) {
-                $(this).data('index', index);
-                $(this).attr('data-index', index);
-                $(this).find('.sequence-number').text(`#${index + 1}`);
-            });
-
-            updateFileSequence();
-        }
-    });
-
-    function updateFileSequence() {
-        $('#fileList .file-wrapper').each(function(index) {
-            $(this).data('index', index);
-            $(this).attr('data-index', index);
-            $(this).find('.sequence-number').text(`#${index + 1}`);
-        });
-    }
-
-    $('#fileList').sortable('refresh'); // Refresh sortable after initialization
-
-    // Initialize existing files with sequence
-    $('#fileList .file-wrapper[data-type="existing"]').each(function(index) {
-        $(this).data('index', index);
-        $(this).attr('data-index', index);
-
-        const sequenceNumber = $(this).find('.sequence-number');
-        if (sequenceNumber.length) {
-            sequenceNumber.text(`#${index + 1}`);
-        } else {
-            // Create a new sequence number element if it doesn't exist
-            $('<span class="sequence-number">#' + (index + 1) + '</span>').appendTo($(this));
-        }
-
-        existingFiles.push({
-            id: $(this).data('id'),
-            index: index,
-            element: $(this)
-        });
-    });
-
+    // State change handler for loading cities
     $('#state_id').on('change', function() {
         let stateId = $(this).val();
-
         if (stateId) {
             $.ajax({
-                url: `/admin/editproperty/getCities/${stateId}`,
+                url: `/admin/addproperty/getCities/${stateId}`,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     let citySelect = $('#city_id');
                     citySelect.empty();
                     citySelect.append('<option hidden></option><option disabled></option>');
-
                     if (data && data.length > 0) {
                         $.each(data, function(index, city) {
                             citySelect.append(`<option value="${city.city_id}">${city.cityname}</option>`);
                         });
                     }
-
                     citySelect.trigger("chosen:updated");
                 },
                 error: function(xhr, status, error) {
@@ -199,11 +145,13 @@ $(document).ready(function() {
         }
     });
 
+    // File input change handler
     $(document).on('change', '.custom-file-input', function() {
         var file = this.files[0].name;
         $(this).siblings('.custom-file-label').text(file.substring(0, 20));
     });
 
+    // Search filter for listing agent
     function filter() {
         let search = $('#searchlistingagent').val().toUpperCase();
         $('#agentlist li').each(function() {
@@ -219,171 +167,163 @@ $(document).ready(function() {
     $('#searchlistingagent').on('keyup', filter);
     filter();
 
+    // Initialize file sequences
+    function initializeFileSequences() {
+        $('#fileList .file-wrapper').each(function(index) {
+            const newIndex = index + 1; // Correcting the index to start from 1
+            $(this).data('index', newIndex);
+            $(this).attr('data-index', newIndex);
+
+            const sequenceNumber = $(this).find('.sequence-number');
+            if (sequenceNumber.length) {
+                sequenceNumber.text(`#${newIndex}`);
+            } else {
+                $('<span class="sequence-number">#' + newIndex + '</span>').appendTo($(this));
+            }
+        });
+    }
+
+    initializeFileSequences();
+
+    // Sortable functionality for file list
+    $('#fileList').sortable({
+        update: function(event, ui) {
+            updateFileSequence();
+        }
+    }).disableSelection();
+
+    // Update file sequence after sorting or deleting
+    function updateFileSequence() {
+        $('#fileList .file-wrapper').each(function(index) {
+            const newIndex = index + 1; // Correcting the index to start from 1
+            $(this).data('index', newIndex);
+            $(this).attr('data-index', newIndex);
+
+            const sequenceNumber = $(this).find('.sequence-number');
+            sequenceNumber.text(`#${newIndex}`);
+
+            const fileInput = $(this).find('input[type="file"]');
+            if (fileInput.length) {
+                fileInput.data('index', newIndex - 1); // fileInput index should start from 0 for array submission
+            }
+        });
+    }
+
+    $('#fileList').sortable('refresh');
+
+    // Delete file preview and update sequence
+    $('#fileList').on('click', '.delete-btn-preview', function () {
+        $(this).parent().remove();
+        updateFileSequence();
+    });
+
+    // Drag-and-drop file handling
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const fileSelectBtn = document.getElementById('fileSelectBtn');
-    const fileList = document.getElementById('fileList');
 
-    const acceptedFileTypes = ['png', 'jpg', 'webp', 'jpeg', 'PNG', 'JPG', 'WEBP', 'JPEG'];
+    if (uploadArea) {
+        uploadArea.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
 
-    uploadArea.addEventListener('dragover', function(event) {
-        event.preventDefault();
-        uploadArea.classList.add('drag-over');
-    });
-    
-    uploadArea.addEventListener('dragleave', function(event) {
-        event.preventDefault();
-        uploadArea.classList.remove('drag-over');
-    });
-    
-    uploadArea.addEventListener('drop', function(event) {
-        event.preventDefault();
-        uploadArea.classList.remove('drag-over');
-        handleFiles(event.dataTransfer.files);
-    });
-    
-    fileSelectBtn.addEventListener('click', function() {
-        fileInput.click();
-    });
-    
-    fileInput.addEventListener('change', function() {
-        handleFiles(fileInput.files);
-    });
-    
+        uploadArea.addEventListener('dragleave', function(event) {
+            event.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', function(event) {
+            event.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            handleFiles(event.dataTransfer.files);
+        });
+    }
+
+    if (fileSelectBtn) {
+        fileSelectBtn.addEventListener('click', function() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.multiple = true;
+            fileInput.style.display = 'none';
+
+            fileInput.addEventListener('change', function() {
+                handleFiles(fileInput.files);
+            });
+
+            fileInput.click();
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            handleFiles(fileInput.files);
+        });
+    }
+
+    // Handle files function to display previews and manage sequences
     function handleFiles(files) {
-        Array.from(files).forEach((file) => {
-            if (acceptedFileTypes.includes(file.name.split('.').pop())) {
-                const fileWrapper = document.createElement('div');
-                fileWrapper.className = 'file-wrapper';
-                fileWrapper.dataset.index = selectedFiles.length + existingFiles.length;
-                fileWrapper.dataset.type = 'new';
-    
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'img-preview';
-                    fileWrapper.appendChild(img);
-    
-                    const sequenceNumber = document.createElement('span');
-                    sequenceNumber.className = 'sequence-number';
-                    sequenceNumber.textContent = `#${fileWrapper.dataset.index + 1}`;
-                    fileWrapper.appendChild(sequenceNumber);
-    
-                    const deleteBtn = document.createElement('span');
-                    deleteBtn.className = 'delete-btn-preview';
-                    deleteBtn.innerHTML = '&times;';
-                    deleteBtn.onclick = function() {
-                        fileList.removeChild(fileWrapper);
-                        selectedFiles = selectedFiles.filter(f => f !== file);
-                        updateFileSequence();
-                    };
-                    fileWrapper.appendChild(deleteBtn);
-    
-                    fileList.appendChild(fileWrapper);
-    
-                    const fileInput = document.createElement('input');
-                    fileInput.type = 'file';
-                    fileInput.name = 'files[]';
-                    fileInput.style.display = 'none';
-                    fileInput.dataset.index = fileWrapper.dataset.index;
-                    fileInput.dataset.name = file.name;
-                    fileWrapper.appendChild(fileInput);
-    
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    fileInput.files = dataTransfer.files;
-                };
-                reader.readAsDataURL(file);
-    
-                selectedFiles.push(file);
-            } else {
-                alert("Unsupported file type.");
-            }
-        });
+        const fileList = document.getElementById('fileList');
+        const existingFileCount = $('#fileList .file-wrapper[data-type="existing"]').length;
 
-        makeSortable();
-        updateFileSequence();
-        console.log("Selected Files after handling new files:", selectedFiles);
-    } 
-    
-    function makeSortable() {
-        $('#fileList').sortable({
-            update: function(event, ui) {
-                const sortedIds = $('#fileList .file-wrapper').map(function() {
-                    return $(this).data('index');
-                }).get();
+        selectedFiles = selectedFiles.concat(Array.from(files));
 
-                existingFiles.forEach(file => {
-                    file.index = sortedIds.indexOf(file.index);
+        selectedFiles.forEach((file, index) => {
+            const newIndex = existingFileCount + index + 1;
+            const fileWrapper = document.createElement('div');
+            fileWrapper.className = 'file-wrapper';
+            fileWrapper.dataset.index = newIndex;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-preview';
+                fileWrapper.appendChild(img);
+
+                const sequenceNumber = document.createElement('span');
+                sequenceNumber.className = 'sequence-number';
+                sequenceNumber.textContent = `#${newIndex}`;
+                fileWrapper.appendChild(sequenceNumber);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-btn-preview';
+                deleteButton.textContent = 'x';
+                deleteButton.addEventListener('click', function() {
+                    const fileIndex = selectedFiles.indexOf(file);
+                    if (fileIndex > -1) {
+                        selectedFiles.splice(fileIndex, 1);
+                    }
+                    fileWrapper.remove();
+                    updateFileSequence();
                 });
+                fileWrapper.appendChild(deleteButton);
 
-                $('#fileList .file-wrapper').each(function(index) {
-                    $(this).data('index', index);
-                    $(this).attr('data-index', index);
-                    $(this).find('.sequence-number').text(`#${index + 1}`);
-                });
+                // Create hidden input field for file data
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'file';
+                hiddenInput.name = 'files[]';
+                hiddenInput.dataset.index = newIndex - 1;
+                hiddenInput.dataset.name = file.name;
+                hiddenInput.style.display = 'none';
 
-                updateFileSequence();
-            }
-        });
-    }
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                hiddenInput.files = dataTransfer.files;
 
-    function initializeFileList() {
-        $('#fileList .file-wrapper').each(function(index) {
-            $(this).data('index', index);
-            $(this).attr('data-index', index);
-        });
-    }
-
-    initializeFileList();  
-
-    function updateFileSequence() {
-        let allFiles = $('#fileList .file-wrapper').toArray();
-        
-        allFiles.forEach((fileWrapper, index) => {
-            $(fileWrapper).data('index', index);
-            $(fileWrapper).attr('data-index', index);
-    
-            const sequenceNumber = $(fileWrapper).find('.sequence-number');
-            if (sequenceNumber.length) {
-                sequenceNumber.text(`#${index + 1}`);
-            } else {
-                $('<span class="sequence-number">#' + (index + 1) + '</span>').appendTo($(fileWrapper));
-            }
-        });
-    
-        existingFiles = $('#fileList .file-wrapper[data-type="existing"]').map(function() {
-            return {
-                id: $(this).data('id'),
-                index: Number($(this).data('index')), // Ensure this is a number
-                element: $(this)
+                fileWrapper.appendChild(hiddenInput);
             };
-        }).get();
-        
-        selectedFiles = $('#fileList .file-wrapper[data-type="new"]').map(function() {
-            return selectedFiles[Number($(this).data('index')) - existingFiles.length];
-        }).get();
-    
-        console.log("Existing Files after updating sequence:", existingFiles);
-        console.log("Selected Files after updating sequence:", selectedFiles);
-    }     
+            reader.readAsDataURL(file);
+            fileList.appendChild(fileWrapper);
+        });
+    }
 
-    makeSortable();
-
-    $("#fileList").on("click", ".delete-btn-preview", function () {
-        $(this).parent().remove();
-        const indexToRemove = $(this).parent().data('index');
-
-        if ($(this).parent().data('type') === 'existing') {
-            existingFiles = existingFiles.filter(file => file.index !== indexToRemove);
-        } else {
-            selectedFiles = selectedFiles.filter((file, index) => index !== (indexToRemove - existingFiles.length));
-        }
-
-        updateFileSequence();
-        // Log after deleting a file
-        console.log("Existing Files after deletion:", existingFiles);
-        console.log("Selected Files after deletion:", selectedFiles);
+    // Prevent default form submission and alert user
+    $('#editproperty').on('submit', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Form submission is disabled for demo.',
+            icon: 'info'
+        });
     });
 });

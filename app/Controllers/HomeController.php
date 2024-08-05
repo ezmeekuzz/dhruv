@@ -87,7 +87,10 @@ class HomeController extends BaseController
     
             foreach ($properties as $property) {
                 // Fetch property galleries
-                $galleries = $propertyGalleryModel->where('property_id', $property['property_id'])->findAll();
+                $galleries = $propertyGalleryModel
+                ->where('property_id', $property['property_id'])
+                ->orderBy('order_sequence', 'asc')
+                ->findAll();
     
                 // Begin list-item div
                 $htmlContent .= '<div class="list-item" style="background-image: url(\'' . base_url($property['backgroundimage']) . '\');">';

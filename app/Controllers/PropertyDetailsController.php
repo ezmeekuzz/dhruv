@@ -38,6 +38,7 @@ class PropertyDetailsController extends BaseController
         
         $propertyGallery = $propertyGalleryModel
         ->where('property_id', $id)
+        ->orderBy('order_sequence', 'asc')
         ->findAll();
 
         $data = [
