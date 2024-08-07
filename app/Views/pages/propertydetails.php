@@ -156,7 +156,7 @@
                     <li>
                         <a class="menuList">Insights <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://dhruv-realty.com/insights-inner/">In The News</a></li>
+                            <li><a href="https://dhruv-realty.com/insigths/">In The News</a></li>
                         </ul>
                     </li>
                     <li>
@@ -266,10 +266,10 @@
                         </tbody>
                     </table>
 
-                    <a href="<?=$propertyDetails['offering_memorandum'];?>" target="_blank" class="offer-btn mobile">
+                    <button class="offer-btn mobile open-om" >
                         <p>OFFERING MEMORANDUM</p>
                         <img src="images/colored-btn.png">
-                    </a>
+                    </button>
 
                     <div class="list-description">
                         <h4>Investment Highlights</h4>
@@ -340,10 +340,36 @@
 
 
                 <div class="listing-sidebar">
-                    <a href="<?=$propertyDetails['offering_memorandum'];?>" target="_blank" class="offer-btn desktop">
+                    <button href="" class="offer-btn desktop open-om">
                         <p>OFFERING MEMORANDUM</p>
                         <img src="images/colored-btn.png">
-                    </a>
+                    </button>
+                    <div class="modal-om">
+                        <form class="form-modal" id="omConsent">
+                            <i class="fas fa-times close"></i>
+                            <h5> Offering Memorandum</h5>
+                            <div class="input-form">
+                                <h6>Fullame*</h6>
+                                <input type="text" name="om-name">
+                                <br>
+                                <h6>Email*</h6>
+                                <input type="email" name="om-email">
+                                <br>
+                                <h6>Phone Number*</h6>
+                                <input type="tel" name="om-phone">
+                                <br>
+                                <input type="hidden" name="offering-memorandum-link" value="<?=$propertyDetails['offering_memorandum']?>">
+                                <div class="om-accept">
+                                    <input type="checkbox" name="om-accept" id="om-accept-checkbox">
+                                    <h6 for="om-accept-checkbox">Accept Confidentiality Agreement</h6>
+                                </div>
+                                <div class="prop-submit">
+                                    <input type="submit" name="prop-submit" value="Confirm">
+                                    <img src="images/colored-btn.png">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="list-agent-info">
                         <h5>LEAD LISTING AGENT</h5>
                         <div class="lead-prop">
@@ -514,7 +540,7 @@
                         <li>
                             <a class="menuList">Insights <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://dhruv-realty.com/insights-inner/">In The News</a></li>
+                                <li><a href="https://dhruv-realty.com/insigths/">In The News</a></li>
                             </ul>
                         </li>
                         <li>
@@ -790,5 +816,62 @@ $('#sendMessage').on('submit', function(event) {
             }
         });
     });
+    $(document).ready(function() {
+    $('#omConsent').on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        
+        // Clear any previous error messages
+        $('.error').remove();
+        
+        // Validate form fields
+        var isValid = true;
+        var formData = $(this).serialize(); // Serialize form data
+
+        // Check if all fields are filled
+        $('#omConsent input[required]').each(function() {
+            if ($(this).val() === '') {
+                isValid = false;
+                $(this).after('<span class="error" style="color:red;">This field is required.</span>');
+            }
+        });
+
+        // Check if the checkbox is checked
+        if (!$('#om-accept-checkbox').is(':checked')) {
+            isValid = false;
+            $('#om-accept-checkbox').after('<span class="error" style="color:red;">You must accept the confidentiality agreement.</span>');
+        }
+
+        if (isValid) {
+            // Submit the form data via AJAX
+            $.ajax({
+                url: '/propertydetails/omConsent', // Replace with your server endpoint URL
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Handle successful response
+                    var link = $('input[name="offering-memorandum-link"]').val();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Consent successfully received!',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.open(link, '_blank');
+                        $('#omConsent')[0].reset(); // Reset the form after successful submission
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred: ' + error,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
+});
 </script>
 </html>

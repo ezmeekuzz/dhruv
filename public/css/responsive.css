@@ -761,8 +761,15 @@
     }
 
     .menuList{
-        pointer-events:inherit;
+        pointer-events:inherit!important;
     }
 
+    .form-modal{
+        padding:30px 20px;
+    }
+
+    .nav-menu{
+        z-index: 50;
+    }
 
 }

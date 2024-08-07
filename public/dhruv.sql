@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2024 at 11:34 AM
+-- Generation Time: Aug 06, 2024 at 08:04 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `additional_listing_agents` (
 --
 
 INSERT INTO `additional_listing_agents` (`additional_listing_agent_id`, `listing_agent_id`, `property_id`) VALUES
-(112, 3, 86);
+(132, 3, 87);
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE `investment_highlights` (
 --
 
 INSERT INTO `investment_highlights` (`investment_highlight_id`, `title`, `content`, `property_id`) VALUES
-(154, 'CENTRAL HUB', 'jhghjj', 86);
+(174, 'CENTRAL HUB', 'SADASDSADASD', 87);
 
 -- --------------------------------------------------------
 
@@ -134,6 +134,20 @@ INSERT INTO `messages` (`message_id`, `fname`, `lname`, `emailaddress`, `phonenu
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `om_consents`
+--
+
+CREATE TABLE `om_consents` (
+  `om_consent_id` int(11) NOT NULL,
+  `fullname` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `properties`
 --
 
@@ -169,7 +183,7 @@ CREATE TABLE `properties` (
 --
 
 INSERT INTO `properties` (`property_id`, `property_name`, `slug`, `real_estate_type`, `property_type_id`, `listing_agent_id`, `price`, `price_per_sf`, `state_id`, `city_id`, `zipcode`, `caprate`, `tenancy`, `buildingsize`, `yearbuilt`, `location`, `askingcaprate`, `noi`, `leasestructure`, `occupancy`, `backgroundimage`, `offering_memorandum`, `publishstatus`, `dateadded`) VALUES
-(86, 'Empress Cape of May', 'empress-cape-of-may', 'Commercial', 3, 2, 9000000.00, 150.00, 73, 19823, '9000', '9000', 'Single Tenant', '47,089 SF', '2008', '5749 Westgate Drive, Orlando, FL 32835', '9000', 1453431.00, 'NNN', 100, 'uploads/1722742501_4632064b05fe8fc08aec.png', 'uploads/offering-memorandum/1722742501_5eaac8acdff705107bc8.pdf', 'Draft', '2024-08-04');
+(87, 'Empress Cape of May', 'empress-cape-of-may', 'Commercial', 3, 2, 9000000.00, 150.00, 73, 19823, '9000', '9000', 'Single Tenant', '47,089 SF', '2008', '5749 Westgate Drive, Orlando, FL 32835', '9000', 1453431.00, 'NNN', 100, 'uploads/1722777812_19ec85e6c33889de0e54.png', 'uploads/offering-memorandum/1722777812_2639dba97cec61760d55.pdf', 'Published', '2024-08-04');
 
 -- --------------------------------------------------------
 
@@ -191,9 +205,12 @@ CREATE TABLE `property_galleries` (
 --
 
 INSERT INTO `property_galleries` (`property_gallery_id`, `property_id`, `location`, `file_name`, `original_name`, `order_sequence`) VALUES
-(430, 86, 'uploads/property-gallery/1722762386_558bd03a30f8f17d5738.png', '1722762386_558bd03a30f8f17d5738.png', '1722762215_90d0cc5fbb4357bc5167.png', 1),
-(431, 86, 'uploads/property-gallery/1722762386_b62e014edc7c010f4721.png', '1722762386_b62e014edc7c010f4721.png', '1722762215_33cac52064655fc6e4ca.png', 2),
-(432, 86, 'uploads/property-gallery/1722762386_f97362566b7265efc96a.png', '1722762386_f97362566b7265efc96a.png', '1722762215_1df7c9ac7cdab32f4bac.png', 3);
+(543, 87, 'uploads/property-gallery/1722848217_84698942fd4aef7057cc.png', '1722848217_84698942fd4aef7057cc.png', '1722848206_8912030f4077d6dab87d.png', 1),
+(544, 87, 'uploads/property-gallery/1722848217_ba8c982c99a66540976b.png', '1722848217_ba8c982c99a66540976b.png', '1722848206_882ab489999d5fb14997.png', 4),
+(546, 87, 'uploads/property-gallery/1722848217_016b382261d803b53224.png', '1722848217_016b382261d803b53224.png', '1722848206_0b13d27701c677ff8a11.png', 3),
+(547, 87, 'uploads/property-gallery/1722848217_201f4eef168c06d86075.png', '1722848217_201f4eef168c06d86075.png', '1722848206_1eaf406f086d5a3e7aa9.png', 5),
+(552, 87, 'uploads/property-gallery/1722936784_1aedab005c1a7875ba0d.png', '1722936784_1aedab005c1a7875ba0d.png', '1722779212_ebbda9191941a55eb13c.png', 6),
+(553, 87, 'uploads/property-gallery/1722936784_e1d99de209b97c303167.png', '1722936784_e1d99de209b97c303167.png', '1722779213_03dce49f27924cb849f8.png', 2);
 
 -- --------------------------------------------------------
 
@@ -334,6 +351,12 @@ ALTER TABLE `messages`
   ADD PRIMARY KEY (`message_id`);
 
 --
+-- Indexes for table `om_consents`
+--
+ALTER TABLE `om_consents`
+  ADD PRIMARY KEY (`om_consent_id`);
+
+--
 -- Indexes for table `properties`
 --
 ALTER TABLE `properties`
@@ -382,7 +405,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `additional_listing_agents`
 --
 ALTER TABLE `additional_listing_agents`
-  MODIFY `additional_listing_agent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `additional_listing_agent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -394,7 +417,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `investment_highlights`
 --
 ALTER TABLE `investment_highlights`
-  MODIFY `investment_highlight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `investment_highlight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
 
 --
 -- AUTO_INCREMENT for table `listing_agents`
@@ -409,16 +432,22 @@ ALTER TABLE `messages`
   MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `om_consents`
+--
+ALTER TABLE `om_consents`
+  MODIFY `om_consent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `property_galleries`
 --
 ALTER TABLE `property_galleries`
-  MODIFY `property_gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=433;
+  MODIFY `property_gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=554;
 
 --
 -- AUTO_INCREMENT for table `property_types`

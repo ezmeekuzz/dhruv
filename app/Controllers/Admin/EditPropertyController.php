@@ -48,7 +48,8 @@ class EditPropertyController extends SessionController
             'property' => $property,
             'propertyGalleries' => $propertyGalleries,
             'additionalListingAgents' => $additionalListingAgents,
-            'investmentHighlights' => $investmentHighlights
+            'investmentHighlights' => $investmentHighlights,
+            'propertyId' => $propertyId,
         ];
         return view('pages/admin/editproperty', $data);
     }
@@ -60,6 +61,20 @@ class EditPropertyController extends SessionController
         return $this->response->setJSON($cities);
     }
 
+    public function getGalleries($propertyId)
+    {
+        $propertyGalleriesModel = new PropertyGalleriesModel();
+    
+        // Fetch the galleries based on the property ID
+        $galleries = $propertyGalleriesModel
+            ->where('property_id', $propertyId)
+            ->orderBy('order_sequence', 'asc')
+            ->findAll();
+    
+        // Return the galleries as a JSON response
+        return $this->response->setJSON($galleries);
+    }
+
     public function update($propertyId)
     {
         $propertiesModel = new PropertiesModel();
@@ -67,7 +82,6 @@ class EditPropertyController extends SessionController
         $investmentHighlightsModel = new InvestmentHighlightsModel();
         $propertyGalleriesModel = new PropertyGalleriesModel();
         $files = $this->request->getFiles();
-        $orderSequence = $this->request->getPost('order_sequence');
     
         // Handle form data
         $propertyName = $this->request->getPost('propertyname');
@@ -135,63 +149,7 @@ class EditPropertyController extends SessionController
         }
     
         // Update the property data
-        $propertiesModel->update($propertyId, $propertyData);
-    
-        // Handle new property gallery images
-        $uploadedFiles = $files['files'];
-        if ($uploadedFiles && is_array($uploadedFiles)) {
-            // Define the upload path
-            $uploadPath3 = FCPATH . 'uploads/property-gallery/';
-            
-            // Create the upload directory if it does not exist
-            if (!is_dir($uploadPath3)) {
-                mkdir($uploadPath3, 0755, true);
-            }
-            
-            // Step 1: Process existing gallery images
-            $existingGalleryImages = $propertyGalleriesModel->where('property_id', $propertyId)->findAll();
-            
-            // Delete files that are no longer in the gallery
-            foreach ($existingGalleryImages as $image) {
-                $filePath = FCPATH . $image['location'];
-                if (!file_exists($filePath)) {
-                    continue;
-                }
-                
-                // Check if the file should be kept
-                $fileShouldBeDeleted = true;
-                foreach ($uploadedFiles as $uploadedFile) {
-                    if ($uploadedFile->getClientName() === $image['file_name']) {
-                        $fileShouldBeDeleted = false;
-                        break;
-                    }
-                }
-                
-                // Delete the file if it is no longer in the gallery
-                if ($fileShouldBeDeleted) {
-                    unlink($filePath);
-                }
-            }
-        
-            // Remove existing gallery records from the database
-            $propertyGalleriesModel->where('property_id', $propertyId)->delete();
-        
-            // Step 2: Handle new file uploads
-            foreach ($uploadedFiles as $index => $uploadedFile) {
-                if ($uploadedFile->isValid() && !$uploadedFile->hasMoved()) {
-                    $newFileName3 = $uploadedFile->getRandomName();
-                    $uploadedFile->move($uploadPath3, $newFileName3);
-                    $sequence = $orderSequence[$index];
-                    $propertyGalleriesModel->insert([
-                        'property_id' => $propertyId,
-                        'location' => 'uploads/property-gallery/' . $newFileName3,
-                        'file_name' => $newFileName3,
-                        'original_name' => $uploadedFile->getClientName(), // Save original file name
-                        'order_sequence' => $sequence
-                    ]);
-                }
-            }
-        }        
+        $propertiesModel->update($propertyId, $propertyData);     
     
         // Handle additional listing agents
         $additionalListingAgentsModel->where('property_id', $propertyId)->delete();
@@ -250,4 +208,83 @@ class EditPropertyController extends SessionController
         $filePath = ROOTPATH . 'app/Config/Propertyroutes.php';
         file_put_contents($filePath, $output);
     }
+    public function updateGalleryOrder()
+    {
+        $propertyGalleriesModel = new PropertyGalleriesModel();
+        
+        // Get the sorted galleries data from the AJAX request
+        $sortedGalleries = $this->request->getPost('sortedGalleries');
+        
+        if (!empty($sortedGalleries) && is_array($sortedGalleries)) {
+            foreach ($sortedGalleries as $gallery) {
+                // Update the order_sequence for each gallery item
+                $propertyGalleriesModel->update($gallery['property_gallery_id'], [
+                    'order_sequence' => $gallery['order_sequence']
+                ]);
+            }
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Gallery order updated successfully.'
+        ]);
+    }
+    public function deleteGalleryFile() {
+        $propertyGalleriesModel = new PropertyGalleriesModel();
+        $propertyGalleryId = $this->request->getPost('property_gallery_id');
+        $fileLocation = $this->request->getPost('file_location');
+    
+        // Delete the file from the database
+        $propertyGalleriesModel->where('property_gallery_id', $propertyGalleryId)->delete();
+    
+        // Delete the actual file from the folder
+        $filePath = FCPATH . $fileLocation; // Adjust according to your file structure
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+    
+        // Return response
+        return $this->response->setJSON(['success' => true]);
+    }    
+    public function uploadGalleryFile()
+    {
+        $propertyGalleriesModel = new PropertyGalleriesModel();
+        $files = $this->request->getFiles();
+        $response = ['files' => [], 'success' => false];
+    
+        // Ensure $files is an array
+        if (!is_array($files)) {
+            $response['error'] = 'No files received.';
+            return $this->response->setJSON($response);
+        }
+    
+        foreach ($files['files'] as $index => $file) {
+            if ($file->isValid() && !$file->hasMoved()) {
+                // Generate a unique name for the file and move it
+                $newName = $file->getRandomName();
+                $file->move(FCPATH . 'uploads/property-gallery', $newName);
+    
+                // Save file details to the database
+                $data = [
+                    'property_id' => $this->request->getPost('property_id'),
+                    'location' => 'uploads/property-gallery/' . $newName,
+                    'file_name' => $newName,
+                    'original_name' => $file->getClientName(), // Save original file name
+                    'order_sequence' => $this->request->getPost('order_sequence')[$index]
+                ];
+    
+                $galleryId = $propertyGalleriesModel->insert($data);
+                $response['files'][] = [
+                    'property_gallery_id' => $galleryId,
+                    'location' => $data['location']
+                ];
+            } else {
+                $response['error'] = 'File upload failed.';
+                return $this->response->setJSON($response);
+            }
+        }
+    
+        $response['success'] = true;
+        return $this->response->setJSON($response);
+    }    
 }

@@ -10,6 +10,7 @@ use App\Models\Admin\AdditionalListingAgentsModel;
 use App\Models\Admin\InvestmentHighlightsModel;
 use App\Models\Admin\PropertyGalleriesModel;
 use App\Models\MessagesModel;
+use App\Models\OmConsentModel;
 
 class PropertyDetailsController extends BaseController
 {
@@ -91,6 +92,30 @@ class PropertyDetailsController extends BaseController
             ];
         }
 
+        return $this->response->setJSON($response);
+    }
+    public function omConsent()
+    {
+        $omConsentModel = new OmConsentModel();
+        $data = [
+            'fullname' => $this->request->getPost('om-name'),
+            'email' => $this->request->getPost('om-email'),
+            'phone' => $this->request->getPost('om-phone'),
+            'date' => date('Y-m-d')
+        ];
+        $insert = $omConsentModel->insert($data);
+        if($insert) {
+            $response = [
+                'success' => true,
+                'message' => 'Successfully saved'
+            ];
+        }
+        else {
+            $response = [
+                'success' => false,
+                'message' => 'Failed to save'
+            ];
+        }
         return $this->response->setJSON($response);
     }
 }

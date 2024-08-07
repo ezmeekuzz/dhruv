@@ -61,10 +61,18 @@ $routes->get('/admin/messages/getData', 'Admin\MessagesController::getData');
 $routes->delete('/admin/messages/delete/(:num)', 'Admin\MessagesController::delete/$1');
 $routes->get('/admin/subscribers', 'Admin\SubscribersController::index');
 $routes->get('/admin/subscribers/getData', 'Admin\SubscribersController::getData');
+$routes->get('/admin/editproperty/getGalleries/(:num)', 'Admin\EditPropertyController::getGalleries/$1');
 $routes->delete('/admin/subscribers/delete/(:num)', 'Admin\SubscribersController::delete/$1');
+$routes->post('admin/editproperty/updateGalleryOrder', 'Admin\EditPropertyController::updateGalleryOrder');
+$routes->post('admin/editproperty/deleteGalleryFile', 'Admin\EditPropertyController::deleteGalleryFile');
+$routes->post('admin/editproperty/uploadGalleryFile', 'Admin\EditPropertyController::uploadGalleryFile');
+$routes->get('/admin/offering-memorandum-consent', 'Admin\OfferingMemorandumConsentController::index');
+$routes->get('/admin/offeringmemorandumconsent/getData', 'Admin\OfferingMemorandumConsentController::getData');
+$routes->delete('/admin/offeringmemorandumconsent/delete/(:num)', 'Admin\OfferingMemorandumConsentController::delete/$1');
 /*Administrator*/
 $routes->get('/', 'HomeController::index');
 $routes->post('/propertydetails/sendMessage', 'PropertyDetailsController::sendMessage');
+$routes->post('/propertydetails/omConsent', 'PropertyDetailsController::omConsent');
 $routes->post('/subscribe', 'SubscribeController::index');
 $routes->post('/home/getCitiesByState', 'HomeController::getCitiesByState');
 $routes->post('/home/getGridProperties', 'HomeController::getGridProperties');

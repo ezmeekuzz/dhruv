@@ -185,17 +185,9 @@
                                         <p>or</p>
                                         <button type="button" id="fileSelectBtn">Select Files</button>
                                         <div id="fileList">
-                                            <?php if($propertyGalleries) : ?>
-                                                <?php foreach($propertyGalleries as $index => $list) : ?>
-                                                    <div class="file-wrapper" data-type="existing" data-index="<?=$index;?>" data-id="<?=$list['property_gallery_id'];?>" data-location="<?=$list['location'];?>">
-                                                        <img src="/<?=$list['location'];?>" alt="" class="img-preview">
-                                                        <span class="delete-btn-preview">&times;</span>
-                                                        <!-- Hidden inputs to store the file data -->
-                                                        <input type="hidden" class="existing-image" data-filename="<?=basename($list['location']);?>" data-filepath="/<?=$list['location'];?>">
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
+                                            
                                         </div>
+                                        <div id="sequence"></div>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
@@ -270,4 +262,7 @@
     </div>
 </div>
 <?=$this->include('templates/admin/footer');?>
+<script>
+    let propertyId = <?=$propertyId;?>;
+</script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/admin/editproperty.js"></script>
