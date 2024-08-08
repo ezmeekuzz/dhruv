@@ -13,7 +13,7 @@ class OmConsentModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'fullname', 'email', 'phone', 'date'
+        'fullname', 'email', 'phone', 'property_id', 'date'
     ];
 
     protected bool $allowEmptyInserts = false;

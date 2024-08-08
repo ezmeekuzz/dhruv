@@ -438,7 +438,7 @@
     }
 
     .top-footer .footer-content h2{
-        font-size: 35px;
+        font-size: 30px;
     }
 
     .top-footer .footer-content p{
@@ -450,6 +450,7 @@
         width: 100%;
         background-color: transparent;
         gap:10px;
+        padding:0px;
     }
 
     .footerForm input[type="email"]{
@@ -770,6 +771,40 @@
 
     .nav-menu{
         z-index: 50;
+    }
+
+
+    .footer-content.footer-menu{
+        gap:20px;
+    }
+
+    .footer-cont-top .nav-menu{
+        width: 100%;
+        gap:0!important;
+        background-color: #18292C;
+    }
+
+    .top-footer{
+        gap:20px;
+    }
+
+    .logoSection.mobile {
+        display: flex!important;
+        justify-content: center;
+    }
+
+    .logoSection.mobile .page-logo{
+        position: relative!important;
+        width: 250px!important;
+        height: 250px;
+    }
+
+    .confiden-header h1{
+        text-align: center;
+    }
+
+    .confiden-content p, .confiden-content li{
+        font-size: 18px!important;
     }
 
 }

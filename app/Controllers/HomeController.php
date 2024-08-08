@@ -112,7 +112,7 @@ class HomeController extends BaseController
                 }
                 $htmlContent .= '<div class="list-info-sec">';
                 $htmlContent .= '<div class="item-info">';
-                $htmlContent .= '<h3><a href="' . $property['slug'] . '">' . $property['property_name'] . '</a></h3>';
+                $htmlContent .= '<h3><a href="' . $property['slug'] . '" class="sliderTitle">' . $property['property_name'] . '</a></h3>';
                 $htmlContent .= '<p>Cap Rate: ' . $property['caprate'] . '%</p>';
                 $htmlContent .= '<div class="item-price">';
                 $htmlContent .= '<h5>Price: $' . number_format($property['price']) . '</h5>';

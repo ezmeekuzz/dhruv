@@ -21,72 +21,101 @@
     <style>
         
         .gallery {
+    width: 100%;
+    max-width: 100%;
+    }
+
+    .main-slider .slick-slide img {
         width: 100%;
         max-width: 100%;
-        }
-        .slick-slide img {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
+        height: 550px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
 
-        .main-slider .slick-slide img {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
+    .thumbnail-slider{
+        padding-top:20px;
+        position: relative!important;
+    }
 
-        .thumbnail-slider{
-            padding-top:20px;
-            position: relative!important;
-        }
+    .thumbnail-slider .slick-list .slick-track{
+        display: flex!important;
+        gap:20px;
+    }
 
-        .thumbnail-slider .slick-list .slick-track{
-            display: flex!important;
-            gap:20px;
-        }
+    .thumbnail-slider .slick-slide img {
+        cursor: pointer;
+        border-radius: 10px;
+        height: 160px;
+        object-fit: cover;
+        width: 100%;
+    }
 
-        .thumbnail-slider .slick-slide img {
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-        .thumbnail-slider .slick-next:before, .thumbnail-slider .slick-prev:before{
-            font-size: 35px;
-        }
+    .thumbnail-slider .slick-next:before, .thumbnail-slider .slick-prev:before{
+        font-size: 35px;
+    }
 
 
-        .thumbnail-slider .slick-prev, .thumbnail-slider .slick-next{
-            top:-150%!important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .thumbnail-slider .slick-prev, .thumbnail-slider .slick-next{
+        top:-150%!important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
+    .thumbnail-slider .slick-prev{
+        left: 50px!important;
+    }
+
+    .thumbnail-slider .slick-next{
+        right:50px!important;
+    }
+
+    @media screen and (max-width:500px){
         .thumbnail-slider .slick-prev{
-            left: 50px!important;
+            left: 20px!important;
         }
 
         .thumbnail-slider .slick-next{
-            right:50px!important;
+            right:20px!important;
         }
 
-        @media screen and (max-width:500px){
-            .thumbnail-slider .slick-prev{
-                left: 20px!important;
-            }
+        .thumbnail-slider .slick-prev, .thumbnail-slider .slick-next{
+            top:-180%!important;
+        }
 
-            .thumbnail-slider .slick-next{
-                right:20px!important;
-            }
+        .thumbnail-slider .slick-slide img{
+            height: 45px;
+        }
 
-            .thumbnail-slider .slick-prev, .thumbnail-slider .slick-next{
-                top:-180%!important;
-            }
+
+        .dropdown-results {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            width: calc(100% - 30px);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .dropdown-results .result-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .dropdown-results .result-item:hover {
+            background-color: #f0f0f0;
+        }
+        .header-search {
+            height: 40px;
         }
         .dropdown-results {
+            height: 40px;
+        }
+
+    }
+    
+    .dropdown-results {
             position: absolute;
             background-color: white;
             border: 1px solid #ccc;
@@ -156,7 +185,7 @@
                     <li>
                         <a class="menuList">Insights <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://dhruv-realty.com/insigths/">In The News</a></li>
+                            <li><a href="https://dhruv-realty.com/insigths/">Insights</a></li>
                         </ul>
                     </li>
                     <li>
@@ -350,18 +379,19 @@
                             <h5> Offering Memorandum</h5>
                             <div class="input-form">
                                 <h6>Fullame*</h6>
-                                <input type="text" name="om-name">
+                                <input type="text" name="om-name" required>
                                 <br>
                                 <h6>Email*</h6>
-                                <input type="email" name="om-email">
+                                <input type="email" name="om-email" required>
                                 <br>
                                 <h6>Phone Number*</h6>
-                                <input type="tel" name="om-phone">
+                                <input type="tel" name="om-phone" required>
                                 <br>
                                 <input type="hidden" name="offering-memorandum-link" value="<?=$propertyDetails['offering_memorandum']?>">
+                                <input type="hidden" name="property_id" value="<?=$propertyDetails['property_id']?>">
                                 <div class="om-accept">
                                     <input type="checkbox" name="om-accept" id="om-accept-checkbox">
-                                    <h6 for="om-accept-checkbox">Accept Confidentiality Agreement</h6>
+                                    <h6 for="om-accept-checkbox"><a href="/confidentiality" target="_blank" class="confiLink">Accept  Confidentiality Agreement</a></h6>
                                 </div>
                                 <div class="prop-submit">
                                     <input type="submit" name="prop-submit" value="Confirm">
@@ -540,7 +570,7 @@
                         <li>
                             <a class="menuList">Insights <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://dhruv-realty.com/insigths/">In The News</a></li>
+                                <li><a href="https://dhruv-realty.com/insigths/">Insights</a></li>
                             </ul>
                         </li>
                         <li>
@@ -817,61 +847,108 @@ $('#sendMessage').on('submit', function(event) {
         });
     });
     $(document).ready(function() {
-    $('#omConsent').on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-        
-        // Clear any previous error messages
-        $('.error').remove();
-        
-        // Validate form fields
-        var isValid = true;
-        var formData = $(this).serialize(); // Serialize form data
+        $('#omConsent').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Clear any previous error messages
+            $('.error').remove();
+            
+            // Validate form fields
+            var isValid = true;
+            var formData = $(this).serialize(); // Serialize form data
 
-        // Check if all fields are filled
-        $('#omConsent input[required]').each(function() {
-            if ($(this).val() === '') {
+            // Check if all fields are filled
+            $('#omConsent input[required]').each(function() {
+                if ($(this).val() === '') {
+                    isValid = false;
+                    $(this).after('<span class="error" style="color:red;">This field is required.</span>');
+                }
+            });
+
+            // Check if the checkbox is checked
+            if (!$('#om-accept-checkbox').is(':checked')) {
                 isValid = false;
-                $(this).after('<span class="error" style="color:red;">This field is required.</span>');
+                $('#om-accept-checkbox').after('<span class="error" style="color:red;">You must accept the confidentiality agreement.</span>');
+            }
+
+            if (isValid) {
+                // Submit the form data via AJAX
+                $.ajax({
+                    url: '/propertydetails/omConsent', // Replace with your server endpoint URL
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Handle successful response
+                        var link = $('input[name="offering-memorandum-link"]').val();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Consent successfully received!',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.open(link, '_blank');
+                            $('#omConsent')[0].reset(); // Reset the form after successful submission
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred: ' + error,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
             }
         });
+        var typingTimer;
+        var doneTypingInterval = 300; // Time in ms, adjust as needed
 
-        // Check if the checkbox is checked
-        if (!$('#om-accept-checkbox').is(':checked')) {
-            isValid = false;
-            $('#om-accept-checkbox').after('<span class="error" style="color:red;">You must accept the confidentiality agreement.</span>');
-        }
+        $('input[name="query"]').on('keyup', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        });
 
-        if (isValid) {
-            // Submit the form data via AJAX
+        $('input[name="query"]').on('keydown', function() {
+            clearTimeout(typingTimer);
+        });
+
+        function doneTyping() {
+            var query = $('input[name="query"]').val();
+
+            if (query.trim() === '') {
+                $('#dropdownResults').hide();
+                return;
+            }
+
             $.ajax({
-                url: '/propertydetails/omConsent', // Replace with your server endpoint URL
-                type: 'POST',
-                data: formData,
+                url: '<?= base_url('search') ?>',
+                method: 'POST',
+                data: { query: query },
                 success: function(response) {
-                    // Handle successful response
-                    var link = $('input[name="offering-memorandum-link"]').val();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Consent successfully received!',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.open(link, '_blank');
-                        $('#omConsent')[0].reset(); // Reset the form after successful submission
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred: ' + error,
-                        confirmButtonText: 'OK'
-                    });
+                    var results = response.results;
+                    var html = '';
+
+                    if (results.length > 0) {
+                        results.forEach(function(result) {
+                            html += '<div class="result-item">';
+                            html += '<h4><a href="' + result.slug + '" target="_blank">' + result.property_name + '</a></h4>';
+                            html += '</div>';
+                        });
+                        $('#dropdownResults').html(html).show();
+                    } else {
+                        $('#dropdownResults').html('<div class="result-item">No results found.</div>').show();
+                    }
                 }
             });
         }
+
+        $(document).on('click', function(event) {
+            if (!$(event.target).closest('.haeder-search').length) {
+                $('#dropdownResults').hide();
+            }
+        });
     });
-});
 </script>
 </html>

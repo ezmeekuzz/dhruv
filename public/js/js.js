@@ -1,17 +1,42 @@
 $(document).ready(function(){
 
+
+    // Title Dots 
+
+    function truncateText(selector, maxLength) {
+        $(selector).each(function() {
+            var text = $(this).text();
+            if (text.length > maxLength) {
+                var truncated = text.substr(0, maxLength) + '...';
+                $(this).text(truncated);
+            }
+        });
+    }
+
+
+    truncateText('.sliderTitle', 20); 
+
+
+
+
     // OM Toggle
 
     $('.open-om').click(function(){
         $('.modal-om').addClass('open-om-modal');
         $('body').addClass('offBody');
+        $('.header-main').css('z-index', '0');
     });
 
     $('.close').click(function(){
         $('.modal-om').removeClass('open-om-modal');
         $('body').removeClass('offBody');
+        $('.header-main').css('z-index', '1');
     });
 
+
+
+
+    
 
     $('.menu-toggle').click(function(){
         $('.nav-menu').toggleClass('open');
@@ -134,6 +159,12 @@ $(document).on('click', '.pagination-btn', function() {
         }
     });
 
+
+
+
+
+
+    
 
 
 });

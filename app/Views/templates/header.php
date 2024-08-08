@@ -172,7 +172,7 @@
                         <a class="menuList">Properties <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
                             <!-- <li><a href="https://app.dhruv-realty.com/listing.html">Residential</a></li> -->
-                            <li><a href="https://app.dhruv-realty.com/listing.html">Commercial Listings</a></li>
+                            <li><a href="/">Commercial Listings</a></li>
                         </ul>
                     </li>
                     <li>
@@ -188,7 +188,7 @@
                     <li>
                         <a class="menuList" >Insights <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://dhruv-realty.com/insigths/">In The News</a></li>
+                            <li><a href="https://dhruv-realty.com/insights/">Insights</a></li>
                         </ul>
                     </li>
                     <li>

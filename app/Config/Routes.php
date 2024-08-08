@@ -74,6 +74,7 @@ $routes->get('/', 'HomeController::index');
 $routes->post('/propertydetails/sendMessage', 'PropertyDetailsController::sendMessage');
 $routes->post('/propertydetails/omConsent', 'PropertyDetailsController::omConsent');
 $routes->post('/subscribe', 'SubscribeController::index');
+$routes->get('/confidentiality', 'ConfidentialityController::index');
 $routes->post('/home/getCitiesByState', 'HomeController::getCitiesByState');
 $routes->post('/home/getGridProperties', 'HomeController::getGridProperties');
 $routes->post('/home/getTabularProperties', 'HomeController::getTabularProperties');

@@ -18,7 +18,9 @@ class OfferingMemorandumConsentController extends SessionController
     }
     public function getData()
     {
-        return datatables('om_consents')->make();
+        return datatables('om_consents')
+        ->join('properties', 'om_consents.property_id = properties.property_id', 'LEFT JOIN')
+        ->make();
     }
     public function delete($id)
     {

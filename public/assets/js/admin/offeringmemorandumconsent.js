@@ -10,6 +10,12 @@ $(document).ready(function () {
             { "data": "fullname" },
             { "data": "email" },
             { "data": "phone" },
+            {
+                "data": "slug",
+                "render": function (data, type, row) {
+                    return `<a href="/${data}" title="View Details">${row.property_name}</a>`;
+                }
+            },
             { "data": "date" },
             {
                 "data": null,

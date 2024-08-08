@@ -101,6 +101,7 @@ class PropertyDetailsController extends BaseController
             'fullname' => $this->request->getPost('om-name'),
             'email' => $this->request->getPost('om-email'),
             'phone' => $this->request->getPost('om-phone'),
+            'property_id' => $this->request->getPost('property_id'),
             'date' => date('Y-m-d')
         ];
         $insert = $omConsentModel->insert($data);

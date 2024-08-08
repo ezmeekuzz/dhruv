@@ -7,7 +7,7 @@
                 <div class="col-md-12 m-b-30">
                     <div class="d-block d-sm-flex flex-nowrap align-items-center">
                         <div class="page-title mb-2 mb-sm-0">
-                            <h1><i class="fa fa-envelope"></i> Messages</h1>
+                            <h1><i class="fa fa-file-pdf-o"></i> Offering Memorandum Consent</h1>
                         </div>
                         <div class="ml-auto d-flex align-items-center">
                             <nav>
@@ -18,7 +18,7 @@
                                     <li class="breadcrumb-item">
                                         Dashboard
                                     </li>
-                                    <li class="breadcrumb-item active text-primary" aria-current="page">Messages</li>
+                                    <li class="breadcrumb-item active text-primary" aria-current="page">Offering Memorandum Consent</li>
                                 </ol>
                             </nav>
                         </div>
@@ -30,7 +30,7 @@
                     <div class="card card-statistics">
                         <div class="card-header">
                             <div class="card-heading">
-                                <h4 class="card-title"><i class="fa fa-envelope"></i> Messages</h4>
+                                <h4 class="card-title"><i class="fa fa-file-pdf-o"></i> Offering Memorandum Consent</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -41,6 +41,7 @@
                                             <th>Full Name</th>
                                             <th>Email Address</th>
                                             <th>Phone Number</th>
+                                            <th>Property</th>
                                             <th>Date</th>
                                             <th></th>
                                         </tr>

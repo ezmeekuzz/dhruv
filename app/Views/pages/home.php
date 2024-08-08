@@ -100,7 +100,7 @@
                     <li>
                         <a class="menuList" >Insights <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://dhruv-realty.com/insights-inner/">In The News</a></li>
+                            <li><a href="https://dhruv-realty.com/insights/">Insights</a></li>
                         </ul>
                     </li>
                     <li>
@@ -259,7 +259,7 @@
                         </div>
 
                         <div class="result-btn">
-                            <input type="submit" value="Clear Filter">
+                            <input type="submit" id="clear-filters" value="Clear Filter">
                             <img src="images/colored-btn.png">
                         </div>
                     </div>
@@ -345,7 +345,7 @@
                         <li>
                             <a class="menuList" >Insights <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="https://dhruv-realty.com/insights-inner/">In The News</a></li>
+                                <li><a href="https://dhruv-realty.com/insights/">Insights</a></li>
                             </ul>
                         </li>
                         <li>
@@ -394,7 +394,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/js.js"></script>
 <script>
-     $(document).ready(function(){
+     $(document).ready(function() {
         $('#state_id').change(function() {
             var state_id = $(this).val();
             if (state_id) {
@@ -416,6 +416,7 @@
                 $('#city_id').append('<option value="">Select</option>');
             }
         });
+
         $('#subscribe').on('submit', function(event) {
             event.preventDefault();
 
@@ -443,18 +444,14 @@
             $.ajax({
                 url: '/subscribe',  // Replace with the actual URL to your PHP script
                 type: 'POST',
-                data: {
-                    emailaddress: emailaddress,
-                },
+                data: { emailaddress: emailaddress },
                 success: function(response) {
-                    // Handle the response from the server
                     Swal.fire({
                         icon: 'success',
                         title: 'Subscribed',
                         text: 'You successfully subscribed!'
                     });
 
-                    // Clear the form fields
                     $('#subscribe')[0].reset();
                 },
                 error: function(xhr, status, error) {
@@ -466,22 +463,19 @@
                 }
             });
         });
-        
+
         var typingTimer;
         var doneTypingInterval = 300; // Time in ms, adjust as needed
 
-        // On keyup, start the countdown
         $('input[name="query"]').on('keyup', function() {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(doneTyping, doneTypingInterval);
         });
 
-        // On keydown, clear the countdown 
         $('input[name="query"]').on('keydown', function() {
             clearTimeout(typingTimer);
         });
 
-        // User is "finished typing," send the AJAX request
         function doneTyping() {
             var query = $('input[name="query"]').val();
 
@@ -517,7 +511,7 @@
                 $('#dropdownResults').hide();
             }
         });
-        // Function to initialize Slick Slider
+
         function initializeSlider() {
             $('.mainSlider').slick({
                 dots: false,
@@ -530,7 +524,6 @@
             });
         }
 
-        // Function to create pagination
         function createPagination($items) {
             const itemsPerPage = 6;
             const totalItems = $items.length;
@@ -547,22 +540,20 @@
                 $pagination.append($btn);
             }
 
-            // Show the first page initially
             showPage(1, $items, itemsPerPage);
         }
 
-        // Function to show a specific page
         function showPage(pageNumber, $items, itemsPerPage) {
             $items.hide();
             $items.slice((pageNumber - 1) * itemsPerPage, pageNumber * itemsPerPage).show();
             updatePagination(pageNumber);
         }
 
-        // Function to update pagination button states
         function updatePagination(currentPage) {
             $('.pagination-btn').removeClass('active');
             $(`.pagination-btn[data-page="${currentPage}"]`).addClass('active');
         }
+
         function loadProperties(formData = null) {
             $.ajax({
                 url: '/home/getGridProperties',
@@ -576,17 +567,27 @@
                     const $items = $('.list-item');
                     createPagination($items);
 
-                    // Handle pagination button clicks
                     $(document).on('click', '.pagination-btn', function() {
                         const pageNumber = $(this).data('page');
                         showPage(pageNumber, $items, itemsPerPage);
 
-                        // Scroll to the first item of the current page
                         const $firstItem = $items.filter(':visible').first();
                         $('html, body').animate({
                             scrollTop: $firstItem.offset().top
                         }, 500);
                     });
+                    function truncateText(selector, maxLength) {
+                        $(selector).each(function() {
+                            var text = $(this).text();
+                            if (text.length > maxLength) {
+                                var truncated = text.substr(0, maxLength) + '...';
+                                $(this).text(truncated);
+                            }
+                        });
+                    }
+
+
+                    truncateText('.sliderTitle', 20); 
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX Error:', status, error);
@@ -594,7 +595,6 @@
             });
         }
 
-        // Function to handle the AJAX call for tabular properties
         function loadTabularProperties(formData = null) {
             $.ajax({
                 url: '/home/getTabularProperties',
@@ -609,18 +609,48 @@
             });
         }
 
-        // Initial load of properties
+        // Handle form submission
+        function setupFormSubmission() {
+            $('.listing-filter').off('submit').on('submit', function(e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+                loadProperties(formData);
+                loadTabularProperties(formData);
+            });
+        }
+
+        // Initial load of properties and setup form submission
         loadProperties();
         loadTabularProperties();
+        setupFormSubmission();
 
-        // Handle form submission
-        $('.listing-filter').on('submit', function(e) {
-            e.preventDefault(); // Prevent the form from submitting the traditional way
-            const formData = $(this).serialize(); // Serialize the form data
+        // Clear filters and reinitialize form submission
+        $('#clear-filters').on('click', function(e) {
+            e.preventDefault(); // Prevent default form submission
 
+            // Uncheck all checkboxes without affecting other input values
+            $('#filter-form').find('input[type="checkbox"]').prop('checked', false);
+
+            // Preserve the current values of state_id and city_id
+            const stateIdValue = $('#state_id').val();
+            const cityIdValue = $('#city_id').val();
+
+            // Reset other inputs (text inputs) except for state_id and city_id
+            $('#filter-form').find('input[type="text"]').not('.location-search').val('');
+
+            // Set the preserved values back to the dropdowns
+            $('#state_id').val(stateIdValue);
+            $('#city_id').val(cityIdValue);
+
+            // Optionally, you can reload the form with the current filters
+            const formData = $('#filter-form').serialize();
             loadProperties(formData);
             loadTabularProperties(formData);
+
+            // Reinitialize form submission handling
+            setupFormSubmission();
         });
     });
 </script>
+
 </html>

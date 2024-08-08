@@ -1,2 +1,2 @@
 <?php
-$routes->get('empress-cape-of-may', 'PropertyDetailsController::index/87');
+$routes->get('empress-cape-of-may-yrthsakj-kjsakjhkjd-lkaslkd-lksalkdkl', 'PropertyDetailsController::index/87');
