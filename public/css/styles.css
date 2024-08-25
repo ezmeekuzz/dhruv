@@ -309,6 +309,8 @@ a{
     justify-content: center;
     align-items: center;
     padding:50px 20px;
+    position: relative!important;
+    z-index: 0;
 }
 
 
@@ -827,7 +829,7 @@ a{
     position: absolute;
     top:20px;
     right: 20px;
-    display: none;
+    display: block;
 }
 
 .list-item .item-info {
@@ -888,7 +890,6 @@ a{
     display:flex;
     align-items: center;
     transition: .4s;
-    padding-right:20px;
 }
 
 .map-toggle{
@@ -913,10 +914,16 @@ a{
 }
 
 
-.listing-map iframe{
+
+
+.listing-map #map{
     border: 1px solid #fff!important;
     transition: .4s;
     border-radius: 20px;
+    overflow: hidden!important;
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }
 
 .prop-listing-map iframe{
@@ -1454,6 +1461,7 @@ a{
     color:#000;
     text-align: center;
     text-transform: uppercase;
+    font-size: 16px;
 }
 
 .offer-btn img {
@@ -1890,8 +1898,6 @@ input[type="submit"]{
     height: 100%;
     top: 0;
     left: 0;
-    background: rgb(0,0,0);
-    background: linear-gradient(185deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
     z-index: 1;
 }
 
@@ -1911,12 +1917,12 @@ input[type="submit"]{
 
 .list-item .item-price h5{
     font-size: 17px;
-    width: 50%;
+    width: 70%;
 }
 
 .list-item .item-price span{
     font-size: 12px;
-    width: 50%;
+    width: 30%;
     text-align: right;
 }
 
@@ -1980,7 +1986,6 @@ input[type="submit"]{
 
 
 .confiLink{
-    text-decoration: none!important;
     color:#000;
     transition: .4s;
     font-weight: 500;
@@ -1989,4 +1994,5 @@ input[type="submit"]{
 
 .confiLink:hover{
     color:#062F38;
+    text-decoration: underline;
 }

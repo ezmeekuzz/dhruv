@@ -64,7 +64,49 @@
         .dropdown-results {
             height: 40px; /* Match the height of the search bar */
         }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
     </style>
+    <script type="text/javascript">
+        const locations = <?php echo json_encode($locations); ?>;
+
+        function initMap() {
+            // Create the map and set the initial zoom level
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 5,
+            });
+
+            // Create a LatLngBounds object to store the bounds of all markers
+            const bounds = new google.maps.LatLngBounds();
+
+            // Loop through the locations array and create markers
+            locations.forEach(function(location) {
+                const markerPosition = { 
+                    lat: parseFloat(location.latitude), 
+                    lng: parseFloat(location.longitude) 
+                };
+                
+                // Add a marker for each location
+                new google.maps.Marker({
+                    position: markerPosition,
+                    map: map,
+                    title: location.state_name,
+                });
+
+                // Extend the bounds to include each marker's position
+                bounds.extend(markerPosition);
+            });
+
+            // Adjust the map to fit all markers within view
+            map.fitBounds(bounds);
+        }
+
+        window.initMap = initMap;
+    </script>
 </head>
 <body>
     <nav class="header-main">
@@ -269,7 +311,7 @@
                     <div class="view-sel">
                         <i id="grid"  class="fas fa-th"></i>
                         <i id="list"  class="fas fa-list"></i>
-                        <i id="map"  class="fas fa-map"></i>
+                        <i id="mapSection"  class="fas fa-map"></i>
                         <!-- <img id="grid" src="images/grid.svg"> -->
                         <!-- <img id="list" src="images/list-solid.svg"> -->
                         <!-- <img id="map" src="images/map-solid.svg"> -->
@@ -294,8 +336,7 @@
                     <div class="map-toggle">
                         <img src="images/maptoggle.png">
                     </div>
-
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3514.355654808007!2d-82.71037352399357!3d28.257230701023616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2904600b15555%3A0x69ada1cc8b402578!2sDhruv%20Management!5e0!3m2!1sen!2sph!4v1721802837642!5m2!1sen!2sph" width="100%" height="810" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <div id="map"></div>
                 </div>
             </div>
             <img src="images/bot-Line.png">
@@ -317,7 +358,7 @@
                     <form class="footerForm" id="subscribe">
                         <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address">
                         <div class="result-btn">
-                            <input type="submit" value="Learn More">
+                            <input type="submit" value="Submit">
                             <img src="images/colored-btn.png">
                         </div>
                     </form>
@@ -652,5 +693,8 @@
         });
     });
 </script>
-
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALqBsjd6GtBlG1JSn_Ux4c8t5QSTBf-0A&callback=initMap&v=weekly"
+      defer
+    ></script>
 </html>

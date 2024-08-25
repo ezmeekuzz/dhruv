@@ -10,6 +10,7 @@ $(document).ready(function () {
             { "data": "fname" },
             { "data": "lname" },
             { "data": "emailaddress" },
+            { "data": "phonenumber" },
             { "data": "link" },
             { "data": "property" },
             { "data": "note" },

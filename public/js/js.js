@@ -14,7 +14,7 @@ $(document).ready(function(){
     }
 
 
-    truncateText('.sliderTitle', 20); 
+    truncateText('.sliderTitle', 15); 
 
 
 
@@ -53,10 +53,9 @@ $(document).ready(function(){
 
     $('#grid').click(function() {
         $('.list').css('display', 'none');
-        $('.grid').css('display', 'flex');
+        $('.grid').css('display', 'block');
         $('.listing-map').css('width', '35%');
         $('.list-items').css('display', 'flex');
-        $('.listing-map iframe').css('position', 'absolute');
         $('.map-toggle img').css('display', 'block');
         $('.pagination').css('display', 'flex');
     });
@@ -66,12 +65,11 @@ $(document).ready(function(){
         $('.list').css('display', 'block');
         $('.listing-map').css('width', '35%');
         $('.list-items').css('display', 'flex');
-        $('.listing-map iframe').css('position', 'absolute');
         $('.map-toggle img').css('display', 'block');
         $('.pagination').css('display', 'none');
     });
 
-    $('#map').click(function() {
+    $('#mapSection').click(function() {
         $('.grid').css('display', 'none');
         $('.list').css('display', 'none');
         $('.listing-map').css('width', '100%');

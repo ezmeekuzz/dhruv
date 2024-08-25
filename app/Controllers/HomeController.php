@@ -10,21 +10,58 @@ use App\Models\Admin\PropertyGalleriesModel;
 
 class HomeController extends BaseController
 {
+    protected $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = 'AIzaSyALqBsjd6GtBlG1JSn_Ux4c8t5QSTBf-0A';
+    }
     public function index()
     {
+        $propertiesModel = new PropertiesModel();
         $propertyTypesModel = new PropertyTypesModel();
         $statesModel = new StatesModel();
         $propertyTypes = $propertyTypesModel->findAll();
         $statesList = $statesModel->findAll();
-
+        $uniqueStates = $propertiesModel->join('states', 'states.state_id = properties.state_id')
+                                        ->distinct()
+                                        ->findAll();
+        $locations = []; // Initialize the locations array
+        foreach ($uniqueStates as $state) {
+            $geocodedData = $this->geocodeState($state['location']);
+            if ($geocodedData) {
+                $locations[] = [
+                    'state_name' => $state['property_name'],
+                    'latitude' => $geocodedData['lat'],
+                    'longitude' => $geocodedData['lng'],
+                ];
+            }
+        }
         $data = [
             'title' => 'Listing | DHRUV Realty',
             'propertyTypes' => $propertyTypes,
             'statesList' => $statesList,
+            'locations' => $locations
         ];
-
+    
         return view('pages/home', $data);
     }
+    
+    private function geocodeState($state)
+    {
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($state) . "&key=" . $this->apiKey;
+        $response = file_get_contents($url);
+        $data = json_decode($response);
+    
+        if ($data->status === 'OK') {
+            return [
+                'lat' => $data->results[0]->geometry->location->lat,
+                'lng' => $data->results[0]->geometry->location->lng
+            ];
+        }
+    
+        return false;
+    }    
 
     public function getGridProperties()
     {

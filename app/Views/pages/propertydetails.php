@@ -272,7 +272,7 @@
                         <tbody>
                             <tr>
                                 <td data-label="Asking Cap Rate"><?=$propertyDetails['askingcaprate'];?>%</td>
-                                <td data-label="NOI">$<?=number_format($propertyDetails['noi'], 2);?></td>
+                                <td data-label="NOI">$<?=number_format($propertyDetails['noi'], 0);?></td>
                                 <td data-label="Lease structure"><?=$propertyDetails['leasestructure'];?></td>
                                 <td data-label="Occupancy"><?=$propertyDetails['occupancy'];?>%</td>
                             </tr>
@@ -287,7 +287,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-label="Price Per SF">$<?=number_format($propertyDetails['price_per_sf'], 2);?></td>
+                                <td data-label="Price Per SF">$<?=number_format($propertyDetails['price_per_sf'], 0);?></td>
                                 <td data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
                                 <td data-label="Building Size"><?=$propertyDetails['buildingsize'];?></td>
                                 <td data-label="Property Type"><?=$propertyDetails['property_type'];?></td>
@@ -378,7 +378,7 @@
                             <i class="fas fa-times close"></i>
                             <h5> Offering Memorandum</h5>
                             <div class="input-form">
-                                <h6>Fullame*</h6>
+                                <h6>Full Name*</h6>
                                 <input type="text" name="om-name" required>
                                 <br>
                                 <h6>Email*</h6>
@@ -389,6 +389,8 @@
                                 <br>
                                 <input type="hidden" name="offering-memorandum-link" value="<?=$propertyDetails['offering_memorandum']?>">
                                 <input type="hidden" name="property_id" value="<?=$propertyDetails['property_id']?>">
+                                <input type="hidden" name="link" value="<?=$propertyDetails['slug']?>">
+                                <input type="hidden" name="property" value="<?=$propertyDetails['property_name']?>">
                                 <div class="om-accept">
                                     <input type="checkbox" name="om-accept" id="om-accept-checkbox">
                                     <h6 for="om-accept-checkbox"><a href="/confidentiality" target="_blank" class="confiLink">Accept  Confidentiality Agreement</a></h6>
@@ -542,7 +544,7 @@
                     <form class="footerForm" id="subscribe">
                         <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address">
                         <div class="result-btn">
-                            <input type="submit" value="Learn More">
+                            <input type="submit" value="Submit">
                             <img src="images/colored-btn.png">
                         </div>
                     </form>
@@ -872,6 +874,15 @@ $('#sendMessage').on('submit', function(event) {
             }
 
             if (isValid) {
+                Swal.fire({
+                    title: 'Sending...',
+                    text: 'Please wait while we send your request.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
                 // Submit the form data via AJAX
                 $.ajax({
                     url: '/propertydetails/omConsent', // Replace with your server endpoint URL

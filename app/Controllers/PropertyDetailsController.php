@@ -102,16 +102,31 @@ class PropertyDetailsController extends BaseController
             'email' => $this->request->getPost('om-email'),
             'phone' => $this->request->getPost('om-phone'),
             'property_id' => $this->request->getPost('property_id'),
+            'link' => $this->request->getPost('link'),
+            'property' => $this->request->getPost('property'),
             'date' => date('Y-m-d')
         ];
-        $insert = $omConsentModel->insert($data);
-        if($insert) {
+    
+        $content = "";
+
+        $content .= "Full Name : " . $data['fullname'] . "<br/>";
+        $content .= "Email : " . $data['email'] . "<br/>";
+        $content .= "Phone Number : " . $data['phone'] . "<br/>";
+        $content .= "Property : " . $data['property'] . "<br/>";
+        $content .= "Property URL: <a href='" . base_url() . $data['link'] . "'>".$data['property']."</a>";
+        
+        $email = \Config\Services::email();
+        $email->setTo('interested@dhruvcommercial.com');
+        $email->setSubject('I am interested in this property!');
+        $email->setMessage($content);
+
+        if ($email->send()) {
+            $insert = $omConsentModel->insert($data);
             $response = [
                 'success' => true,
                 'message' => 'Successfully saved'
             ];
-        }
-        else {
+        } else {
             $response = [
                 'success' => false,
                 'message' => 'Failed to save'

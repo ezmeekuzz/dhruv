@@ -41,6 +41,7 @@
                                             <th>First Name</th>
                                             <th>Last Name</th>
                                             <th>Email Address</th>
+                                            <th>Phone Number</th>
                                             <th>Link</th>
                                             <th>Property</th>
                                             <th>Note</th>
