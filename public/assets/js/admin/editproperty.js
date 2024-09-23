@@ -253,3 +253,33 @@ $(document).ready(function() {
     // Example usage:
     loadPropertyGalleries(propertyId);
 });
+
+function initAutocomplete() {
+    var locationInput = document.getElementById('location');
+    
+    // Create the autocomplete object
+    var autocomplete = new google.maps.places.Autocomplete(locationInput, {
+        types: ['geocode'], // You can restrict to certain types of places like 'establishment' for businesses
+        componentRestrictions: { country: "us" } // Restrict results to a specific country (optional)
+    });
+
+    // Set the data fields to return when a place is selected
+    autocomplete.setFields(['address_components', 'geometry', 'formatted_address']);
+    
+    // Add a listener to handle when a user selects a place
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+            alert("No details available for input: '" + place.name + "'");
+            return;
+        }
+        
+        // Optionally, you can use the place details here (e.g., lat/long or address_components)
+        console.log('Selected place:', place);
+        
+        // Update your form fields with the selected location data if needed
+        // For example, you can split the address components into other fields
+    });
+}
+
+google.maps.event.addDomListener(window, 'load', initAutocomplete);

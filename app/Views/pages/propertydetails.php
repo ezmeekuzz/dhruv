@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <title>Inner Listing | DHRUV</title>
+    <title><?=$title;?></title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
@@ -138,7 +138,72 @@
         .dropdown-results {
             height: 40px; /* Match the height of the search bar */
         }
+        .map {
+            height: 100%;
+        }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
     </style>
+    <script type="text/javascript">
+        function initMap() {
+            const locations = <?php echo json_encode($locations); ?>;
+
+            const mapElements = document.querySelectorAll(".map");
+
+            mapElements.forEach((mapElement) => {
+                const myLatLng = {
+                    lat: parseFloat(locations.latitude),
+                    lng: parseFloat(locations.longitude)
+                };
+
+                const map = new google.maps.Map(mapElement, {
+                    zoom: 5,
+                    center: myLatLng,
+                });
+
+                const marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: locations.property_name,
+                });
+
+                const formattedPrice = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(locations.price);
+
+                const contentString = `
+                    <div style="text-align: center; width: 200px;">
+                        <img src="${locations.image_url}" alt="State Image" style="width: 100%; height: auto;" />
+                        <div class="info-window-content">
+                            <label class="label-info">${formattedPrice}</label>
+                            <div class="location-name">${locations.location}</div>
+                            <div class="property-name"><strong>${locations.property_name}</strong></div><br/>
+                            <div class="cap-rate">
+                                <label><strong>Cap Rate</strong></label><br/>
+                                <span>${locations.caprate}%</span>
+                            </div>
+                        </div>
+                    </div>`;
+
+                const infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+            });
+        }
+
+        window.initMap = initMap;
+    </script>
 </head>
 
 <body>
@@ -361,7 +426,7 @@
                     </form>
 
                     <div class="prop-listing-map desktop">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3514.355654808007!2d-82.71037352399357!3d28.257230701023616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2904600b15555%3A0x69ada1cc8b402578!2sDhruv%20Management!5e0!3m2!1sen!2sph!4v1721802837642!5m2!1sen!2sph" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="map"></div>
                     </div>
 
                 </div>
@@ -505,7 +570,7 @@
                     </div>
 
                     <div class="prop-listing-map mobile">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3514.355654808007!2d-82.71037352399357!3d28.257230701023616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2904600b15555%3A0x69ada1cc8b402578!2sDhruv%20Management!5e0!3m2!1sen!2sph!4v1721802837642!5m2!1sen!2sph" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="map"></div>
                     </div>
                 </div>
             </div>
@@ -962,4 +1027,9 @@ $('#sendMessage').on('submit', function(event) {
         });
     });
 </script>
+
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALqBsjd6GtBlG1JSn_Ux4c8t5QSTBf-0A&callback=initMap&v=weekly"
+      defer
+    ></script>
 </html>

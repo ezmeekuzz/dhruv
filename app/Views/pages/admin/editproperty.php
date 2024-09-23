@@ -265,4 +265,5 @@
 <script>
     let propertyId = <?=$propertyId;?>;
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALqBsjd6GtBlG1JSn_Ux4c8t5QSTBf-0A&libraries=places"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/admin/editproperty.js"></script>

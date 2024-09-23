@@ -117,7 +117,7 @@
         width: 30%;
     }
 
-    .listing-filter{
+    .formSectionFilter{
         padding:40px 20px;
     }
 
@@ -425,7 +425,8 @@
     }
 
     .list-item{
-        width: 95%;
+        width: 100%;
+        margin: 0px 0px 20px;
     }
 
     iframe{
@@ -665,7 +666,7 @@
     }
 
     .listing-map{
-        display: none;
+        display: block;
     }
 
     .listing-map iframe{
@@ -678,15 +679,15 @@
 
 
     .banner::before{
-        height: 370px;
+        height: 450px;
     }
 
     .banner{
-        height: 370px;
+        height: 450px;
     }
 
     .inner-banner-sec{
-        height: 200px;
+        height: 250px;
     }
 
     .item-price{
@@ -706,7 +707,11 @@
     }
 
     #map{
-        display: none;
+        display: block;
+    }
+
+    .listing-map #map{
+        height: 400px!important;
     }
 
 
@@ -807,4 +812,66 @@
         font-size: 18px!important;
     }
 
+
+    .bannerLeasing{
+        height: 550px;
+
+    }
+
+    .leasingBanner{
+        height: 300px!important;
+    }
+
+    .bannerLeasing::before{
+        height: 550px;
+    }
+
+    .dropdown-field.leasingSection .result-btn{
+        width: 100%!important;
+    }
+
+    .unit-details-sec{
+        flex-direction: column;
+    }
+
+    .unitDetail{
+        width:100%;
+    }
+
+    .unit-section-map{
+        padding:40px 15px 15px;
+    }
+
+    .sas-mobile{
+        display: none!important;
+    }
+
+    .space-available-section{
+        margin-top:30px;
+    }
+
+    .modalSliderClose{
+        top:0;
+        right:-40%;
+    }
+
+    .modalSlider{
+        gap:20px;
+    }
+
+    .unitDetailSlider{
+        padding:10px;
+    }
+
+
+
+    .unitDetailSlider img{
+        height: 400px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .inner-listing-section {
+        padding: 150px 20px 50px;
+    }
 }

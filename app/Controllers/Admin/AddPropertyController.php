@@ -52,6 +52,7 @@ class AddPropertyController extends SessionController
         $files = $this->request->getFiles();
         $propertyName = $this->request->getPost('propertyname');
         $propertyData = [
+            'purpose' => 'For Sale',
             'property_name' => $propertyName,
             'slug' => strtolower(str_replace(
                 [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"], 

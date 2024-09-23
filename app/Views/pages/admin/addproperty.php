@@ -233,4 +233,5 @@
     </div>
 </div><?=$this->include('templates/admin/footer');?>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALqBsjd6GtBlG1JSn_Ux4c8t5QSTBf-0A&libraries=places"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/admin/addproperty.js"></script>

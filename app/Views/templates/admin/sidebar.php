@@ -56,7 +56,17 @@
                                     <li class="<?php if($currentpage === 'propertytypemasterlist') { echo 'active'; } ?>"> <a href='/admin/property-type-masterlist'>Property Type Masterlist</a></li>
                                 </ul>
                             </li>
-                            <li class="<?php if($currentpage === 'addproperty' || $currentpage === 'propertymasterlist') { echo 'active'; } ?>">
+                            <li class="<?php if($currentpage === 'addspace' || $currentpage === 'spacemasterlist') { echo 'active'; } ?>">
+                                <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <i class="nav-icon fa fa-building"></i>
+                                    <span class="nav-title">Spaces</span>
+                                </a>
+                                <ul aria-expanded="false">
+                                    <li class="<?php if($currentpage === 'addspace') { echo 'active'; } ?>"><a href='/admin/add-space'>Add Space</a></li>
+                                    <li class="<?php if($currentpage === 'spacemasterlist') { echo 'active'; } ?>"> <a href='/admin/space-masterlist'>Space Masterlist</a></li>
+                                </ul>
+                            </li>
+                            <li class="<?php if($currentpage === 'addproperty' || $currentpage === 'propertymasterlist' || $currentpage === 'propertyforleasemasterlist' || $currentpage === 'addpropertyforlease') { echo 'active'; } ?>">
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <i class="nav-icon fa fa-building-o"></i>
                                     <span class="nav-title">Properties</span>
@@ -64,6 +74,8 @@
                                 <ul aria-expanded="false">
                                     <li class="<?php if($currentpage === 'addproperty') { echo 'active'; } ?>"><a href='/admin/add-property'>Add Property</a></li>
                                     <li class="<?php if($currentpage === 'propertymasterlist') { echo 'active'; } ?>"> <a href='/admin/property-masterlist'>Property Masterlist</a></li>
+                                    <li class="<?php if($currentpage === 'addpropertyforlease') { echo 'active'; } ?>"><a href='/admin/add-property-for-lease'>Add Property For Lease</a></li>
+                                    <li class="<?php if($currentpage === 'propertyforleasemasterlist') { echo 'active'; } ?>"> <a href='/admin/property-for-lease-masterlist'>Property For Lease Masterlist</a></li>
                                 </ul>
                             </li>
                             <li class="<?php if($currentpage === 'messages') { echo 'active'; } ?>"><a href="/admin/messages"><i class="nav-icon ti ti-envelope"></i><span class="nav-title">Messages</span></a> </li>

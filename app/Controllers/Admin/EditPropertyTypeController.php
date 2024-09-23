@@ -13,7 +13,7 @@ class EditPropertyTypeController extends SessionController
         $propertyTypesModel = new PropertyTypesModel();
         $details = $propertyTypesModel->find($id);
         $data = [
-            'title' => 'DHRUV Realty | Add Property Type',
+            'title' => 'DHRUV Realty | Edit Property Type',
             'currentpage' => 'propertytypemasterlist',
             'details' => $details
         ];

@@ -26,6 +26,7 @@ class PropertyMasterlistController extends SessionController
             ->join('listing_agents', 'listing_agents.listing_agent_id = properties.listing_agent_id', 'LEFT JOIN')
             ->join('states', 'states.state_id = properties.state_id', 'LEFT JOIN')
             ->join('cities', 'cities.city_id = properties.city_id', 'LEFT JOIN')
+            ->where('properties.purpose', 'For Sale')
             ->make();
     }
     public function delete($id)

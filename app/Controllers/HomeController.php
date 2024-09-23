@@ -7,6 +7,7 @@ use App\Models\Admin\PropertyTypesModel;
 use App\Models\Admin\StatesModel;
 use App\Models\Admin\CitiesModel;
 use App\Models\Admin\PropertyGalleriesModel;
+use App\Models\Admin\SpacesModel;
 
 class HomeController extends BaseController
 {
@@ -21,31 +22,57 @@ class HomeController extends BaseController
         $propertiesModel = new PropertiesModel();
         $propertyTypesModel = new PropertyTypesModel();
         $statesModel = new StatesModel();
+        $spacesModel = new SpacesModel();
+        
+        // Fetch property types and states
         $propertyTypes = $propertyTypesModel->findAll();
+        $spaces = $spacesModel->findAll();
         $statesList = $statesModel->findAll();
+    
+        // Fetch unique states associated with properties
         $uniqueStates = $propertiesModel->join('states', 'states.state_id = properties.state_id')
                                         ->distinct()
                                         ->findAll();
-        $locations = []; // Initialize the locations array
+    
+        // Initialize the locations array
+        $locations = [];
+    
+        // Loop through the unique states to geocode and add location data
         foreach ($uniqueStates as $state) {
             $geocodedData = $this->geocodeState($state['location']);
+            
+            // Prepare the image URL and price
+            $imageUrl = $state['backgroundimage'];
+            $price = $state['price'];
+            
             if ($geocodedData) {
                 $locations[] = [
-                    'state_name' => $state['property_name'],
+                    'purpose' => $state['purpose'],
+                    'location' => $state['location'],
+                    'property_name' => $state['property_name'], 
+                    'caprate' => $state['caprate'], 
+                    'rental_rate' => $state['rental_rate'], 
+                    'size_sf' => $state['size_sf'], 
+                    'image_url' => $imageUrl,
+                    'price' => $price,
                     'latitude' => $geocodedData['lat'],
                     'longitude' => $geocodedData['lng'],
                 ];
             }
         }
+    
+        // Prepare data for the view
         $data = [
             'title' => 'Listing | DHRUV Realty',
             'propertyTypes' => $propertyTypes,
+            'spaces' => $spaces,
             'statesList' => $statesList,
-            'locations' => $locations
+            'locations' => $locations,
         ];
     
+        // Load the view with the prepared data
         return view('pages/home', $data);
-    }
+    }     
     
     private function geocodeState($state)
     {
@@ -63,7 +90,7 @@ class HomeController extends BaseController
         return false;
     }    
 
-    public function getGridProperties()
+    public function getForSaleGridProperties()
     {
         if ($this->request->isAJAX()) {
             $filters = $this->request->getPost();
@@ -117,6 +144,7 @@ class HomeController extends BaseController
             }
             
             $builder->where('properties.publishstatus', 'Published');
+            $builder->where('properties.purpose', 'For Sale');
             $properties = $builder->findAll();
     
             // Start generating the specific HTML
@@ -163,8 +191,99 @@ class HomeController extends BaseController
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);
         }
-    }    
-    public function getTabularProperties()
+    }  
+
+    public function getForLeasingGridProperties()
+    {
+        if ($this->request->isAJAX()) {
+            $filters = $this->request->getPost();
+    
+            $propertiesModel = new PropertiesModel();
+            $propertyGalleryModel = new PropertyGalleriesModel();
+            $builder = $propertiesModel
+                ->join('states', 'states.state_id = properties.state_id', 'left')
+                ->join('cities', 'cities.city_id = properties.city_id', 'left')
+                ->join('spaces', 'spaces.space_id = properties.space_id', 'left')
+                ->where('purpose', 'For Leasing');
+    
+            // Apply filters
+            if (!empty($filters['property_type_id2'])) {
+                $builder->whereIn('properties.space_id', $filters['property_type_id2']);
+            }
+    
+            if (!empty($filters['state_id2'])) {
+                $builder->where('properties.state_id', $filters['state_id2']);
+            }
+    
+            if (!empty($filters['location2'])) {
+                $builder->like('properties.location', $filters['location2'], 'both');
+            }
+    
+            if (!empty($filters['city_id2'])) {
+                $builder->where('properties.city_id', $filters['city_id2']);
+            }
+    
+            if (!empty($filters['zip_code2'])) {
+                $builder->where('properties.zipcode', $filters['zip_code2']);
+            }
+    
+            if (!empty($filters['rental_rate_min'])) {
+                $builder->where('properties.rental_rate >=', $filters['rental_rate_min']);
+            }
+    
+            if (!empty($filters['rental_rate_max'])) {
+                $builder->where('properties.rental_rate <=', $filters['rental_rate_max']);
+            }
+    
+            if (!empty($filters['size_sf_min'])) {
+                $builder->where('properties.size_sf >=', $filters['size_sf_min']);
+            }
+    
+            if (!empty($filters['size_sf_max'])) {
+                $builder->where('properties.size_sf <=', $filters['size_sf_max']);
+            }
+    
+            $builder->where('properties.publishstatus', 'Published');
+            $builder->where('properties.purpose', 'For Leasing');
+            $properties = $builder->findAll();
+    
+            // Start generating the specific HTML
+            $htmlContent = '';
+    
+            foreach ($properties as $property) {
+                // Check if the property is added within the last two weeks
+                $dateAdded = new \DateTime($property['dateadded']);
+                $twoWeeksAgo = new \DateTime('-2 weeks');
+                $isNew = $dateAdded >= $twoWeeksAgo;
+    
+                // Begin list-item div with background image
+                $htmlContent .= '<div class="list-item leasingItem" style="background-image: url(\'' . base_url($property['backgroundimage']) . '\');">';
+    
+                // If the property is new, add the 'New' tag
+                if ($isNew) {
+                    $htmlContent .= '<a class="list-tag">New</a>';
+                }
+    
+                // Add property details
+                $htmlContent .= '<div class="list-info-sec">';
+                $htmlContent .= '<div class="item-info">';
+                $htmlContent .= '<h3><a class="sliderTitle" href="' . $property['slug'] . '">' . $property['property_name'] . '</a></h3>';
+                $htmlContent .= '<p>City: ' . $property['cityname'] . '</p>'; // Assuming city_name is joined
+                $htmlContent .= '<div class="item-price">';
+                $htmlContent .= '<h5>Space Available : ' . number_format($property['size_sf']) . ' sf</h5>'; // Assuming 'size_sf' is the space available
+                $htmlContent .= '<span>Type: ' . $property['spacetype'] . '</span>';
+                $htmlContent .= '</div>'; // End item-price
+                $htmlContent .= '</div>'; // End item-info
+                $htmlContent .= '</div>'; // End list-info-sec
+                $htmlContent .= '</div>'; // End list-item
+            }
+    
+            // Return the generated HTML content
+            return $this->response->setBody($htmlContent);
+        }
+    }
+      
+    public function getForSaleTabularProperties()
     {
         if ($this->request->isAJAX()) {
             $filters = $this->request->getPost();
@@ -173,7 +292,8 @@ class HomeController extends BaseController
             $builder = $propertiesModel
                 ->join('states', 'states.state_id = properties.state_id', 'left')
                 ->join('cities', 'cities.city_id = properties.city_id', 'left')
-                ->join('property_types', 'property_types.property_type_id = properties.property_type_id', 'left');
+                ->join('property_types', 'property_types.property_type_id = properties.property_type_id', 'left')
+                ->where('purpose', 'For Sale');
 
             // Apply filters
             if (!empty($filters['property_type_id'])) {
@@ -217,20 +337,8 @@ class HomeController extends BaseController
             }
 
             $properties = $builder->findAll();
-
-            // Start generating the specific HTML for table
-            $htmlContent = '<table>';
-            $htmlContent .= '<thead>
-                                <tr>
-                                    <th>Property Name</th>
-                                    <th>City</th>
-                                    <th>State</th>
-                                    <th>Cap Rate</th>
-                                    <th>Price</th>
-                                    <th>Type</th>
-                                </tr>
-                            </thead>';
-            $htmlContent .= '<tbody>';
+            
+            $htmlContent = "";
 
             foreach ($properties as $property) {
                 $htmlContent .= '<tr>';
@@ -243,8 +351,74 @@ class HomeController extends BaseController
                 $htmlContent .= '</tr>';
             }
 
-            $htmlContent .= '</tbody>';
-            $htmlContent .= '</table>';
+            // Return the generated HTML content
+            return $this->response->setBody($htmlContent);
+        }
+    }
+      
+    public function getForLeasingTabularProperties()
+    {
+        if ($this->request->isAJAX()) {
+            $filters = $this->request->getPost();
+
+            $propertiesModel = new PropertiesModel();
+            $builder = $propertiesModel
+                ->join('states', 'states.state_id = properties.state_id', 'left')
+                ->join('cities', 'cities.city_id = properties.city_id', 'left')
+                ->join('spaces', 'spaces.space_id = properties.space_id', 'left')
+                ->where('purpose', 'For Leasing');
+    
+            // Apply filters
+            if (!empty($filters['property_type_id2'])) {
+                $builder->whereIn('properties.space_id', $filters['property_type_id2']);
+            }
+    
+            if (!empty($filters['state_id2'])) {
+                $builder->where('properties.state_id', $filters['state_id2']);
+            }
+    
+            if (!empty($filters['location2'])) {
+                $builder->like('properties.location', $filters['location2'], 'both');
+            }
+    
+            if (!empty($filters['city_id2'])) {
+                $builder->where('properties.city_id', $filters['city_id2']);
+            }
+    
+            if (!empty($filters['zip_code2'])) {
+                $builder->where('properties.zipcode', $filters['zip_code2']);
+            }
+    
+            if (!empty($filters['rental_rate_min'])) {
+                $builder->where('properties.rental_rate >=', $filters['rental_rate_min']);
+            }
+    
+            if (!empty($filters['rental_rate_max'])) {
+                $builder->where('properties.rental_rate <=', $filters['rental_rate_max']);
+            }
+    
+            if (!empty($filters['size_sf_min'])) {
+                $builder->where('properties.size_sf >=', $filters['size_sf_min']);
+            }
+    
+            if (!empty($filters['size_sf_max'])) {
+                $builder->where('properties.size_sf <=', $filters['size_sf_max']);
+            }
+
+            $properties = $builder->findAll();
+            
+            $htmlContent = "";
+
+            foreach ($properties as $property) {
+                $htmlContent .= '<tr>';
+                $htmlContent .= '<td><a href="' . $property['slug'] . '">' . $property['property_name'] . '</a></td>';
+                $htmlContent .= '<td>' . $property['cityname'] . '</td>'; // Assuming 'city_name' is available
+                $htmlContent .= '<td>' . $property['state_name'] . '</td>'; // Assuming 'state_name' is available
+                $htmlContent .= '<td>$' . $property['rental_rate'] . '</td>';
+                $htmlContent .= '<td>' . $property['leasestructure'] . '</td>';
+                $htmlContent .= '<td>' . $property['spacetype'] . '</td>'; // Assuming 'property_type' is available
+                $htmlContent .= '</tr>';
+            }
 
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);
