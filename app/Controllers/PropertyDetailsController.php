@@ -49,6 +49,7 @@ class PropertyDetailsController extends BaseController
         ->findAll();
         
         $leasingUnitsList = $leasingUnitsModel
+        ->join('leasing_galleries', 'leasing_galleries.leasing_unit_id = leasing_units.leasing_unit_id AND leasing_galleries.order_arrangement = 1', 'left')
         ->where('property_id', $id)
         ->findAll();
         
@@ -58,9 +59,12 @@ class PropertyDetailsController extends BaseController
         ->findAll();
 
         $locations = [
+            'purpose' => $propertyDetails['purpose'],
             'location' => $propertyDetails['location'],
             'property_name' => $propertyDetails['property_name'], 
             'caprate' => $propertyDetails['caprate'], 
+            'rental_rate' => $propertyDetails['rental_rate'], 
+            'size_sf' => $propertyDetails['size_sf'], 
             'image_url' => $propertyDetails['backgroundimage'],
             'price' => $propertyDetails['price'],
             'latitude' => $geocodedData['lat'],

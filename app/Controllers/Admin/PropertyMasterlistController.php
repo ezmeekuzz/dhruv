@@ -130,4 +130,40 @@ class PropertyMasterlistController extends SessionController
 
         return $this->response->setJSON(['status' => 'error']);
     }
+    public function markAsSold()
+    {
+        // Load the PropertyModel
+        $propertyModel = new PropertiesModel();
+
+        // Get the property_id from the POST request
+        $propertyId = $this->request->getPost('property_id');
+
+        // Validate that the property ID is provided
+        if (!$propertyId) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Property ID is missing.'
+            ]);
+        }
+
+        // Find the property in the database
+        $property = $propertyModel->find($propertyId);
+
+        // Check if the property exists
+        if (!$property) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Property not found.'
+            ]);
+        }
+
+        // Update the property's status to "sold"
+        $propertyModel->update($propertyId, ['soldstatus' => 'sold']);
+
+        // Return success response
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Property has been marked as sold.'
+        ]);
+    }
 }

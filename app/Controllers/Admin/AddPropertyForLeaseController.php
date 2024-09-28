@@ -74,6 +74,7 @@ class AddPropertyForLeaseController extends SessionController
             'addt' => $this->request->getPost('addt'),
             'starting_sf_yr' => $this->request->getPost('starting_sf_yr'),
             'ending_sf_yr' => $this->request->getPost('ending_sf_yr'),
+            'sf_yr' => $this->request->getPost('sf_yr'),
             'publishstatus' => ($this->request->getPost('publishstatus') == 'Yes') ? 'Published' : 'Draft',
             'dateadded' => date('Y-m-d')
         ];

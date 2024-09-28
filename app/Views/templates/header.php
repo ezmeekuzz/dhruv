@@ -198,7 +198,8 @@
                     <li>
                         <a class="menuList">Properties <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://app.dhruv-realty.com/">Commercial Listings</a></li>
+                            <li><a href="/">Commercial Listings</a></li>
+                            <li><a href="/leasing">Leasing Listings</a></li>
                         </ul>
                     </li>
                     <li>

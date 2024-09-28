@@ -84,6 +84,10 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="location">Address</label>
+                                    <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location">
+                                </div>
+                                <div class="form-group">
                                     <label for="state_id">States</label>
                                     <select class="form-control chosen-select" name="state_id" id="state_id" data-placeholder="Choose a states...">
                                         <option hidden></option>
@@ -115,10 +119,6 @@
                                     <input type="text" name="yearbuilt" id="yearbuilt" class="form-control" placeholder="Enter Year Built">
                                 </div>
                                 <div class="form-group">
-                                    <label for="location">Location</label>
-                                    <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location">
-                                </div>
-                                <div class="form-group">
                                     <label for="leasestructure">Lease Structure</label>
                                     <input type="text" name="leasestructure" id="leasestructure" class="form-control" placeholder="Enter Lease Structure">
                                 </div>
@@ -135,12 +135,16 @@
                                     <input type="text" name="addt" id="addt" class="form-control" placeholder="Enter ADDT">
                                 </div>
                                 <div class="form-group">
-                                    <label for="starting_sf_yr">Starting SF Year</label>
+                                    <label for="starting_sf_yr">SF/YR Pricing</label>
                                     <input type="text" name="starting_sf_yr" id="starting_sf_yr" class="form-control" placeholder="Enter Starting SF Year">
                                 </div>
                                 <div class="form-group">
-                                    <label for="ending_sf_yr">Ending SF Year</label>
+                                    <label for="ending_sf_yr">Max Continuous SF</label>
                                     <input type="text" name="ending_sf_yr" id="ending_sf_yr" class="form-control" placeholder="Enter Ending SF Year">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sf_yr">SF/YR</label>
+                                    <input type="text" name="sf_yr" id="sf_yr" class="form-control" placeholder="Enter SF/Year">
                                 </div>
                                 <div class="form-group">
                                     <label for="backgroundimage">Background Image</label>

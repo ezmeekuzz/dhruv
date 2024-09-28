@@ -98,6 +98,10 @@
                                     <input type="text" name="caprate" id="caprate" class="form-control" placeholder="Enter Cap Rate" value="<?=$property['caprate'];?>">
                                 </div>
                                 <div class="form-group">
+                                    <label for="location">Address</label>
+                                    <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location" value="<?=$property['location'];?>">
+                                </div>
+                                <div class="form-group">
                                     <label for="state_id">States</label>
                                     <select class="form-control chosen-select" name="state_id" id="state_id" data-placeholder="Choose a states...">
                                         <option hidden></option>
@@ -143,10 +147,6 @@
                                 <div class="form-group">
                                     <label for="yearbuilt">Year Built</label>
                                     <input type="text" name="yearbuilt" id="yearbuilt" class="form-control" placeholder="Enter Year Built" value="<?=$property['yearbuilt'];?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="location">Location</label>
-                                    <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location" value="<?=$property['location'];?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="askingcaprate">Asking Cap Rate</label>

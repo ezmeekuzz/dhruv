@@ -16,12 +16,25 @@ $(document).ready(function () {
             {
                 "data": null,
                 "render": function (data, type, row) {
-                    return `<a href="/admin/edit-property/${row.property_id}" title="Edit" class="edit-btn" data-id="${row.property_id}" style="color: blue;"><i class="fa fa-edit" style="font-size: 18px;"></i></a>
-                            <a href="#" title="Delete" class="delete-btn" data-id="${row.property_id}" style="color: red;"><i class="fa fa-trash" style="font-size: 18px;"></i></a>`;
+                    return `
+                        <a href="/admin/edit-property/${row.property_id}" title="Edit" class="edit-btn" data-id="${row.property_id}" style="color: blue;">
+                            <i class="fa fa-edit" style="font-size: 18px;"></i>
+                        </a>
+                        <a href="#" title="Sold" class="sold-btn" data-id="${row.property_id}" style="color: green;">
+                            <i class="fa fa-money" style="font-size: 18px;"></i>
+                        </a>
+                        <a href="#" title="Delete" class="delete-btn" data-id="${row.property_id}" style="color: red;">
+                            <i class="fa fa-trash" style="font-size: 18px;"></i>
+                        </a>`;
                 }
             }
         ],
         "createdRow": function (row, data, dataIndex) {
+            // Check if the property is sold and apply grayish color
+            if (data.soldstatus === 'sold') {
+                $(row).addClass('sold-property');  // Add a custom class for sold properties
+            }
+    
             $(row).attr('data-id', data.property_id);
             $(row).find('td:not(:last-child)').attr('data-id', data.property_id);
             $(row).find('td:not(:last-child)').addClass('propertyDetails');
@@ -30,6 +43,65 @@ $(document).ready(function () {
             $(this).trigger('dt-init-complete');
         }
     });
+    
+    // Add custom CSS to style the sold property rows
+    $('<style>')
+        .prop('type', 'text/css')
+        .html('.sold-property { background-color: #d3d3d3; }') // Grayish color for sold properties
+        .appendTo('head');
+    
+    // SweetAlert2 confirmation for Sold button
+    $(document).on('click', '.sold-btn', function (e) {
+        e.preventDefault(); // Prevent the default action of the button
+    
+        var propertyId = $(this).data('id'); // Get the property ID from the button
+    
+        // Show SweetAlert2 confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to mark this property as sold!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, mark as sold!',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Make an AJAX request to mark the property as sold
+                $.ajax({
+                    url: '/admin/propertymasterlist/markAsSold',  // Your backend URL to handle the sold action
+                    type: 'POST',
+                    data: { property_id: propertyId },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Sold!',
+                                'The property has been marked as sold.',
+                                'success'
+                            );
+                            // Optionally, you can reload the DataTable to reflect the changes
+                            table.ajax.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Something went wrong. Please try again.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle AJAX errors
+                        Swal.fire(
+                            'Error!',
+                            'Something went wrong. Please try again.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });    
 
     $(document).on('click', '.delete-btn', function () {
         var id = $(this).data('id');

@@ -27,18 +27,19 @@
                 currency: 'USD',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
-            }).format(locations.starting_sf_yr);
+            }).format(locations.rental_rate);
 
             const contentString = `
                 <div style="text-align: center; width: 200px;">
+                    <div style="padding: 12px;"><center><h3>${locations.purpose}</h3></center></div>
                     <img src="${locations.image_url}" alt="State Image" style="width: 100%; height: auto;" />
                     <div class="info-window-content">
-                        <label class="label-info">${formattedPrice}</label>
+                        <label class="label-info">${formattedPrice} PSF/Yr</label>
                         <div class="location-name">${locations.location}</div>
                         <div class="property-name"><strong>${locations.property_name}</strong></div><br/>
                         <div class="cap-rate">
-                            <label><strong>Cap Rate</strong></label><br/>
-                            <span>${locations.caprate}%</span>
+                            <label><strong>Size SF</strong></label><br/>
+                            <span>${locations.size_sf}</span>
                         </div>
                     </div>
                 </div>`;
@@ -87,14 +88,14 @@
                     </div>
                     <div class="prop-price">
                         <i class="fas fa-download" id="copyURL"></i>
-                        <h3><span class="askinPrice">Starting SF/YR</span> $<?=number_format($propertyDetails['starting_sf_yr'], 0);?></h3>
+                        <h3><span class="askinPrice">SF/YR Pricing</span> $<?=number_format($propertyDetails['starting_sf_yr'], 0);?></h3>
                     </div>
                 </div>
                 <table class="list-table">
                     <thead>
                         <tr>
                             <th>Anchor Tenant</th>
-                            <th>Max Available SF</th>
+                            <th>Max Continuous SF</th>
                             <th>Lease Structure</th>
                             <th>ADDT</th>
                         </tr>
@@ -102,9 +103,9 @@
                     <tbody>
                         <tr>
                             <td data-label="Anchor Tenant"><?=$propertyDetails['anchor_tenant'];?></td>
-                            <td data-label="Max Available SF"><?=$propertyDetails['ending_sf_yr'];?></td>
+                            <td data-label="Max Continuous SF"><?=number_format($propertyDetails['ending_sf_yr'], 0);?> SF</td>
                             <td data-label="Lease Structure"><?=$propertyDetails['leasestructure'];?></td>
-                            <td data-label="ADDT"><?=$propertyDetails['addt'];?></td>
+                            <td data-label="ADDT"><?=number_format($propertyDetails['addt'], 0);?></td>
                         </tr>
                     </tbody>
                     <thead>
@@ -117,7 +118,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td data-label="SF/YR"><?=$propertyDetails['starting_sf_yr'];?></td>
+                            <td data-label="SF/YR"><?=$propertyDetails['sf_yr'];?></td>
                             <td data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
                             <td data-label="Building Size"><?=$propertyDetails['buildingsize'];?> SF</td>
                             <td data-label="Space Use"><?=$propertyDetails['spacetype'];?></td>
@@ -169,7 +170,7 @@
                     </form> -->
                 <div class="space-available-section">
                     <div class="sas-title">
-                        <h3><?=COUNT($leasingUnitsList);?> Space Available</h3> <h3 class="sas-mobile">Site Plan</h3>
+                        <h3><?=COUNT($leasingUnitsList);?> Space(s) Available</h3> <h3 class="sas-mobile">Site Plan</h3>
                     </div>
                     <?php if($leasingUnitsList) : ?>
                     <?php foreach($leasingUnitsList as $list) : ?>
@@ -181,6 +182,10 @@
                                 <p>$<?=$list['leasing_rental_rate'];?></p>
                             </div>
                             <div class="unitDetail">
+                                <h6>CAM</h6>
+                                <p>$<?=$list['cam'];?></p>
+                            </div>
+                            <div class="unitDetail">
                                 <h6>Space Available</h6>
                                 <p><?=$list['space_available'];?></p>
                             </div>
@@ -189,20 +194,41 @@
                                 <p><?=$list['space_use'];?></p>
                             </div>
                             <div class="unitDetail">
-                                <img class="imageTrigger" src="/<?=$list['site_plan_map'];?>"/>
+                                <img class="imageTrigger" src="/<?=$list['location'];?>"/>
+                            </div>
+                        </div>
+                        <div class="modalSlider">
+                            <div class="modalSliderClose">X</div>
+                            <div class="unitDetailSlider">
+
+                            <?php
+                            // Connect to the database
+                            $db = \Config\Database::connect();
+
+                            // Query to get leasing galleries by leasing_unit_id
+                            $query = $db->table('leasing_galleries')
+                                        ->where('leasing_unit_id', $list['leasing_unit_id'])
+                                        ->get();
+                            $galleries = $query->getResultArray();
+                            ?>
+
+                            <!-- If there are gallery images for the unit, display them -->
+                            <?php if (!empty($galleries)) : ?>
+                                <?php foreach ($galleries as $gallery) : ?>
+                                    <div>
+                                        <img src="/<?= $gallery['location']; ?>" alt="Gallery Image" />
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <!-- Fallback if no gallery images -->
+                                <div><img src="images/sitePlanImage.png" alt="Default Image" /></div>
+                            <?php endif; ?>
+
                             </div>
                         </div>
                     </div>
                     <?php endforeach; ?>
                     <?php endif; ?>
-                    <div class="modalSlider">
-                        <div class="modalSliderClose">X</div>
-                        <div class="unitDetailSlider">
-                            <div><img src="images/sitePlanImage.png"/></div>
-                            <div><img src="images/city1.png"/></div>
-                            <div><img src="images/city2.png"/></div>
-                        </div>
-                    </div>
                 </div>
                 <div class="list-record desktop">
                     <h4>Broker Of Record</h4>
@@ -222,10 +248,12 @@
                 </div>
             </div>
             <div class="listing-sidebar">
+                <?php if($propertyDetails['leasing_flyer'] != "" || $propertyDetails['leasing_flyer'] != NULL) : ?>
                 <a href="<?=$propertyDetails['leasing_flyer'];?>" target="_blank" class="offer-btn desktop">
                     <p>Leasing Flyer</p>
                     <img src="images/colored-btn.png">
                 </a>
+                <?php endif; ?>
                 <div class="list-agent-info">
                     <h5>LEAD LEASING AGENT</h5>
                     <div class="lead-prop">

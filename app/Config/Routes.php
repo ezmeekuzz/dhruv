@@ -61,6 +61,7 @@ $routes->get('/admin/propertymasterlist/getData', 'Admin\PropertyMasterlistContr
 $routes->delete('/admin/propertymasterlist/delete/(:num)', 'Admin\PropertyMasterlistController::delete/$1');
 $routes->get('/admin/propertymasterlist/propertyDetails', 'Admin\PropertyMasterlistController::propertyDetails');
 $routes->delete('admin/propertymasterlist/deleteImage/(:num)', 'Admin\PropertyMasterlistController::deleteImage/$1');
+$routes->post('/admin/propertymasterlist/markAsSold', 'Admin\PropertyMasterlistController::markAsSold');
 $routes->get('/admin/edit-property/(:num)', 'Admin\EditPropertyController::index/$1');
 $routes->post('admin/editproperty/update/(:num)', 'Admin\EditPropertyController::update/$1');
 $routes->get('/admin/messages', 'Admin\MessagesController::index');
@@ -85,11 +86,19 @@ $routes->delete('/admin/propertyforleasemasterlist/delete/(:num)', 'Admin\Proper
 $routes->delete('admin/propertyforleasemasterlist/deleteImage/(:num)', 'Admin\PropertyForLeaseMasterlistController::deleteImage/$1');
 $routes->post('admin/propertyforleasemasterlist/addLeasingUnit', 'Admin\PropertyForLeaseMasterlistController::addLeasingUnit');
 $routes->post('/admin/propertyforleasemasterlist/deleteLeasingUnit', 'Admin\PropertyForLeaseMasterlistController::deleteLeasingUnit');
+$routes->post('/admin/propertyforleasemasterlist/updateOrder', 'Admin\PropertyForLeaseMasterlistController::updateOrder');
+$routes->get('/admin/propertyforleasemasterlist/getLeasingUnitDetails', 'Admin\PropertyForLeaseMasterlistController::getLeasingUnitDetails');
+$routes->post('/admin/propertyforleasemasterlist/updateImageOrder', 'Admin\PropertyForLeaseMasterlistController::updateImageOrder');
+$routes->post('/admin/propertyforleasemasterlist/deleteImageLeasing', 'Admin\PropertyForLeaseMasterlistController::deleteImageLeasing');
+$routes->post('/admin/propertyforleasemasterlist/uploadLeasingImage', 'Admin\PropertyForLeaseMasterlistController::uploadLeasingImage');
+$routes->get('/admin/propertyforleasemasterlist/getLeasingImages', 'Admin\PropertyForLeaseMasterlistController::getLeasingImages');
+$routes->post('/admin/propertyforleasemasterlist/editLeasingUnit', 'Admin\PropertyForLeaseMasterlistController::editLeasingUnit');
+$routes->post('/admin/propertyforleasemasterlist/markAsSold', 'Admin\PropertyForLeaseMasterlistController::markAsSold');
 $routes->get('/admin/edit-property-for-lease/(:num)', 'Admin\EditPropertyForLeaseController::index/$1');
-$routes->post('admin/editpropertyforlease/update/(:num)', 'Admin\EditPropertyForLeaseController::update/$1');
-$routes->post('admin/editpropertyforlease/updateGalleryOrder', 'Admin\EditPropertyForLeaseController::updateGalleryOrder');
-$routes->post('admin/editpropertyforlease/deleteGalleryFile', 'Admin\EditPropertyForLeaseController::deleteGalleryFile');
-$routes->post('admin/editpropertyforlease/uploadGalleryFile', 'Admin\EditPropertyForLeaseController::uploadGalleryFile');
+$routes->post('/admin/editpropertyforlease/update/(:num)', 'Admin\EditPropertyForLeaseController::update/$1');
+$routes->post('/admin/editpropertyforlease/updateGalleryOrder', 'Admin\EditPropertyForLeaseController::updateGalleryOrder');
+$routes->post('/admin/editpropertyforlease/deleteGalleryFile', 'Admin\EditPropertyForLeaseController::deleteGalleryFile');
+$routes->post('/admin/editpropertyforlease/uploadGalleryFile', 'Admin\EditPropertyForLeaseController::uploadGalleryFile');
 $routes->get('/admin/editpropertyforlease/getGalleries/(:num)', 'Admin\EditPropertyForLeaseController::getGalleries/$1');
 /*Administrator*/
 $routes->get('/', 'HomeController::index');

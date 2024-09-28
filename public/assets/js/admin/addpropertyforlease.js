@@ -9,7 +9,7 @@ $(document).ready(function() {
         var requiredFields = [
             'propertyname', 'anchor_tenant', 'space_id', 'listing_agent_id',
             'state_id', 'city_id', 'zipcode', 'buildingsize', 'yearbuilt', 'location',
-            'leasestructure', 'rental_rate', 'size_sf', 'addt', 'starting_sf_yr', 'ending_sf_yr',
+            'leasestructure', 'rental_rate', 'size_sf', 'addt', 'starting_sf_yr', 'ending_sf_yr', 'sf_yr',
             'backgroundimage'
         ];
         var isValid = true;

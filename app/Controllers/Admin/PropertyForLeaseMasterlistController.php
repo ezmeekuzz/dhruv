@@ -9,6 +9,7 @@ use App\Models\Admin\AdditionalListingAgentsModel;
 use App\Models\Admin\InvestmentHighlightsModel;
 use App\Models\Admin\PropertyGalleriesModel;
 use App\Models\Admin\LeasingUnitsModel;
+use App\Models\Admin\LeasingGalleriesModel;
 
 class PropertyForLeaseMasterlistController extends SessionController
 {
@@ -105,7 +106,9 @@ class PropertyForLeaseMasterlistController extends SessionController
         ->findAll();
 
         $leasingUnits = $leasingUnitsModel
-        ->where('property_id', $propertyId)
+        ->join('leasing_galleries', 'leasing_galleries.leasing_unit_id = leasing_units.leasing_unit_id AND leasing_galleries.order_arrangement = 1', 'left')
+        ->where('leasing_units.property_id', $propertyId) // Ensure to reference the correct table for property_id
+        ->orderBy('leasing_units.arrange_order', 'ASC') // Reference arrange_order from leasing_units
         ->findAll();
 
         $propertyDetails['additional_listing_agents'] = $additionalListingAgents;
@@ -115,7 +118,7 @@ class PropertyForLeaseMasterlistController extends SessionController
         
         return $this->response->setJSON($propertyDetails);
     } 
-    public function deleteImage($imageId)
+    public function Leasing($imageId)
     {
         $propertyGalleryModel = new PropertyGalleriesModel();
 
@@ -140,74 +143,111 @@ class PropertyForLeaseMasterlistController extends SessionController
     public function addLeasingUnit()
     {
         $leasingUnitsModel = new LeasingUnitsModel();
+        $leasingGalleriesModel = new LeasingGalleriesModel();
     
         // Collect POST data
         $property_id = $this->request->getPost('property_id');
         $unit_number = $this->request->getPost('unit_number');
+        $cam = $this->request->getPost('cam');
         $leasing_rental_rate = $this->request->getPost('leasing_rental_rate');
         $space_available = $this->request->getPost('space_available');
         $space_use = $this->request->getPost('space_use');
     
         // Handle file upload for site plan map
-        $site_plan_map = $this->request->getFile('site_plan_map');
+        $site_plan_maps = $this->request->getFileMultiple('site_plan_map');
     
-        // Validate the file (optional)
-        if ($site_plan_map && $site_plan_map->isValid() && !$site_plan_map->hasMoved()) {
-            // Move the uploaded file to the desired location
-            $newName = $site_plan_map->getRandomName();
-            $site_plan_map->move(FCPATH . 'uploads/site-plans', $newName);
+        $existingUnitsCount = $leasingUnitsModel->where('property_id', $property_id)->countAllResults();
+        $arrange_order = $existingUnitsCount + 1;
     
-            // Prepare data for the database
-            $data = [
-                'property_id' => $property_id,
-                'unit_number' => $unit_number,
-                'leasing_rental_rate' => $leasing_rental_rate,
-                'space_available' => $space_available,
-                'space_use' => $space_use,
-                'site_plan_map' => 'uploads/site-plans/' . $newName,
-            ];
+        // Prepare data for leasing unit
+        $data = [
+            'property_id' => $property_id,
+            'unit_number' => $unit_number,
+            'cam' => $cam,
+            'leasing_rental_rate' => $leasing_rental_rate,
+            'space_available' => $space_available,
+            'space_use' => $space_use,
+            'arrange_order' => $arrange_order,
+        ];
     
-            // Insert data into the database
-            $insert = $leasingUnitsModel->insert($data);
+        // Insert leasing unit data into the database
+        $insertLeasingUnit = $leasingUnitsModel->insert($data);
     
-            // Check if insert is successful
-            if ($insert) {
-                return $this->response->setJSON([
-                    'success' => true,
-                    'message' => 'Leasing Unit successfully added!',
-                ]);
-            } else {
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Failed to add leasing unit!',
+        // Check if insert is successful
+        if ($insertLeasingUnit) {
+            $leasing_unit_id = $leasingUnitsModel->insertID(); // Get the ID of the newly created leasing unit
+    
+            // Loop through the uploaded site plan maps
+            foreach ($site_plan_maps as $file) {
+                // Validate the file
+                if ($file->isValid() && !$file->hasMoved()) {
+                    // Move the uploaded file to the desired location
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'uploads/site-plans', $newName);
+    
+                    // Prepare data for leasing galleries
+                    $galleryData = [
+                        'leasing_unit_id' => $leasing_unit_id,
+                        'location' => 'uploads/site-plans/' . $newName, // Adjust this path as necessary
+                        'order_arrangement' => 0, // Placeholder; will update the order later
+                    ];
+    
+                    // Insert into the leasing galleries
+                    if (!$leasingGalleriesModel->insert($galleryData)) {
+                        // Optional: Log error if insert fails
+                        log_message('error', 'Failed to insert gallery data: ' . json_encode($galleryData));
+                    }
+                } else {
+                    // Optional: Log error if file validation fails
+                    log_message('error', 'File validation failed for: ' . $file->getName());
+                }
+            }
+    
+            // After all files have been uploaded, update order arrangement
+            $galleries = $leasingGalleriesModel->where('leasing_unit_id', $leasing_unit_id)->findAll();
+            foreach ($galleries as $index => $gallery) {
+                $leasingGalleriesModel->update($gallery['leasing_gallery_id'], [
+                    'order_arrangement' => $index + 1 // Update the order arrangement based on the index
                 ]);
             }
+    
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Leasing Unit successfully added!',
+            ]);
         } else {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Invalid file or file upload error.',
+                'message' => 'Failed to add leasing unit!',
             ]);
         }
     }    
+       
     public function deleteLeasingUnit()
     {
-        
         $leasingUnitsModel = new LeasingUnitsModel();
-
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+    
         $unitId = $this->request->getPost('id'); // Get the ID from the request
-
-        // Fetch the unit details to get the file path (Assuming 'site_plan_map' holds the file path)
+    
+        // Fetch the unit details
         $unit = $leasingUnitsModel->find($unitId);
-
+    
         if ($unit) {
-            // Get the file path
-            $filePath = FCPATH . $unit['site_plan_map']; // Adjust 'site_plan_map' to the correct column
-
-            // Check if the file exists and delete it
-            if (file_exists($filePath)) {
-                unlink($filePath); // Delete the file from the server
+            // Fetch associated galleries for the unit
+            $galleries = $leasingGalleriesModel->where('leasing_unit_id', $unitId)->findAll();
+    
+            // Delete each gallery image file from the server
+            foreach ($galleries as $gallery) {
+                $filePath = FCPATH . $gallery['location']; // Assuming 'location' holds the file path
+                if (file_exists($filePath)) {
+                    unlink($filePath); // Delete the file from the server
+                }
             }
-
+    
+            // Delete the galleries from the database
+            $leasingGalleriesModel->where('leasing_unit_id', $unitId)->delete();
+    
             // Delete the leasing unit record from the database
             if ($leasingUnitsModel->delete($unitId)) {
                 return $this->response->setJSON(['success' => true]);
@@ -217,5 +257,217 @@ class PropertyForLeaseMasterlistController extends SessionController
         } else {
             return $this->response->setJSON(['success' => false, 'message' => 'Leasing unit not found']);
         }
+    }
+    
+    public function updateOrder()
+    {
+        $leasingUnitsModel = new LeasingUnitsModel();
+
+        $order = $this->request->getPost('order'); // Array of material IDs in the new order
+
+        if (!empty($order)) {
+            foreach ($order as $index => $id) {
+                $leasingUnitsModel->update($id, ['arrange_order' => $index + 1]);
+            }
+
+            return $this->response->setJSON(['status' => 'success']);
+        }
+
+        return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                              ->setJSON(['status' => 'error', 'message' => 'Invalid order data']);
+    }
+    public function getLeasingUnitDetails() {
+        $leasingUnitsModel = new LeasingUnitsModel();
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+        $unitId = $this->request->getVar('unitId');
+    
+        // Fetch leasing unit details from the database
+        $leasingUnit = $leasingUnitsModel->find($unitId);
+        $leasingGallery = $leasingGalleriesModel
+        ->where('leasing_unit_id', $leasingUnit['leasing_unit_id'])
+        ->orderBy('order_arrangement', 'ASC')
+        ->findAll();
+    
+        if ($leasingUnit) {
+            // Include the 'status' key in the response
+            return $this->response->setJSON(['data' => $leasingUnit, 'gallery' => $leasingGallery]);
+        } else {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Leasing unit not found']);
+        }
+    }  
+    public function updateImageOrder() {
+
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+
+        $order = $this->request->getPost('order');
+    
+        if ($order && is_array($order)) {
+            foreach ($order as $item) {
+                // Assuming you have an 'id' for each image and a corresponding 'order' value
+                $leasingGalleriesModel->update($item['id'], ['order_arrangement' => $item['order']]);  // Update the order in the database
+            }
+    
+            return $this->response->setJSON(['success' => true]);
+        }
+    
+        return $this->response->setJSON(['success' => false]);
+    }
+    public function deleteImageLeasing() {
+
+        // Initialize the model
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+    
+        // Get the image ID from the POST request
+        $imageId = $this->request->getPost('imageId');
+    
+        // Fetch the image details from the database
+        $image = $leasingGalleriesModel->where('leasing_gallery_id', $imageId)->first();  // Use 'first()' to get a single row directly
+    
+        if ($image) {
+            // Define the file path, assuming 'location' contains the relative path to the image
+            $filePath = FCPATH . $image['location'];  // Adjust 'location' to match your column name
+    
+            // Check if the file exists on the server and delete it
+            if (file_exists($filePath)) {
+                unlink($filePath);  // Remove the image file from the server
+            }
+    
+            // Delete the image record from the database
+            $leasingGalleriesModel->delete($imageId);
+    
+            // Return success response
+            return $this->response->setJSON(['success' => true, 'message' => 'Image deleted successfully']);
+        } else {
+            // Handle case where the image was not found in the database
+            return $this->response->setJSON(['success' => false, 'message' => 'Image not found']);
+        }
+    }     
+    public function uploadLeasingImage() {
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+    
+        // Check if the request has a file
+        if ($this->request->getFile('file')) {
+            $file = $this->request->getFile('file');
+            $leasingUnitId = $this->request->getPost('leasing_unit_id');
+
+            $existingUnitsCount = $leasingGalleriesModel->where('leasing_unit_id', $leasingUnitId)->countAllResults();
+            $arrange_order = $existingUnitsCount + 1;
+            // Validate the file (optional step)
+            if ($file->isValid() && !$file->hasMoved()) {
+                // Define the file path and move the file to the desired directory
+                $newFileName = $file->getRandomName();  // Generate a unique file name
+                $file->move(FCPATH . 'uploads/site-plans', $newFileName);
+    
+                // Prepare the data for database insertion
+                $data = [
+                    'leasing_unit_id' => $leasingUnitId,
+                    'location' => 'uploads/site-plans/' . $newFileName,
+                    'order_arrangement' => $arrange_order
+                ];
+    
+                // Insert the file information into the database
+                if ($leasingGalleriesModel->insert($data)) {
+                    return $this->response->setJSON(['success' => true]);
+                } else {
+                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to insert image data into database']);
+                }
+            } else {
+                return $this->response->setJSON(['success' => false, 'message' => 'Invalid file or upload error']);
+            }
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'No file provided']);
+        }
+    }    
+    public function getLeasingImages() {
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+        
+        $leasingUnitId = $this->request->getGet('leasing_unit_id');
+    
+        // Fetch all images associated with the leasing unit
+        $images = $leasingGalleriesModel
+            ->where('leasing_unit_id', $leasingUnitId)
+            ->findAll();
+    
+        if ($images) {
+            return $this->response->setJSON(['success' => true, 'images' => $images]);
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'No images found']);
+        }
+    }      
+    public function editLeasingUnit()
+    {
+        $leasingUnitsModel = new LeasingUnitsModel();
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+    
+        // Collect POST data
+        $leasing_unit_id = $this->request->getPost('leasing_unit_id');
+        $property_id = $this->request->getPost('property_id');
+        $unit_number = $this->request->getPost('unit_number');
+        $cam = $this->request->getPost('cam');
+        $leasing_rental_rate = $this->request->getPost('leasing_rental_rate');
+        $space_available = $this->request->getPost('space_available');
+        $space_use = $this->request->getPost('space_use');
+    
+        // Prepare data for leasing unit
+        $data = [
+            'property_id' => $property_id,
+            'unit_number' => $unit_number,
+            'cam' => $cam,
+            'leasing_rental_rate' => $leasing_rental_rate,
+            'space_available' => $space_available,
+            'space_use' => $space_use,
+        ];
+        
+        // Insert leasing unit data into the database
+        $updateLeasingUnit = $leasingUnitsModel->update($leasing_unit_id, $data);
+    
+        // Check if insert is successful
+        if ($updateLeasingUnit) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Leasing Unit successfully updated!',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Failed to update leasing unit!',
+            ]);
+        }
+    }  
+    public function markAsSold()
+    {
+        // Load the PropertyModel
+        $propertyModel = new PropertiesModel();
+
+        // Get the property_id from the POST request
+        $propertyId = $this->request->getPost('property_id');
+
+        // Validate that the property ID is provided
+        if (!$propertyId) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Property ID is missing.'
+            ]);
+        }
+
+        // Find the property in the database
+        $property = $propertyModel->find($propertyId);
+
+        // Check if the property exists
+        if (!$property) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Property not found.'
+            ]);
+        }
+
+        // Update the property's status to "sold"
+        $propertyModel->update($propertyId, ['soldstatus' => 'sold']);
+
+        // Return success response
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Property has been marked as sold.'
+        ]);
     }
 }

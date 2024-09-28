@@ -13,7 +13,7 @@ class LeasingUnitsModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'property_id', 'unit_number', 'leasing_rental_rate', 'space_available', 'space_use', 'site_plan_map'
+        'property_id', 'unit_number', 'cam', 'leasing_rental_rate', 'space_available', 'space_use', 'arrange_order'
     ];
 
     protected bool $allowEmptyInserts = false;

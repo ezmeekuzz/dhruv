@@ -4,16 +4,16 @@ namespace App\Models\Admin;
 
 use CodeIgniter\Model;
 
-class PropertiesModel extends Model
+class LeasingGalleriesModel extends Model
 {
-    protected $table            = 'properties';
-    protected $primaryKey       = 'property_id';
+    protected $table            = 'leasing_galleries';
+    protected $primaryKey       = 'leasing_gallery_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'property_name', 'anchor_tenant', 'slug', 'real_estate_type', 'property_type_id', 'space_id', 'listing_agent_id', 'price', 'price_per_sf', 'state_id', 'city_id', 'zipcode', 'caprate', 'tenancy', 'buildingsize', 'yearbuilt', 'location', 'askingcaprate', 'noi', 'leasestructure', 'occupancy', 'rental_rate', 'size_sf', 'addt', 'starting_sf_yr', 'ending_sf_yr', 'sf_yr', 'backgroundimage', 'offering_memorandum', 'leasing_flyer', 'publishstatus', 'dateadded', 'purpose', 'soldstatus'
+        'leasing_unit_id', 'location', 'order_arrangement'
     ];
 
     protected bool $allowEmptyInserts = false;

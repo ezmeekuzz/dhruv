@@ -1,4 +1,54 @@
 <?=$this->include('templates/admin/header');?>
+<style>
+    .drop-zone {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #f9f9f9;
+    }
+
+    .drop-zone.dragover {
+        background-color: #e9e9e9;
+    }
+
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .preview-item {
+        position: relative;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 18px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+    }
+</style>
 <div class="app-container">
     <?=$this->include('templates/admin/sidebar');?>
     <div class="app-main" id="main">
@@ -91,6 +141,10 @@
                         <input type="text" class="form-control" id="unit_number" name="unit_number" required>
                     </div>
                     <div class="form-group">
+                        <label for="cam">CAM</label>
+                        <input type="text" class="form-control" id="cam" name="cam" required>
+                    </div>
+                    <div class="form-group">
                         <label for="leasing_rental_rate">Leasing Rental Rate</label>
                         <input type="number" class="form-control" id="leasing_rental_rate" name="leasing_rental_rate" required>
                     </div>
@@ -104,13 +158,77 @@
                     </div>
                     <div class="form-group">
                         <label for="site_plan_map">Site Plan Map</label>
-                        <input type="file" class="form-control" id="site_plan_map" name="site_plan_map">
+                        <div id="drop-zone" class="drop-zone">
+                            <p>Drag and drop files here or click to upload</p>
+                            <input type="file" id="site_plan_map" name="site_plan_map[]" multiple hidden>
+                            <div id="preview-container" class="preview-container">
+                                <!-- Image previews will be displayed here -->
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="saveLeasingUnits">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editLeasingUnitsModal" tabindex="-1" role="dialog" aria-labelledby="editLeasingUnitsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLeasingUnitsModal">Edit Leasing Units</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editLeasingUnitsForm">
+                    <div class="form-group">
+                        <label for="leasing_unit_id">Leasing Unit ID</label>
+                        <input type="text" class="form-control" id="leasing_unit_id" name="leasing_unit_id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="property_id">Property ID</label>
+                        <input type="text" class="form-control" id="edit_property_id" name="property_id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="unit_number">Unit Number</label>
+                        <input type="text" class="form-control" id="edit_unit_number" name="unit_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cam">CAM</label>
+                        <input type="text" class="form-control" id="edit_cam" name="cam" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="leasing_rental_rate">Leasing Rental Rate</label>
+                        <input type="number" class="form-control" id="edit_leasing_rental_rate" name="leasing_rental_rate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="space_available">Space Available</label>
+                        <input type="text" class="form-control" id="edit_space_available" name="space_available" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="space_use">Space Use</label>
+                        <input type="text" class="form-control" id="edit_space_use" name="space_use" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_site_plan_map">Site Plan Map</label>
+                        <div id="edit_drop-zone" class="drop-zone">
+                            <p>Drag and drop files here or click to upload</p>
+                            <input type="file" id="edit_site_plan_map" name="site_plan_map[]" multiple hidden>
+                            <div id="edit_preview-container" class="preview-container">
+                                <!-- Image previews will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="editLeasingUnits">Save</button>
             </div>
         </div>
     </div>
