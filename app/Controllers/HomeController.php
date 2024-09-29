@@ -145,6 +145,7 @@ class HomeController extends BaseController
             
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.purpose', 'For Sale');
+            $builder->where('properties.soldstatus !=', 'sold');
             $properties = $builder->findAll();
     
             // Start generating the specific HTML
@@ -245,6 +246,7 @@ class HomeController extends BaseController
     
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.purpose', 'For Leasing');
+            $builder->where('properties.soldstatus !=', 'sold');
             $properties = $builder->findAll();
     
             // Start generating the specific HTML
@@ -335,7 +337,10 @@ class HomeController extends BaseController
             if (!empty($filters['tenancy'])) {
                 $builder->whereIn('properties.tenancy', $filters['tenancy']);
             }
-
+    
+            $builder->where('properties.publishstatus', 'Published');
+            $builder->where('properties.purpose', 'For Leasing');
+            $builder->where('properties.soldstatus !=', 'sold');
             $properties = $builder->findAll();
             
             $htmlContent = "";
@@ -404,7 +409,10 @@ class HomeController extends BaseController
             if (!empty($filters['size_sf_max'])) {
                 $builder->where('properties.size_sf <=', $filters['size_sf_max']);
             }
-
+    
+            $builder->where('properties.publishstatus', 'Published');
+            $builder->where('properties.purpose', 'For Leasing');
+            $builder->where('properties.soldstatus !=', 'sold');
             $properties = $builder->findAll();
             
             $htmlContent = "";
