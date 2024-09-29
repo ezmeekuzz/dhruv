@@ -83,6 +83,7 @@ class PropertyForLeaseMasterlistController extends SessionController
         $investmentHighlightsModel = new InvestmentHighlightsModel();
         $propertyGalleryModel = new PropertyGalleriesModel();
         $leasingUnitsModel = new leasingUnitsModel();
+        $leasingGalleriesModel = new leasingGalleriesModel();
 
         $propertyDetails = $propertyModel
         ->join('spaces', 'spaces.space_id=properties.space_id', 'left')
@@ -104,12 +105,22 @@ class PropertyForLeaseMasterlistController extends SessionController
         ->where('property_id', $propertyId)
         ->orderBy('order_sequence', 'asc')
         ->findAll();
+        
+        $hasLeasingGalleries = $leasingGalleriesModel
+        ->join('leasing_units', 'leasing_units.leasing_unit_id=leasing_galleries.leasing_unit_id', 'left')
+        ->where('leasing_units.property_id', $propertyId)
+        ->where('leasing_galleries.order_arrangement', 1)
+        ->countAllResults() > 0;
 
-        $leasingUnits = $leasingUnitsModel
-        ->join('leasing_galleries', 'leasing_galleries.leasing_unit_id = leasing_units.leasing_unit_id AND leasing_galleries.order_arrangement = 1', 'left')
-        ->where('leasing_units.property_id', $propertyId) // Ensure to reference the correct table for property_id
-        ->orderBy('leasing_units.arrange_order', 'ASC') // Reference arrange_order from leasing_units
-        ->findAll();
+        $query = $leasingUnitsModel->where('leasing_units.property_id', $propertyId)
+                                ->orderBy('leasing_units.arrange_order', 'ASC');
+
+        if ($hasLeasingGalleries) {
+            $query->join('leasing_galleries', 'leasing_galleries.leasing_unit_id = leasing_units.leasing_unit_id AND leasing_galleries.order_arrangement = 1', 'left');
+        }
+
+        $leasingUnits = $query->findAll();
+
 
         $propertyDetails['additional_listing_agents'] = $additionalListingAgents;
         $propertyDetails['investment_highlights'] = $investmentHighlights;

@@ -10,6 +10,7 @@ use App\Models\Admin\AdditionalListingAgentsModel;
 use App\Models\Admin\InvestmentHighlightsModel;
 use App\Models\Admin\PropertyGalleriesModel;
 use App\Models\Admin\LeasingUnitsModel;
+use App\Models\Admin\LeasingGalleriesModel;
 use App\Models\MessagesModel;
 use App\Models\OmConsentModel;
 
@@ -184,5 +185,40 @@ class PropertyDetailsController extends BaseController
             ];
         }
         return $this->response->setJSON($response);
+    }
+    
+    public function getGallery()
+    {
+        $leasingGalleriesModel = new LeasingGalleriesModel();
+        $leasingUnitId = $this->request->getPost('leasing_unit_id'); // Get the leasing unit ID from the request
+
+        if ($leasingUnitId) {
+
+            // Fetch gallery images for the given leasing_unit_id
+            $galleryImages = $leasingGalleriesModel
+                ->where('leasing_unit_id', $leasingUnitId)
+                ->orderBy('order_arrangement')
+                ->findAll();
+
+            if (!empty($galleryImages)) {
+                // Send the gallery images back as JSON response
+                return $this->response->setJSON([
+                    'success' => true,
+                    'gallery' => $galleryImages
+                ]);
+            } else {
+                // No gallery found for the given leasing_unit_id
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'No images found for this unit.'
+                ]);
+            }
+        }
+
+        // If no leasing_unit_id is provided
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Invalid unit ID.'
+        ]);
     }
 }

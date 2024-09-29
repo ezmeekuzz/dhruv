@@ -831,10 +831,17 @@
     }
 
     .unit-details-sec{
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap:0;
+        row-gap: 20px;
     }
 
     .unitDetail{
+        width:50%;
+        align-items: flex-start;
+    }
+
+    .unitDetail.imageCol{
         width:100%;
     }
 
@@ -871,7 +878,5 @@
         border-radius: 5px;
     }
 
-    .inner-listing-section {
-        padding: 150px 20px 50px;
-    }
+
 }

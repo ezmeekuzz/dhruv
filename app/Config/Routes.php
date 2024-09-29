@@ -106,6 +106,7 @@ $routes->get('/sale', 'HomeController::index');
 $routes->get('/leasing', 'LeasingController::index');
 $routes->post('/propertydetails/sendMessage', 'PropertyDetailsController::sendMessage');
 $routes->post('/propertydetails/omConsent', 'PropertyDetailsController::omConsent');
+$routes->post('/propertydetails/getGallery', 'PropertyDetailsController::getGallery');
 $routes->post('/subscribe', 'SubscribeController::index');
 $routes->get('/confidentiality', 'ConfidentialityController::index');
 $routes->post('/home/getCitiesByState', 'HomeController::getCitiesByState');

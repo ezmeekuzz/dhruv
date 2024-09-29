@@ -193,42 +193,20 @@
                                 <h6>Space Use</h6>
                                 <p><?=$list['space_use'];?></p>
                             </div>
-                            <div class="unitDetail">
-                                <img class="imageTrigger" src="/<?=$list['location'];?>"/>
-                            </div>
-                        </div>
-                        <div class="modalSlider">
-                            <div class="modalSliderClose">X</div>
-                            <div class="unitDetailSlider">
-
-                            <?php
-                            // Connect to the database
-                            $db = \Config\Database::connect();
-
-                            // Query to get leasing galleries by leasing_unit_id
-                            $query = $db->table('leasing_galleries')
-                                        ->where('leasing_unit_id', $list['leasing_unit_id'])
-                                        ->get();
-                            $galleries = $query->getResultArray();
-                            ?>
-
-                            <!-- If there are gallery images for the unit, display them -->
-                            <?php if (!empty($galleries)) : ?>
-                                <?php foreach ($galleries as $gallery) : ?>
-                                    <div>
-                                        <img src="/<?= $gallery['location']; ?>" alt="Gallery Image" />
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <!-- Fallback if no gallery images -->
-                                <div><img src="images/sitePlanImage.png" alt="Default Image" /></div>
-                            <?php endif; ?>
-
+                            <div class="unitDetail imageCol">
+                                <a href="#ex1" rel="modal:open" class="open-modal" data-id="<?=$list['leasing_unit_id'];?>">
+                                    <img class="imageTrigger" src="/<?=$list['location'];?>" />
+                                </a>
                             </div>
                         </div>
                     </div>
                     <?php endforeach; ?>
                     <?php endif; ?>
+                    <div id="ex1" class="modal">
+                        <div id="modal-content">
+                            
+                        </div>
+                    </div>
                 </div>
                 <div class="list-record desktop">
                     <h4>Broker Of Record</h4>
@@ -675,5 +653,83 @@
                 });
             }
         });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        // Event delegation for dynamic content
+        document.querySelectorAll('.open-modal').forEach(function (trigger) {
+            trigger.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                var leasingUnitId = this.getAttribute('data-id'); // Get the leasing_unit_id from the clicked element
+
+                // Open modal and fetch gallery
+                fetchLeasingGallery(leasingUnitId);
+
+                // Show the modal
+                $('#ex1').modal(); // Assuming you're using a modal library like jQuery Modal
+            });
+        });
+    });
+
+    function fetchLeasingGallery(leasingUnitId) {
+        // Perform AJAX request to CodeIgniter
+        $.ajax({
+            url: '/propertydetails/getGallery', // Replace with your actual route
+            method: 'POST',
+            data: { leasing_unit_id: leasingUnitId },
+            dataType: 'json',
+            success: function (response) {
+                // Clear existing modal content
+                $('#modal-content').empty();
+
+                if (response.success && response.gallery.length > 0) {
+                    // Inject the Owl Carousel structure dynamically
+                    var owlCarouselHtml = `
+                        <div class="owl-carousel owl-theme" id="owl-carousel">
+                            <!-- Images will be dynamically inserted here -->
+                        </div>
+                    `;
+
+                    // Append the carousel structure to the modal content
+                    $('#modal-content').append(owlCarouselHtml);
+
+                    // Populate the carousel with images
+                    var galleryContent = '';
+                    response.gallery.forEach(function (image) {
+                        galleryContent += '<div class="item"><img src="/' + image.location + '" alt="Gallery Image" class="gallery-image" /></div>';
+                    });
+
+                    // Insert the images into the Owl Carousel
+                    $('#owl-carousel').html(galleryContent);
+
+                    // Initialize Owl Carousel
+                    initOwlCarousel();
+                } else {
+                    // Display a message if no images are found
+                    $('#modal-content').html('<p>No images available for this unit.</p>');
+                }
+            },
+            error: function () {
+                $('#modal-content').html('<p>Failed to load gallery. Please try again later.</p>');
+            }
+        });
+    }
+
+    // Initialize the Owl Carousel
+    function initOwlCarousel() {
+        $('#owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,  // Enable navigation buttons
+            navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'], // Font Awesome icons
+            items: 1,  // Display one image at a time
+            autoHeight: true // Adjust height based on image
+        });
+    }
+
+    // Destroy the carousel and clear content when the modal is closed
+    $(document).on('closed.modal', '#ex1', function () {
+        $('#owl-carousel').trigger('destroy.owl.carousel'); // Destroy carousel on modal close
+        $('#modal-content').empty(); // Clear modal content
     });
 </script>

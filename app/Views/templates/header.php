@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" integrity="sha512-T3VL1q6jMUIzGLRB9z86oJg9PgF7A55eC2XkB93zyWSqQw3Ju+6IEJZYBfT7E9wOHM7HCMCOZSpcssxnUn6AeQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title><?=$title;?></title>
     <style>
         .gallery {
@@ -178,6 +180,89 @@
             border-radius: 3px; /* Rounded corners */
             text-align: center;
             margin-bottom: 5px; /* Space below the label */
+        }
+        /* Navigation buttons for Owl Carousel */
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: black;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001; /* Higher z-index for visibility */
+            font-size: 20px;
+        }
+
+        /* Left arrow positioning */
+        .owl-carousel .owl-nav button.owl-prev {
+            left: 10px;
+        }
+
+        /* Right arrow positioning */
+        .owl-carousel .owl-nav button.owl-next {
+            right: 10px;
+        }
+
+        /* Hover effect on arrows */
+        .owl-carousel .owl-nav button.owl-prev:hover,
+        .owl-carousel .owl-nav button.owl-next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Arrow symbols (Font Awesome) */
+        .owl-carousel .owl-nav button.owl-prev::before,
+        .owl-carousel .owl-nav button.owl-next::before {
+            content: '';
+        }
+
+        .owl-carousel .owl-nav button.owl-prev::before {
+            content: ''; /* Left arrow icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+
+        .owl-carousel .owl-nav button.owl-next::before {
+            content: ''; /* Right arrow icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+        #ex1.modal {
+            width: 90%; /* Wider width */
+            max-width: 1400px; /* Increase maximum width for larger screens */
+            height: auto;
+            padding: 20px;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrollbars inside the modal */
+        }
+
+        /* Modal content */
+        #modal-content {
+            width: 100%;
+            height: auto; /* Adjust height based on content */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        #ex1 a[rel="modal:close"] {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            z-index: 1001;
         }
     </style>
 </head>
