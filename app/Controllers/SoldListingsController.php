@@ -9,7 +9,7 @@ use App\Models\Admin\CitiesModel;
 use App\Models\Admin\PropertyGalleriesModel;
 use App\Models\Admin\SpacesModel;
 
-class HomeController extends BaseController
+class SoldListingsController extends BaseController
 {
     protected $apiKey;
 
@@ -21,18 +21,16 @@ class HomeController extends BaseController
     {
         $propertiesModel = new PropertiesModel();
         $propertyTypesModel = new PropertyTypesModel();
-        $statesModel = new StatesModel();
         $spacesModel = new SpacesModel();
         
         // Fetch property types and states
         $propertyTypes = $propertyTypesModel->findAll();
         $spaces = $spacesModel->findAll();
-        $statesList = $statesModel->findAll();
     
         // Fetch unique states associated with properties
         $uniqueStates = $propertiesModel
         ->join('states', 'states.state_id = properties.state_id')
-        ->where('properties.soldstatus !=', 'sold')
+        ->where('properties.soldstatus', 'sold')
         ->distinct()
         ->findAll();
     
@@ -65,15 +63,14 @@ class HomeController extends BaseController
     
         // Prepare data for the view
         $data = [
-            'title' => 'Listing | DHRUV Realty',
+            'title' => 'Sold Listing | DHRUV Realty',
             'propertyTypes' => $propertyTypes,
             'spaces' => $spaces,
-            'statesList' => $statesList,
             'locations' => $locations,
         ];
     
         // Load the view with the prepared data
-        return view('pages/home', $data);
+        return view('pages/sold-listing', $data);
     }     
     
     private function geocodeState($state)
@@ -108,46 +105,10 @@ class HomeController extends BaseController
             if (!empty($filters['property_type_id'])) {
                 $builder->whereIn('properties.property_type_id', $filters['property_type_id']);
             }
-    
-            if (!empty($filters['state_id'])) {
-                $builder->where('properties.state_id', $filters['state_id']);
-            }
-    
-            if (!empty($filters['location'])) {
-                $builder->like('properties.location', $filters['location'], 'both');
-            }
-    
-            if (!empty($filters['city_id'])) {
-                $builder->where('properties.city_id', $filters['city_id']);
-            }
-    
-            if (!empty($filters['zip_code'])) {
-                $builder->where('properties.zipcode', $filters['zip_code']);
-            }
-    
-            if (!empty($filters['min_price'])) {
-                $builder->where('properties.price >=', $filters['min_price']);
-            }
-    
-            if (!empty($filters['max_price'])) {
-                $builder->where('properties.price <=', $filters['max_price']);
-            }
-    
-            if (!empty($filters['min_cr'])) {
-                $builder->where('properties.caprate >=', $filters['min_cr']);
-            }
-    
-            if (!empty($filters['max_cr'])) {
-                $builder->where('properties.caprate <=', $filters['max_cr']);
-            }
-    
-            if (!empty($filters['tenancy'])) {
-                $builder->whereIn('properties.tenancy', $filters['tenancy']);
-            }
             
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.purpose', 'For Sale');
-            $builder->where('properties.soldstatus !=', 'sold');
+            $builder->where('properties.soldstatus', 'sold');
             $properties = $builder->findAll();
     
             // Start generating the specific HTML
@@ -162,6 +123,12 @@ class HomeController extends BaseController
     
                 // Begin list-item div
                 $htmlContent .= '<div class="list-item" style="background-image: url(\'' . base_url($property['backgroundimage']) . '\');">';
+                
+                // Add SOLD watermark
+                if ($property['soldstatus'] == 'sold') {
+                    $htmlContent .= '<div class="sold-watermark">SOLD</div>';
+                }
+    
                 $htmlContent .= '<div class="mainSlider">';
     
                 // Add gallery images to the slider
@@ -171,10 +138,11 @@ class HomeController extends BaseController
     
                 // Close mainSlider and add remaining property details
                 $htmlContent .= '</div>';
+                
                 // Check if the property is added within the last two weeks
                 $dateAdded = new \DateTime($property['dateadded']);
                 $twoWeeksAgo = new \DateTime('-2 weeks');
-
+    
                 if ($dateAdded >= $twoWeeksAgo) {
                     $htmlContent .= '<a class="list-tag">New</a>';
                 }
@@ -194,7 +162,7 @@ class HomeController extends BaseController
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);
         }
-    }  
+    }    
 
     public function getForLeasingGridProperties()
     {
@@ -214,41 +182,8 @@ class HomeController extends BaseController
                 $builder->whereIn('properties.space_id', $filters['property_type_id2']);
             }
     
-            if (!empty($filters['state_id2'])) {
-                $builder->where('properties.state_id', $filters['state_id2']);
-            }
-    
-            if (!empty($filters['location2'])) {
-                $builder->like('properties.location', $filters['location2'], 'both');
-            }
-    
-            if (!empty($filters['city_id2'])) {
-                $builder->where('properties.city_id', $filters['city_id2']);
-            }
-    
-            if (!empty($filters['zip_code2'])) {
-                $builder->where('properties.zipcode', $filters['zip_code2']);
-            }
-    
-            if (!empty($filters['rental_rate_min'])) {
-                $builder->where('properties.rental_rate >=', $filters['rental_rate_min']);
-            }
-    
-            if (!empty($filters['rental_rate_max'])) {
-                $builder->where('properties.rental_rate <=', $filters['rental_rate_max']);
-            }
-    
-            if (!empty($filters['size_sf_min'])) {
-                $builder->where('properties.size_sf >=', $filters['size_sf_min']);
-            }
-    
-            if (!empty($filters['size_sf_max'])) {
-                $builder->where('properties.size_sf <=', $filters['size_sf_max']);
-            }
-    
             $builder->where('properties.publishstatus', 'Published');
-            $builder->where('properties.purpose', 'For Leasing');
-            $builder->where('properties.soldstatus !=', 'sold');
+            $builder->where('properties.soldstatus', 'sold');
             $properties = $builder->findAll();
     
             // Start generating the specific HTML
@@ -263,6 +198,10 @@ class HomeController extends BaseController
                 // Begin list-item div with background image
                 $htmlContent .= '<div class="list-item leasingItem" style="background-image: url(\'' . base_url($property['backgroundimage']) . '\');">';
     
+                // Add SOLD watermark
+                if ($property['soldstatus'] == 'sold') {
+                    $htmlContent .= '<div class="sold-watermark">SOLD</div>';
+                }
                 // If the property is new, add the 'New' tag
                 if ($isNew) {
                     $htmlContent .= '<a class="list-tag">New</a>';
@@ -303,46 +242,9 @@ class HomeController extends BaseController
             if (!empty($filters['property_type_id'])) {
                 $builder->whereIn('properties.property_type_id', $filters['property_type_id']);
             }
-
-            if (!empty($filters['state_id'])) {
-                $builder->where('properties.state_id', $filters['state_id']);
-            }
-
-            if (!empty($filters['location'])) {
-                $builder->like('properties.location', $filters['location'], 'both');
-            }
-
-            if (!empty($filters['city_id'])) {
-                $builder->where('properties.city_id', $filters['city_id']);
-            }
-
-            if (!empty($filters['zip_code'])) {
-                $builder->where('properties.zipcode', $filters['zip_code']);
-            }
-
-            if (!empty($filters['min_price'])) {
-                $builder->where('properties.price >=', $filters['min_price']);
-            }
-
-            if (!empty($filters['max_price'])) {
-                $builder->where('properties.price <=', $filters['max_price']);
-            }
-
-            if (!empty($filters['min_cr'])) {
-                $builder->where('properties.caprate >=', $filters['min_cr']);
-            }
-
-            if (!empty($filters['max_cr'])) {
-                $builder->where('properties.caprate <=', $filters['max_cr']);
-            }
-
-            if (!empty($filters['tenancy'])) {
-                $builder->whereIn('properties.tenancy', $filters['tenancy']);
-            }
     
             $builder->where('properties.publishstatus', 'Published');
-            $builder->where('properties.purpose', 'For Leasing');
-            $builder->where('properties.soldstatus !=', 'sold');
+            $builder->where('properties.soldstatus', 'sold');
             $properties = $builder->findAll();
             
             $htmlContent = "";
@@ -380,41 +282,8 @@ class HomeController extends BaseController
                 $builder->whereIn('properties.space_id', $filters['property_type_id2']);
             }
     
-            if (!empty($filters['state_id2'])) {
-                $builder->where('properties.state_id', $filters['state_id2']);
-            }
-    
-            if (!empty($filters['location2'])) {
-                $builder->like('properties.location', $filters['location2'], 'both');
-            }
-    
-            if (!empty($filters['city_id2'])) {
-                $builder->where('properties.city_id', $filters['city_id2']);
-            }
-    
-            if (!empty($filters['zip_code2'])) {
-                $builder->where('properties.zipcode', $filters['zip_code2']);
-            }
-    
-            if (!empty($filters['rental_rate_min'])) {
-                $builder->where('properties.rental_rate >=', $filters['rental_rate_min']);
-            }
-    
-            if (!empty($filters['rental_rate_max'])) {
-                $builder->where('properties.rental_rate <=', $filters['rental_rate_max']);
-            }
-    
-            if (!empty($filters['size_sf_min'])) {
-                $builder->where('properties.size_sf >=', $filters['size_sf_min']);
-            }
-    
-            if (!empty($filters['size_sf_max'])) {
-                $builder->where('properties.size_sf <=', $filters['size_sf_max']);
-            }
-    
             $builder->where('properties.publishstatus', 'Published');
-            $builder->where('properties.purpose', 'For Leasing');
-            $builder->where('properties.soldstatus !=', 'sold');
+            $builder->where('properties.soldstatus', 'sold');
             $properties = $builder->findAll();
             
             $htmlContent = "";
@@ -432,18 +301,6 @@ class HomeController extends BaseController
 
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);
-        }
-    }
-
-    public function getCitiesByState()
-    {
-        if ($this->request->isAJAX()) {
-            $stateId = $this->request->getPost('state_id');
-
-            $cityModel = new CitiesModel();
-            $cities = $cityModel->where('state_id', $stateId)->findAll();
-
-            return $this->response->setJSON($cities);
         }
     }
 }

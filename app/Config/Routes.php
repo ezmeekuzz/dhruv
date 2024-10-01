@@ -120,4 +120,9 @@ $routes->post('/leasing/getForSaleGridProperties', 'HomeController::getForSaleGr
 $routes->post('/leasing/getForLeasingGridProperties', 'HomeController::getForLeasingGridProperties');
 $routes->post('/leasing/getForSaleTabularProperties', 'HomeController::getForSaleTabularProperties');
 $routes->post('/leasing/getForLeasingTabularProperties', 'HomeController::getForLeasingTabularProperties');
+$routes->get('/sold-listings', 'SoldListingsController::index');
+$routes->post('/soldlistings/getForSaleGridProperties', 'SoldListingsController::getForSaleGridProperties');
+$routes->post('/soldlistings/getForLeasingGridProperties', 'SoldListingsController::getForLeasingGridProperties');
+$routes->post('/soldlistings/getForSaleTabularProperties', 'SoldListingsController::getForSaleTabularProperties');
+$routes->post('/soldlistings/getForLeasingTabularProperties', 'SoldListingsController::getForLeasingTabularProperties');
 require APPPATH . 'Config/Propertyroutes.php';

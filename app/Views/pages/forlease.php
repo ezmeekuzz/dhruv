@@ -197,6 +197,11 @@
                                 <a href="#ex1" rel="modal:open" class="open-modal" data-id="<?=$list['leasing_unit_id'];?>">
                                     <img class="imageTrigger" src="/<?=$list['location'];?>" />
                                 </a>
+                                <div class="imgDots imageTrigger">
+                                    <div class="dot"> </div>
+                                    <div class="dot"> </div>
+                                    <div class="dot"> </div>
+                                </div>
                             </div>
                         </div>
                     </div>

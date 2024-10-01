@@ -877,6 +877,8 @@
         object-fit: cover;
         border-radius: 5px;
     }
-
+    .unitDetail.imageCol{
+        align-items: center;
+    }
 
 }

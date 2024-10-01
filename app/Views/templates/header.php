@@ -285,6 +285,7 @@
                         <ul class="menu-dropdown">
                             <li><a href="/">Commercial Listings</a></li>
                             <li><a href="/leasing">Leasing Listings</a></li>
+                            <li><a href="/sold-listings">Sold Listings</a></li>
                         </ul>
                     </li>
                     <li>
