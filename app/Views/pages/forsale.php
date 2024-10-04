@@ -2,7 +2,7 @@
 <script type="text/javascript">
     function initMap() {
         const locations = <?php echo json_encode($locations); ?>;
-
+        
         const mapElements = document.querySelectorAll(".map");
 
         mapElements.forEach((mapElement) => {
@@ -55,11 +55,12 @@
 
     window.initMap = initMap;
 </script>
+<?php $url = ($propertyDetails['soldstatus'] == 'sold') ? '/sold-listings' : '/'; ?>
 <section class="main-section inner-list-section">
     <div class="main-inner-sec inner-list-content">
         <div class="list-content">
             <div class="listing-info">
-                <a href="/">Back To Properties</a>
+                <a href="<?=$url;?>">Back To Properties</a>
                 <div class="gallery">
                     <div class="main-slider">
                     <?php if($propertyGallery) : ?>
@@ -124,10 +125,12 @@
                         </tr>
                     </tbody>
                 </table>
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <button class="offer-btn mobile open-om" >
                     <p>OFFERING MEMORANDUM</p>
                     <img src="images/colored-btn.png">
                 </button>
+                <?php endif; ?>
                 <div class="list-description">
                     <h4>Investment Highlights</h4>
                     <ul>
@@ -190,10 +193,12 @@
                 </div>
             </div>
             <div class="listing-sidebar">
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <button class="offer-btn desktop open-om">
                     <p>OFFERING MEMORANDUM</p>
                     <img src="images/colored-btn.png">
                 </button>
+                <?php endif; ?>
                 <div class="modal-om">
                     <form class="form-modal" id="omConsent">
                         <i class="fas fa-times close"></i>

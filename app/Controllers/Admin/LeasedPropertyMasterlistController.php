@@ -11,15 +11,15 @@ use App\Models\Admin\PropertyGalleriesModel;
 use App\Models\Admin\LeasingUnitsModel;
 use App\Models\Admin\LeasingGalleriesModel;
 
-class PropertyForLeaseMasterlistController extends SessionController
+class LeasedPropertyMasterlistController extends SessionController
 {
     public function index()
     {
         $data = [
-            'title' => 'DHRUV Realty | Property For Lease Masterlist',
-            'currentpage' => 'propertyforleasemasterlist'
+            'title' => 'DHRUV Realty | Leased Property Masterlist',
+            'currentpage' => 'leasedpropertymasterlist'
         ];
-        return view('pages/admin/propertyforleasemasterlist', $data);
+        return view('pages/admin/leasedpropertymasterlist', $data);
     }
     public function getData()
     {
@@ -29,7 +29,7 @@ class PropertyForLeaseMasterlistController extends SessionController
             ->join('states', 'states.state_id = properties.state_id', 'LEFT JOIN')
             ->join('cities', 'cities.city_id = properties.city_id', 'LEFT JOIN')
             ->where('properties.purpose', 'For Leasing')
-            ->where('properties.soldstatus !=', 'sold')
+            ->where('properties.soldstatus', 'sold')
             ->make();
     }
     public function delete($id)
@@ -100,7 +100,7 @@ class PropertyForLeaseMasterlistController extends SessionController
         } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete the property from the database']);
         }
-    }      
+    }    
     public function propertyDetails()
     {
         $propertyId = $this->request->getVar('propertyId');
@@ -472,7 +472,7 @@ class PropertyForLeaseMasterlistController extends SessionController
             ]);
         }
     }  
-    public function markAsLeased()
+    public function unLeased()
     {
         // Load the PropertyModel
         $propertyModel = new PropertiesModel();
@@ -500,7 +500,7 @@ class PropertyForLeaseMasterlistController extends SessionController
         }
 
         // Update the property's status to "sold"
-        $propertyModel->update($propertyId, ['soldstatus' => 'sold']);
+        $propertyModel->update($propertyId, ['soldstatus' => '']);
 
         // Return success response
         return $this->response->setJSON([

@@ -56,11 +56,26 @@
 
     window.initMap = initMap;
 </script>
+<style>
+.clickLabel {
+    position: absolute; /* Changed from relative to absolute */
+    bottom: 25px; /* Adjusts the distance from the bottom */
+    right: 20px; /* Positions the label on the right */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px; /* Adjust the size as needed */
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+</style>
+<?php $url = ($propertyDetails['soldstatus'] == 'sold') ? '/sold-listings' : '/leasing'; ?>
 <section class="main-section inner-list-section">
     <div class="main-inner-sec inner-list-content">
         <div class="list-content">
             <div class="listing-info">
-                <a href="/leasing">Back To Properties</a>
+                <a href="<?=$url;?>">Back To Properties</a>
                 <div class="gallery">
                     <div class="main-slider">
                     <?php if($propertyGallery) : ?>
@@ -194,14 +209,10 @@
                                 <p><?=$list['space_use'];?></p>
                             </div>
                             <div class="unitDetail imageCol">
-                                <a href="#ex1" rel="modal:open" class="open-modal" data-id="<?=$list['leasing_unit_id'];?>">
+                                <a href="#ex1" rel="modal:open" class="open-modal" data-id="<?=$list['leasing_unit_id'];?>" style="min-height: 100px; object-fit: contain;">
                                     <img class="imageTrigger" src="/<?=$list['location'];?>" />
+                                    <label class="clickLabel">Click Me <i class="fas fa-hand-point-left"></i></label>
                                 </a>
-                                <div class="imgDots imageTrigger">
-                                    <div class="dot"> </div>
-                                    <div class="dot"> </div>
-                                    <div class="dot"> </div>
-                                </div>
                             </div>
                         </div>
                     </div>

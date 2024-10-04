@@ -235,14 +235,15 @@
             font-weight: 900;
         }
         #ex1.modal {
-            width: 90%; /* Wider width */
-            max-width: 1400px; /* Increase maximum width for larger screens */
+            width: 100%; /* Wider width */
+            max-width: 950px; /* Increase maximum width for larger screens */
             height: auto;
             padding: 20px;
             position: relative;
             justify-content: center;
             align-items: center;
             overflow: hidden; /* Prevent scrollbars inside the modal */
+            background: #000;
         }
 
         /* Modal content */
@@ -283,9 +284,9 @@
                     <li>
                         <a class="menuList">Properties <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="/">Commercial Listings</a></li>
-                            <li><a href="/leasing">Leasing Listings</a></li>
-                            <li><a href="/sold-listings">Sold Listings</a></li>
+                            <li><a href="/">For Sale</a></li>
+                            <li><a href="/leasing">For Lease</a></li>
+                            <li><a href="/sold-listings">Recently Sold</a></li>
                         </ul>
                     </li>
                     <li>
@@ -302,7 +303,7 @@
                     <li>
                         <a class="menuList" >Insights <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://dhruv-realty.com/insigths/">Insigths</a></li>
+                            <li><a href="https://dhruv-realty.com/insigths/">Insights</a></li>
                         </ul>
                     </li>
                     <li>

@@ -8,11 +8,11 @@ $(document).ready(function () {
     const previewContainer2 = $('#edit_preview-container');
     let files = [];
     
-    var table = $('#propertyforleasemasterlist').DataTable({
+    var table = $('#leasedpropertymasterlist').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": "/admin/propertyforleasemasterlist/getData",
+            "url": "/admin/leasedpropertymasterlist/getData",
             "type": "GET"
         },
         "columns": [
@@ -26,7 +26,7 @@ $(document).ready(function () {
                 "data": null,
                 "render": function (data, type, row) {
                     return `<a href="/admin/edit-property-for-lease/${row.property_id}" title="Edit" class="edit-btn" data-id="${row.property_id}" style="color: blue;"><i class="fa fa-edit" style="font-size: 18px;"></i></a>
-                            <a href="#" title="Sold" class="sold-btn" data-id="${row.property_id}" style="color: green;"><i class="fa fa-money" style="font-size: 18px;"></i></a>
+                            <a href="#" title="Unleased" class="sold-btn" data-id="${row.property_id}" style="color: green;"><i class="fa fa-money" style="font-size: 18px;"></i></a>
                             <a href="#" title="Add Leasing Units" class="add-leasing-units" data-id="${row.property_id}" style="color: orange;"><i class="fa fa-plus-circle" style="font-size: 18px;"></i></a>
                             <a href="#" title="Delete" class="delete-btn" data-id="${row.property_id}" style="color: red;"><i class="fa fa-trash" style="font-size: 18px;"></i></a>`;
                 }
@@ -60,25 +60,25 @@ $(document).ready(function () {
         // Show SweetAlert2 confirmation
         Swal.fire({
             title: 'Are you sure?',
-            text: "You are about to mark this property as leased!",
+            text: "You are about to revert this property into unleased!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, mark as leased!',
+            confirmButtonText: 'Revert to unleased!',
             cancelButtonText: 'No, cancel'
         }).then((result) => {
             if (result.isConfirmed) {
                 // Make an AJAX request to mark the property as sold
                 $.ajax({
-                    url: '/admin/propertyforleasemasterlist/markAsLeased',  // Your backend URL to handle the sold action
+                    url: '/admin/leasedpropertymasterlist/unLeased',  // Your backend URL to handle the sold action
                     type: 'POST',
                     data: { property_id: propertyId },
                     success: function (response) {
                         if (response.success) {
                             Swal.fire(
-                                'Leased!',
-                                'The property has been marked as leased.',
+                                'Unleased!',
+                                'The property has been revert into unleased.',
                                 'success'
                             );
                             // Optionally, you can reload the DataTable to reflect the changes
@@ -148,7 +148,7 @@ $(document).ready(function () {
         });
     
         $.ajax({
-            url: '/admin/propertyforleasemasterlist/addLeasingUnit', // Adjust the URL based on your backend route
+            url: '/admin/leasedpropertymasterlist/addLeasingUnit', // Adjust the URL based on your backend route
             type: 'POST',
             data: formData,
             processData: false, // Important for FormData
@@ -198,7 +198,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/admin/propertyforleasemasterlist/delete/' + id,
+                    url: '/admin/leasedpropertymasterlist/delete/' + id,
                     method: 'DELETE',
                     success: function (response) {
                         if (response.status === 'success') {
@@ -229,7 +229,7 @@ $(document).ready(function () {
     
         $.ajax({
             type: "GET",
-            url: "/admin/propertyforleasemasterlist/propertyDetails",
+            url: "/admin/leasedpropertymasterlist/propertyDetails",
             data: { propertyId: propertyId },
             success: function (response) {
                 // Access specific properties from the response object
@@ -420,7 +420,7 @@ $(document).ready(function () {
                         let order = $(this).sortable('toArray', { attribute: 'data-id' });
                 
                         $.ajax({
-                            url: '/admin/propertyforleasemasterlist/updateOrder',
+                            url: '/admin/leasedpropertymasterlist/updateOrder',
                             type: 'POST',
                             data: { order: order },
                             success: function(response) {
@@ -469,7 +469,7 @@ $(document).ready(function () {
                 // If confirmed, send an AJAX request to delete the leasing unit
                 $.ajax({
                     type: "POST",
-                    url: "/admin/propertyforleasemasterlist/deleteLeasingUnit", // Your backend URL to handle the delete
+                    url: "/admin/leasedpropertymasterlist/deleteLeasingUnit", // Your backend URL to handle the delete
                     data: { id: unitId }, // Send the ID of the unit to be deleted
                     success: function (response) {
                         if (response.success) {
@@ -527,7 +527,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/admin/propertyforleasemasterlist/deleteImage/' + imageId,
+                    url: '/admin/leasedpropertymasterlist/deleteImage/' + imageId,
                     method: 'DELETE',
                     success: function (response) {
                         if (response.status === 'success') {
@@ -638,7 +638,7 @@ $(document).ready(function () {
         console.log(unitId);
         $.ajax({
             type: "GET",
-            url: "/admin/propertyforleasemasterlist/getLeasingUnitDetails", // Update this URL to the appropriate endpoint
+            url: "/admin/leasedpropertymasterlist/getLeasingUnitDetails", // Update this URL to the appropriate endpoint
             data: { unitId: unitId },
             success: function (response) {
                 console.log(response);
@@ -748,7 +748,7 @@ $(document).ready(function () {
         formData.append('leasing_unit_id', $('#leasing_unit_id').val());  // Add additional data if needed (e.g., leasing unit ID)
     
         $.ajax({
-            url: '/admin/propertyforleasemasterlist/uploadLeasingImage',  // Server-side endpoint to handle file upload
+            url: '/admin/leasedpropertymasterlist/uploadLeasingImage',  // Server-side endpoint to handle file upload
             type: 'POST',
             data: formData,
             processData: false,  // Do not process the data as query string
@@ -771,7 +771,7 @@ $(document).ready(function () {
         const leasingUnitId = $('#leasing_unit_id').val();
     
         $.ajax({
-            url: '/admin/propertyforleasemasterlist/getLeasingImages',  // Endpoint to fetch images from the server
+            url: '/admin/leasedpropertymasterlist/getLeasingImages',  // Endpoint to fetch images from the server
             type: 'GET',
             data: { leasing_unit_id: leasingUnitId },  // Send leasing_unit_id as query parameter
             success: function(response) {
@@ -819,7 +819,7 @@ $(document).ready(function () {
                 // Send an AJAX request to delete the image from the server and database
                 $.ajax({
                     type: "POST",
-                    url: "/admin/propertyforleasemasterlist/deleteImageLeasing", // Update with your actual endpoint
+                    url: "/admin/leasedpropertymasterlist/deleteImageLeasing", // Update with your actual endpoint
                     data: { imageId: imageId },
                     success: function (response) {
                         if (response.success) {
@@ -874,7 +874,7 @@ $(document).ready(function () {
         // Send the new order to the server via AJAX
         $.ajax({
             type: "POST",
-            url: "/admin/propertyforleasemasterlist/updateImageOrder", // Update with your actual endpoint
+            url: "/admin/leasedpropertymasterlist/updateImageOrder", // Update with your actual endpoint
             data: { order: orderedFiles2 },
             success: function(response) {
                 if (response.success) {
@@ -925,7 +925,7 @@ $(document).ready(function () {
         var formData = new FormData($('#editLeasingUnitsForm')[0]); // Collect the form data, including file
     
         $.ajax({
-            url: '/admin/propertyforleasemasterlist/editLeasingUnit', // Adjust the URL based on your backend route
+            url: '/admin/leasedpropertymasterlist/editLeasingUnit', // Adjust the URL based on your backend route
             type: 'POST',
             data: formData,
             processData: false, // Important for FormData

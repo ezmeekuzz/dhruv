@@ -9,15 +9,15 @@ use App\Models\Admin\AdditionalListingAgentsModel;
 use App\Models\Admin\InvestmentHighlightsModel;
 use App\Models\Admin\PropertyGalleriesModel;
 
-class PropertyMasterlistController extends SessionController
+class SoldPropertyMasterlistController extends SessionController
 {
     public function index()
     {
         $data = [
-            'title' => 'DHRUV Realty | Property Masterlist',
-            'currentpage' => 'propertymasterlist'
+            'title' => 'DHRUV Realty | Sold Property Masterlist',
+            'currentpage' => 'soldpropertymasterlist'
         ];
-        return view('pages/admin/propertymasterlist', $data);
+        return view('pages/admin/soldpropertymasterlist', $data);
     }
     public function getData()
     {
@@ -26,7 +26,7 @@ class PropertyMasterlistController extends SessionController
             ->join('listing_agents', 'listing_agents.listing_agent_id = properties.listing_agent_id', 'LEFT JOIN')
             ->join('states', 'states.state_id = properties.state_id', 'LEFT JOIN')
             ->join('cities', 'cities.city_id = properties.city_id', 'LEFT JOIN')
-            ->where('properties.soldstatus !=', 'sold')
+            ->where('properties.soldstatus', 'sold')
             ->where('properties.purpose', 'For Sale')
             ->make();
     }
@@ -131,7 +131,7 @@ class PropertyMasterlistController extends SessionController
 
         return $this->response->setJSON(['status' => 'error']);
     }
-    public function markAsSold()
+    public function unSold()
     {
         // Load the PropertyModel
         $propertyModel = new PropertiesModel();
@@ -159,7 +159,7 @@ class PropertyMasterlistController extends SessionController
         }
 
         // Update the property's status to "sold"
-        $propertyModel->update($propertyId, ['soldstatus' => 'sold']);
+        $propertyModel->update($propertyId, ['soldstatus' => '']);
 
         // Return success response
         return $this->response->setJSON([

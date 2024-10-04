@@ -48,6 +48,7 @@ class SoldListingsController extends BaseController
             if ($geocodedData) {
                 $locations[] = [
                     'purpose' => $state['purpose'],
+                    'soldstatus' => $state['soldstatus'],
                     'location' => $state['location'],
                     'property_name' => $state['property_name'], 
                     'caprate' => $state['caprate'], 
@@ -109,8 +110,31 @@ class SoldListingsController extends BaseController
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.purpose', 'For Sale');
             $builder->where('properties.soldstatus', 'sold');
-            $properties = $builder->findAll();
     
+            // Apply filters
+            if (!empty($filters['orderBy'])) {
+                switch ($filters['orderBy']) {
+                    case 'Price_Asc':
+                        $builder->orderBy('properties.price', 'ASC');
+                        break;
+                    case 'Price_Desc':
+                        $builder->orderBy('properties.price', 'DESC');
+                        break;
+                    case 'Cap_Asc':
+                        $builder->orderBy('properties.caprate', 'ASC');
+                        break;
+                    case 'Cap_Desc':
+                        $builder->orderBy('properties.caprate', 'DESC');
+                        break;
+                    default:
+                        $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+                        break;
+                }
+            } else {
+                $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+            }
+            $properties = $builder->findAll();
+            
             // Start generating the specific HTML
             $htmlContent = '';
     
@@ -184,6 +208,29 @@ class SoldListingsController extends BaseController
     
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.soldstatus', 'sold');
+
+            if (!empty($filters['orderBy'])) {
+                switch ($filters['orderBy']) {
+                    case 'PriceSF_Asc':
+                        $builder->orderBy('properties.price_per_sf', 'ASC');
+                        break;
+                    case 'PriceSF_Desc':
+                        $builder->orderBy('properties.price_per_sf', 'DESC');
+                        break;
+                    case 'Rental_Asc':
+                        $builder->orderBy('properties.rental_rate', 'ASC');
+                        break;
+                    case 'Rental_Desc':
+                        $builder->orderBy('properties.rental_rate', 'DESC');
+                        break;
+                    default:
+                        $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+                        break;
+                }
+            } else {
+                $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+            }
+
             $properties = $builder->findAll();
     
             // Start generating the specific HTML
@@ -245,6 +292,29 @@ class SoldListingsController extends BaseController
     
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.soldstatus', 'sold');
+
+            if (!empty($filters['orderBy'])) {
+                switch ($filters['orderBy']) {
+                    case 'Price_Asc':
+                        $builder->orderBy('properties.price', 'ASC');
+                        break;
+                    case 'Price_Desc':
+                        $builder->orderBy('properties.price', 'DESC');
+                        break;
+                    case 'Cap_Asc':
+                        $builder->orderBy('properties.caprate', 'ASC');
+                        break;
+                    case 'Cap_Desc':
+                        $builder->orderBy('properties.caprate', 'DESC');
+                        break;
+                    default:
+                        $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+                        break;
+                }
+            } else {
+                $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+            }
+
             $properties = $builder->findAll();
             
             $htmlContent = "";
@@ -284,6 +354,29 @@ class SoldListingsController extends BaseController
     
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.soldstatus', 'sold');
+
+            if (!empty($filters['orderBy'])) {
+                switch ($filters['orderBy']) {
+                    case 'PriceSF_Asc':
+                        $builder->orderBy('properties.price_per_sf', 'ASC');
+                        break;
+                    case 'PriceSF_Desc':
+                        $builder->orderBy('properties.price_per_sf', 'DESC');
+                        break;
+                    case 'Rental_Asc':
+                        $builder->orderBy('properties.rental_rate', 'ASC');
+                        break;
+                    case 'Rental_Desc':
+                        $builder->orderBy('properties.rental_rate', 'DESC');
+                        break;
+                    default:
+                        $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+                        break;
+                }
+            } else {
+                $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
+            }
+
             $properties = $builder->findAll();
             
             $htmlContent = "";

@@ -611,6 +611,15 @@ button.banner-search img{
     cursor: pointer;
 }
 
+.prop-orderBy{
+    padding:0px;
+    background-color: #fff;
+    border-radius: 50px;
+    width: 16%;
+    position: relative; 
+    cursor: pointer;
+}
+
 
 .prop-name {
     display: flex;
@@ -733,17 +742,12 @@ button.banner-search img{
     border: 0px;
 }
 
-
-
-
-
 .prop-list-active{
     display: flex!important;
 }
 
 .prop-list li {
     width: 47%;
-    display: flex;
     font-size: 14px;
     gap:10px;
     align-items: flex-start;
@@ -2278,27 +2282,8 @@ input[type="submit"]{
 .unitDetail img {
     width: 100%;
     cursor: pointer;
-    min-height: 150px;
-    object-fit: contain;
 }
 
 #forLease{
     display:none;
-}
-.imgDots{
-    display: flex;
-    justify-content: center;
-    gap:5px;
-    width: auto;
-    padding:5px;
-    border-radius: 50px;
-    background-color: #ffffff21;
-    cursor: pointer;
-}
-
-.imgDots .dot{
-    width: 7px;
-    height: 7px;
-    border-radius: 50px;
-    background-color: #BCAC79;
 }

@@ -31,8 +31,9 @@ class LeasingController extends BaseController
     
         // Fetch unique states associated with properties
         $uniqueStates = $propertiesModel->join('states', 'states.state_id = properties.state_id')
-                                        ->distinct()
-                                        ->findAll();
+        ->where('properties.soldstatus !=', 'sold')
+        ->distinct()
+        ->findAll();
     
         // Initialize the locations array
         $locations = [];

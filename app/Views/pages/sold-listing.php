@@ -36,7 +36,7 @@
             if (location.purpose === 'For Sale') {
                 moneyValue = formatCurrency(location.price);
                 markerIcon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'; // Red marker for sale
-                purpose = 'For Sale';
+                purpose = 'Sold Unit';
                 dataPricing = `
                         <div class="cap-rate">
                             <label><strong>Cap Rate</strong></label><br/>
@@ -45,7 +45,7 @@
             } else if (location.purpose === 'For Leasing') {
                 moneyValue = formatCurrency(location.rental_rate) + ' PSF/Yr';
                 markerIcon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'; // Blue marker for leasing
-                purpose = 'For Lease';
+                purpose = 'Leased Unit';
                 dataPricing = `
                         <div class="cap-rate">
                             <label><strong>Size SF</strong></label><br/>
@@ -113,7 +113,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: rgba(0, 0, 0, 0.4); /* Semi-transparent white text */
+    color: rgba(255, 255, 255, 0.7); /* Semi-transparent white text */
     font-family: 'General Sans', sans-serif; /* Apply General Sans font */
     font-weight: 600; /* Semi-bold */
     font-size: 74px;
@@ -123,18 +123,58 @@
     text-align: center;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Black shadow behind text */
 }
+.prop-orderBy {
+    width: 100%; /* Ensure container takes up full width */
+    position: relative;
+}
 
+.transparent-select {
+    width: 100%; /* Make select element fill the container */
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove the border */
+    font-size: 16px;
+    color: #000; /* Text color */
+    appearance: none; /* Remove default browser styling */
+    padding: 20px; /* Add vertical padding to center the text vertically */
+    height: auto; /* Allow height to adjust based on content */
+    cursor: pointer;
+    box-sizing: border-box; /* Ensure padding is included in width and height calculation */
+}
+
+.transparent-select option {
+    color: #000; /* Ensure option text is visible */
+}
+
+.transparent-select:focus {
+    outline: none; /* Prevent any visible outline on focus */
+}
+.prop-orderBy::after {
+    content: '';
+    position: absolute;
+    right: 15px; /* Position arrow on the right side */
+    top: 50%;
+    transform: translateY(-50%); /* Vertically center the arrow */
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 15px solid #BCAC79; /* Increased arrow height and set color to #BCAC79 */
+    pointer-events: none; /* Prevent arrow from blocking interactions */
+}
+@media screen and (max-width:500px) {
+    .prop-orderBy, .prop-type {
+        width: 100% !important;
+    }
+}
 </style>
 <section class="main-section banner" style="background-image: url('images/Floridanight.png');">
     <div class="main-inner-sec inner-banner-sec leasingbannerSec">
         <h2 class="banner-title">Recently Sold</h2>
         <div class="search-section leasingSearchBanner">
             <button class="banner-search activeBtn" id="forsalebtn">
-                For Sale
+                Sold Units
                 <img src="images/wthIcon.png">
             </button>
             <button class="banner-search" id="forleasebtn">
-                For Lease
+                Lease Units
                 <img src="images/wthIcon.png">
             </button>
         </div>
@@ -147,23 +187,22 @@
             <form class="listing-filter active" id="forSale">
                 <div class="list-filtering">
                     <div class="dropdown-field">
-                        <div class="prop-type" style="width: 40%;">
-                            <div class="prop-name">
-                                <h5>Sort By</h5>
-                                <img class="chevo" src="images/Polygon.png">
-                            </div>
-                            <ul class="prop-list min-max">
-                                <li>Ascending</li>
-                                <li>Descending</li>
-                                <input type="submit" value="APPLY">
-                            </ul>
+                        <div class="prop-orderBy" style="width: 40%;">
+                            <select name="orderBy" id="orderBy" class="transparent-select">
+                                <option hidden></option>
+                                <option disabled selected>Order By</option>
+                                <option value="Price_Asc">Price : Low to High</option>
+                                <option value="Price_Desc">Price : High to Low</option>
+                                <option value="Cap_Asc">Cap Rate : Low to High</option>
+                                <option value="Cap_Desc">Cap Rate : High to Low</option>
+                            </select>
                         </div>
                         <div class="prop-type" style="width: 40%;">
                             <div class="prop-name">
                                 <h5>Property Type</h5>
                                 <img class="chevo" src="images/Polygon.png">
                             </div>
-                            <ul class="prop-list main-prop-list">
+                            <ul class="prop-list main-prop-list" style="width: 100%; padding: 20px; z-index: 99999;">
                                 <?php if($propertyTypes) : ?>
                                     <?php foreach($propertyTypes as $list) : ?>
                                         <li><label><input type="checkbox" value="<?=$list['property_type_id'];?>" name="property_type_id[]"><?=$list['property_type'];?></label></li>
@@ -183,23 +222,22 @@
             <form class="listing-filter" id="forLease">
                 <div class="list-filtering">
                     <div class="dropdown-field leasingSection">
-                        <div class="prop-type" style="width: 40%;">
-                            <div class="prop-name">
-                                <h5>Sort By</h5>
-                                <img class="chevo" src="images/Polygon.png">
-                            </div>
-                            <ul class="prop-list min-max">
-                                <li>Ascending</li>
-                                <li>Descending</li>
-                                <input type="submit" value="APPLY">
-                            </ul>
+                        <div class="prop-orderBy" style="width: 40%;">
+                            <select name="orderBy2" id="orderBy2" class="transparent-select">
+                                <option hidden></option>
+                                <option disabled selected>Order By</option>
+                                <option value="PriceSF_Asc">Price Per SF : Low to High</option>
+                                <option value="PriceSF_Desc">Price Per SF : High to Low</option>
+                                <option value="Rental_Asc">Rental Rate : Low to High</option>
+                                <option value="Rental_Desc">Rental Rate : High to Low</option>
+                            </select>
                         </div>
                         <div class="prop-type" style="width: 40%;">
                             <div class="prop-name">
                                 <h5>Space Use</h5>
                                 <img class="chevo" src="images/Polygon.png">
                             </div>
-                            <ul class="prop-list main-prop-list leasingDropdown">
+                            <ul class="prop-list main-prop-list" style="width: 100% !important; padding: 20px; z-index: 99999;">
                                 <?php if($spaces) : ?>
                                     <?php foreach($spaces as $list) : ?>
                                         <li><label><input type="checkbox" value="<?=$list['space_id'];?>" name="property_type_id2[]"><?=$list['spacetype'];?></label></li>
@@ -455,7 +493,22 @@
                 loadForLeasingTabularProperties(formData);
             });
         }
+        $('#orderBy').on('change', function() {
+            const orderBy = $(this).val();
+            const formData = { orderBy: orderBy };
 
+            // Load the properties based on the selected order
+            loadForSaleProperties(formData);
+            loadForSaleTabularProperties(formData);
+        });
+        $('#orderBy2').on('change', function() {
+            const orderBy = $(this).val();
+            const formData = { orderBy: orderBy };
+
+            // Load the properties based on the selected order
+            loadForLeasingProperties(formData);
+            loadForLeasingTabularProperties(formData);
+        });
         // Initial load of properties and setup form submission
         loadForSaleProperties();
         loadForLeasingProperties();
