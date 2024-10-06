@@ -127,20 +127,16 @@
                     </tbody>
                     <thead>
                         <tr>
-                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <th>SF/YR</th>
-                            <?php endif; ?>
-                            <th <?= ($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?> >Year Built</th>
+                            <th>Year Built</th>
                             <th>Building Size</th>
                             <th>Space Use</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <td data-label="SF/YR"><?=$propertyDetails['sf_yr'];?></td>
-                            <?php endif; ?>
-                            <td <?= ($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?>  data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
+                            <td data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
                             <td data-label="Building Size"><?=$propertyDetails['buildingsize'];?> SF</td>
                             <td data-label="Space Use"><?=$propertyDetails['spacetype'];?></td>
                         </tr>
@@ -346,6 +342,11 @@
                         </div>
                     </div>
                 </form>
+                    <?php if($propertyDetails['soldstatus'] == 'sold') : ?>
+                    <div class="prop-listing-map desktop">
+                        <div class="map"></div>
+                    </div>
+                    <?php endif; ?>
                 <div class="list-record mobile">
                     <h4>Broker Of Record</h4>
                     <div class="record-items">
@@ -362,9 +363,11 @@
                         </ul>
                     </div>
                 </div>
-                <div class="prop-listing-map">
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
+                <div class="prop-listing-map desktop">
                     <div class="map"></div>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

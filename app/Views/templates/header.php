@@ -236,16 +236,18 @@
             }
         }
         #ex1.modal {
-            width: 100%; /* Wider width */
-            max-width: 950px; /* Increase maximum width for larger screens */
-            height: auto;
-            padding: 20px;
-            position: relative;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* Prevent scrollbars inside the modal */
-            background: #000;
-        }
+    width: 100%; /* Wider width */
+    max-width: 950px; /* Increase maximum width for larger screens */
+    height: auto;
+    padding: 20px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent scrollbars inside the modal */
+    background: transparent; /* Ensures a transparent background */
+    border: none; /* No border */
+    box-shadow: none; /* Remove any shadow effects */
+}
 
         /* Modal content */
         #modal-content {
@@ -302,106 +304,6 @@
 
         .transparent-input::placeholder {
             color: black; /* Placeholder color set to black */
-        }
-        .card-container {
-            display: flex;
-            flex-wrap: wrap; /* Allows wrapping on smaller screens */
-            gap: 20px; /* Space between cards */
-        }
-
-        .card {
-            position: relative;
-            width: 380px; /* Fixed width for cards */
-            height: 380px; /* Adjust the height as needed */
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-image {
-            width: 100%;
-            height: 70%; /* Image takes up 70% of the card height */
-            object-fit: cover;
-        }
-
-        .card-details {
-            position: relative; /* To position the overlay within this section */
-            width: 100%;
-            height: 30%; /* Details take up 30% of the card height */
-            background-color: transparent;
-            color: white;
-            padding: 10px;
-            text-align: left;
-            z-index: 1; /* Make sure the text is above the overlay */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden; /* To hide the overlay before hover */
-        }
-
-        .card-details h2,
-        .card-details p {
-            margin: 0;
-            z-index: 2; /* Ensure the text stays above the overlay */
-        }
-
-        /* Overlay specifically for the card-details */
-        .hover-overlay {
-            position: absolute;
-            top: -100%; /* Initially hidden above the card details */
-            left: 0;
-            width: 100%;
-            height: 100%; /* Overlay covers the card details */
-            background-color: rgba(0, 0, 0, 0.2);
-            transition: top 0.3s ease; /* Slide effect for overlay */
-            z-index: 0; /* Keep overlay behind the text */
-        }
-
-        /* Hover effect on card */
-        .card:hover .hover-overlay {
-            top: 0; /* Slide down to cover the card details */
-        }
-
-        .card a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 20px;
-        }
-
-        .card h2 {
-            font-weight: bold !important;
-            font-size: 20px;
-        }
-
-        .card h3 {
-            font-weight: normal;
-            font-size: 15px;
-            margin-top: 10px;
-        }
-
-        /* Media Query for smaller screens */
-        @media (max-width: 600px) {
-            .card-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .card {
-                width: 90vw; /* Make the card narrower on mobile */
-                height: auto; /* Let the height be dynamic */
-            }
-
-            .card-details {
-                padding: 12px;
-            }
-
-            .card-details h2 {
-                font-size: 1.2rem;
-            }
-
-            .card-details p {
-                font-size: 0.9rem;
-            }
         }
     </style>
 </head>

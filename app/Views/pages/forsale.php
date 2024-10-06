@@ -94,21 +94,17 @@
                 <table class="list-table">
                     <thead>
                         <tr>
-                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <th>Asking Cap Rate</th>
                             <th>NOI</th>
-                            <?php endif; ?>
-                            <th <?= ($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?> >Lease structure</th>
+                            <th>Lease structure</th>
                             <th>Occupancy</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <td data-label="Asking Cap Rate"><?=$propertyDetails['askingcaprate'];?>%</td>
                             <td data-label="NOI">$<?=number_format($propertyDetails['noi'], 0);?></td>
-                            <?php endif; ?>
-                            <td <?=($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?>  data-label="Lease structure"><?=$propertyDetails['leasestructure'];?></td>
+                            <td data-label="Lease structure"><?=$propertyDetails['leasestructure'];?></td>
                             <td data-label="Occupancy"><?=$propertyDetails['occupancy'];?>%</td>
                         </tr>
                     </tbody>
@@ -195,10 +191,17 @@
                             <img src="images/colored-btn.png">
                         </div>
                     </div>
+                    <?php if($propertyDetails['soldstatus'] == 'sold') : ?>
+                    <div class="prop-listing-map desktop">
+                        <div class="map"></div>
+                    </div>
+                    <?php endif; ?>
                 </form>
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <div class="prop-listing-map desktop">
                     <div class="map"></div>
                 </div>
+                <?php endif; ?>
             </div>
             <div class="listing-sidebar">
                 <?php if($propertyDetails['soldstatus'] != 'sold') : ?>

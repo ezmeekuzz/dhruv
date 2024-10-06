@@ -141,18 +141,34 @@ class LeasedPropertyMasterlistController extends SessionController
 
         $query = $leasingUnitsModel->where('leasing_units.property_id', $propertyId)
                                 ->orderBy('leasing_units.arrange_order', 'ASC');
-
-        if ($hasLeasingGalleries) {
-            $query->join('leasing_galleries', 'leasing_galleries.leasing_unit_id = leasing_units.leasing_unit_id AND leasing_galleries.order_arrangement = 1', 'left');
-        }
-
+                                
         $leasingUnits = $query->findAll();
-
 
         $propertyDetails['additional_listing_agents'] = $additionalListingAgents;
         $propertyDetails['investment_highlights'] = $investmentHighlights;
         $propertyDetails['property_galleries'] = $propertyGalleries;
         $propertyDetails['leasing_units'] = $leasingUnits;
+
+        if ($leasingUnits) {
+            foreach ($leasingUnits as &$leasing) {
+                // Get the leasing gallery with 'order_arrangement' = 1
+                $leasingGallery = $leasingGalleriesModel
+                    ->where('leasing_unit_id', $leasing['leasing_unit_id'])
+                    ->where('order_arrangement', 1)
+                    ->first();
+                
+                // Check if the leasing gallery exists and extract the 'location' attribute
+                if ($leasingGallery) {
+                    $leasing['location'] = $leasingGallery['location'];
+                } else {
+                    // If no leasing gallery is found, set 'location' to null or some default value
+                    $leasing['location'] = null;
+                }
+            }
+        
+            // Attach the updated leasing units with location to property details
+            $propertyDetails['leasing_units'] = $leasingUnits;
+        }
         
         return $this->response->setJSON($propertyDetails);
     } 

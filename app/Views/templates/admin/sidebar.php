@@ -78,8 +78,8 @@
                                     <li class="<?php if($currentpage === 'propertyforleasemasterlist') { echo 'active'; } ?>"> <a href='/admin/property-for-lease-masterlist'>Property For Lease Masterlist</a></li>
                                 </ul>
                             </li>
-                            <li class="<?php if($currentpage === 'soldpropertymasterlist') { echo 'active'; } ?>"><a href="/admin/sold-property-masterlist"><i class="nav-icon fa fa-building-o"></i><span class="nav-title">Sold Property Masterlist</span></a> </li>
-                            <li class="<?php if($currentpage === 'leasedpropertymasterlist') { echo 'active'; } ?>"><a href="/admin/leased-property-masterlist"><i class="nav-icon fa fa-building-o"></i><span class="nav-title">Leased Property Masterlist</span></a> </li>
+                            <li class="<?php if($currentpage === 'soldpropertymasterlist') { echo 'active'; } ?>"><a href="/admin/sold-property-masterlist"><i class="nav-icon fa fa-building-o"></i><span class="nav-title">Sold Units Masterlist</span></a> </li>
+                            <li class="<?php if($currentpage === 'leasedpropertymasterlist') { echo 'active'; } ?>"><a href="/admin/leased-property-masterlist"><i class="nav-icon fa fa-building-o"></i><span class="nav-title">Leased Units Masterlist</span></a> </li>
                             <li class="<?php if($currentpage === 'messages') { echo 'active'; } ?>"><a href="/admin/messages"><i class="nav-icon ti ti-envelope"></i><span class="nav-title">Messages</span></a> </li>
                             <li class="<?php if($currentpage === 'offeringmemorandumconsent') { echo 'active'; } ?>"><a href="/admin/offering-memorandum-consent"><i class="nav-icon fa fa-file-pdf-o"></i><span class="nav-title">Offering Memorandum Consent</span></a> </li>
                             <li class="<?php if($currentpage === 'subscribers') { echo 'active'; } ?>"><a href="/admin/subscribers"><i class="nav-icon ti ti-user"></i><span class="nav-title">Subscribers</span></a> </li>
