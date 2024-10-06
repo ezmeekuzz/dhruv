@@ -236,18 +236,18 @@
             }
         }
         #ex1.modal {
-    width: 100%; /* Wider width */
-    max-width: 950px; /* Increase maximum width for larger screens */
-    height: auto;
-    padding: 20px;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Prevent scrollbars inside the modal */
-    background: transparent; /* Ensures a transparent background */
-    border: none; /* No border */
-    box-shadow: none; /* Remove any shadow effects */
-}
+            width: 100%; /* Wider width */
+            max-width: 950px; /* Increase maximum width for larger screens */
+            height: auto;
+            padding: 20px;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrollbars inside the modal */
+            background: transparent; /* Ensures a transparent background */
+            border: none; /* No border */
+            box-shadow: none; /* Remove any shadow effects */
+        }
 
         /* Modal content */
         #modal-content {
@@ -267,43 +267,6 @@
             padding: 10px;
             border-radius: 50%;
             z-index: 1001;
-        }
-        .prop-type {
-            width: 40%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .prop-name {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .input-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .transparent-input {
-            width: 90%; /* Input width relative to the .prop-type width */
-            padding: 10px;
-            background-color: transparent; /* Transparent background */
-            border: none; /* Remove the border completely */
-            border-radius: 0; /* Remove any border radius */
-            color: #333; /* Text color */
-            font-size: 16px;
-            outline: none; /* Remove default focus outline */
-        }
-
-        .transparent-input::placeholder {
-            color: black; /* Placeholder color set to black */
         }
     </style>
 </head>

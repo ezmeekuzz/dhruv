@@ -306,11 +306,6 @@
                                 <option value="Cap_Desc">Cap Rate : High to Low</option>
                             </select>
                         </div>
-                        <div class="prop-type" style="width: 40%; position: relative;">
-                            <div class="input-wrapper">
-                                <input type="date" class="transparent-input" name="solddate" id="solddate" placeholder="Select Date Sold">
-                            </div>
-                        </div>
                         <div class="prop-type" style="width: 40%;">
                             <div class="prop-name">
                                 <h5>Property Type</h5>
@@ -344,12 +339,9 @@
                                 <option value="PriceSF_Desc">Price Per SF : High to Low</option>
                                 <option value="Rental_Asc">Rental Rate : Low to High</option>
                                 <option value="Rental_Desc">Rental Rate : High to Low</option>
+                                <option value="Date_Asc">Date Ascending</option>
+                                <option value="Date_Desc">Date Descending</option>
                             </select>
-                        </div>
-                        <div class="prop-type" style="width: 40%; position: relative;">
-                            <div class="input-wrapper">
-                                <input type="date" class="transparent-input" name="leaseddate" id="leaseddate" placeholder="Select Date Sold">
-                            </div>
                         </div>
                         <div class="prop-type" style="width: 40%;">
                             <div class="prop-name">

@@ -29,6 +29,11 @@
                 maximumFractionDigits: 0
             }).format(locations.price);
 
+            // Set the purposeUnit conditionally based on purpose and sold status
+            if (locations.purpose === 'For Leasing' && locations.soldstatus === 'sold') {
+                purposeUnit = 'Leased Unit';
+            }
+
             const contentString = `
                 <div style="text-align: center; width: 200px;">
                     <img src="${locations.image_url}" alt="State Image" style="width: 100%; height: auto;" />
@@ -110,9 +115,7 @@
                     </tbody>
                     <thead>
                         <tr>
-                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <th>Price Per SF</th>
-                            <?php endif; ?>
                             <th>Year Built</th>
                             <th>Building Size</th>
                             <th>Property Type</th>
@@ -120,9 +123,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <td data-label="Price Per SF">$<?=number_format($propertyDetails['price_per_sf'], 0);?></td>
-                            <?php endif; ?>
                             <td data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
                             <td data-label="Building Size"><?=$propertyDetails['buildingsize'];?></td>
                             <td data-label="Property Type"><?=$propertyDetails['property_type'];?></td>

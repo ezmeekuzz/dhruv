@@ -28,10 +28,16 @@
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(locations.rental_rate);
+            let purposeUnit = locations.purpose;
 
+            // Set the purposeUnit conditionally based on purpose and sold status
+            if (locations.purpose === 'For Leasing' && locations.soldstatus === 'sold') {
+                purposeUnit = 'Leased Unit';
+            }
+            
             const contentString = `
                 <div style="text-align: center; width: 200px;">
-                    <div style="padding: 12px;"><center><h3>${locations.purpose}</h3></center></div>
+                    <div style="padding: 12px;"><center><h3>${purposeUnit}</h3></center></div>
                     <img src="${locations.image_url}" alt="State Image" style="width: 100%; height: auto;" />
                     <div class="info-window-content">
                         <label class="label-info">${formattedPrice} PSF/Yr</label>

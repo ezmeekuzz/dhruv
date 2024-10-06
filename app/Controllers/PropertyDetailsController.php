@@ -61,6 +61,7 @@ class PropertyDetailsController extends BaseController
 
         $locations = [
             'purpose' => $propertyDetails['purpose'],
+            'soldstatus' => $propertyDetails['soldstatus'],
             'location' => $propertyDetails['location'],
             'property_name' => $propertyDetails['property_name'], 
             'caprate' => $propertyDetails['caprate'], 
