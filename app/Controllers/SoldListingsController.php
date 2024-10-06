@@ -106,12 +106,16 @@ class SoldListingsController extends BaseController
             if (!empty($filters['property_type_id'])) {
                 $builder->whereIn('properties.property_type_id', $filters['property_type_id']);
             }
-            
+    
+            if (!empty($filters['solddate'])) {
+                $builder->where('properties.solddate', $filters['solddate']);
+            }
+    
             $builder->where('properties.publishstatus', 'Published');
             $builder->where('properties.purpose', 'For Sale');
             $builder->where('properties.soldstatus', 'sold');
     
-            // Apply filters
+            // Apply ordering filters
             if (!empty($filters['orderBy'])) {
                 switch ($filters['orderBy']) {
                     case 'Price_Asc':
@@ -133,61 +137,58 @@ class SoldListingsController extends BaseController
             } else {
                 $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
             }
+    
+            // Fetch properties
             $properties = $builder->findAll();
-            
-            // Start generating the specific HTML
-            $htmlContent = '';
+    
+            // Initialize HTML content
+            $htmlContent = '<div class="card-container">';
     
             foreach ($properties as $property) {
                 // Fetch property galleries
                 $galleries = $propertyGalleryModel
-                ->where('property_id', $property['property_id'])
-                ->orderBy('order_sequence', 'asc')
-                ->findAll();
+                    ->where('property_id', $property['property_id'])
+                    ->orderBy('order_sequence', 'asc')
+                    ->findAll();
     
-                // Begin list-item div
-                $htmlContent .= '<div class="list-item" style="background-image: url(\'' . base_url($property['backgroundimage']) . '\');">';
+                // Build card content
+                $htmlContent .= '<div class="card">';
+    
+                // Wrap the image and SOLD label together
+                $htmlContent .= '<div class="image-container">'; // New wrapper for the image and label
                 
-                // Add SOLD watermark
-                if ($property['soldstatus'] == 'sold') {
-                    $htmlContent .= '<div class="sold-watermark">SOLD</div>';
+                // Add main image (or first gallery image)
+                if (!empty($galleries)) {
+                    $htmlContent .= '<img src="' . base_url($galleries[0]['location']) . '" alt="Card Image" class="card-image">';
+                } else {
+                    $htmlContent .= '<img src="https://via.placeholder.com/300x200" alt="Card Image" class="card-image">'; // Fallback if no images
                 }
     
-                $htmlContent .= '<div class="mainSlider">';
-    
-                // Add gallery images to the slider
-                foreach ($galleries as $gallery) {
-                    $htmlContent .= '<div class="item"><img src="' . base_url($gallery['location']) . '" alt="Image"></div>';
-                }
-    
-                // Close mainSlider and add remaining property details
-                $htmlContent .= '</div>';
+                // Add SOLD label
+                $htmlContent .= '<div class="sold-watermark">SOLD</div>'; // Add SOLD label here
                 
-                // Check if the property is added within the last two weeks
-                $dateAdded = new \DateTime($property['dateadded']);
-                $twoWeeksAgo = new \DateTime('-2 weeks');
+                $htmlContent .= '</div>'; // End image-container
     
-                if ($dateAdded >= $twoWeeksAgo) {
-                    $htmlContent .= '<a class="list-tag">New</a>';
-                }
-                $htmlContent .= '<div class="list-info-sec">';
-                $htmlContent .= '<div class="item-info">';
-                $htmlContent .= '<h3><a href="' . $property['slug'] . '" class="sliderTitle">' . $property['property_name'] . '</a></h3>';
-                $htmlContent .= '<p>Cap Rate: ' . $property['caprate'] . '%</p>';
-                $htmlContent .= '<div class="item-price">';
-                $htmlContent .= '<h5>Price: $' . number_format($property['price']) . '</h5>';
-                $htmlContent .= '<span>Type: ' . $property['property_type'] . '</span>';
-                $htmlContent .= '</div>'; // End item-price
-                $htmlContent .= '</div>'; // End item-info
-                $htmlContent .= '</div>'; // End list-info-sec
-                $htmlContent .= '</div>'; // End list-item
+                // Add hover overlay
+                $htmlContent .= '<div class="hover-overlay"></div>';
+    
+                // Card details
+                $htmlContent .= '<div class="card-details">';
+                $htmlContent .= '<h2><a href="' . base_url('/' . $property['slug']) . '">' . $property['property_name'] . '</a></h2>';
+                $htmlContent .= '<h3>Sold Price: $' . number_format($property['price']) . '</h3>';
+                $htmlContent .= '<h3>Location: ' . $property['location'] . '</h3>';
+                $htmlContent .= '</div>'; // End card-details
+    
+                $htmlContent .= '</div>'; // End card
             }
+    
+            $htmlContent .= '</div>'; // End card-container
     
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);
         }
     }    
-
+       
     public function getForLeasingGridProperties()
     {
         if ($this->request->isAJAX()) {
@@ -204,6 +205,10 @@ class SoldListingsController extends BaseController
             // Apply filters
             if (!empty($filters['property_type_id2'])) {
                 $builder->whereIn('properties.space_id', $filters['property_type_id2']);
+            }
+
+            if (!empty($filters['leaseddate'])) {
+                $builder->where('properties.solddate', $filters['leaseddate']);
             }
     
             $builder->where('properties.publishstatus', 'Published');
@@ -247,7 +252,7 @@ class SoldListingsController extends BaseController
     
                 // Add SOLD watermark
                 if ($property['soldstatus'] == 'sold') {
-                    $htmlContent .= '<div class="sold-watermark">SOLD</div>';
+                    $htmlContent .= '<div class="sold-watermark">LEASED</div>';
                 }
                 // If the property is new, add the 'New' tag
                 if ($isNew) {
@@ -288,6 +293,10 @@ class SoldListingsController extends BaseController
             // Apply filters
             if (!empty($filters['property_type_id'])) {
                 $builder->whereIn('properties.property_type_id', $filters['property_type_id']);
+            }
+
+            if (!empty($filters['solddate'])) {
+                $builder->where('properties.solddate', $filters['solddate']);
             }
     
             $builder->where('properties.publishstatus', 'Published');
@@ -350,6 +359,10 @@ class SoldListingsController extends BaseController
             // Apply filters
             if (!empty($filters['property_type_id2'])) {
                 $builder->whereIn('properties.space_id', $filters['property_type_id2']);
+            }
+
+            if (!empty($filters['leaseddate'])) {
+                $builder->where('properties.solddate', $filters['leaseddate']);
             }
     
             $builder->where('properties.publishstatus', 'Published');

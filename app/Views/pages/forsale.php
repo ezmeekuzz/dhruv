@@ -88,29 +88,35 @@
                     </div>
                     <div class="prop-price">
                         <i class="fas fa-download" id="copyURL"></i>
-                        <h3><span class="askinPrice">Asking Price</span> $<?=number_format($propertyDetails['price'], 0);?></h3>
+                        <h3><span class="askinPrice"><?=($propertyDetails['soldstatus'] == 'sold') ? 'Sold Price' : 'Asking Price'; ?></span> $<?=number_format($propertyDetails['price'], 0);?></h3>
                     </div>
                 </div>
                 <table class="list-table">
                     <thead>
                         <tr>
+                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <th>Asking Cap Rate</th>
                             <th>NOI</th>
-                            <th>Lease structure</th>
+                            <?php endif; ?>
+                            <th <?= ($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?> >Lease structure</th>
                             <th>Occupancy</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <td data-label="Asking Cap Rate"><?=$propertyDetails['askingcaprate'];?>%</td>
                             <td data-label="NOI">$<?=number_format($propertyDetails['noi'], 0);?></td>
-                            <td data-label="Lease structure"><?=$propertyDetails['leasestructure'];?></td>
+                            <?php endif; ?>
+                            <td <?=($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?>  data-label="Lease structure"><?=$propertyDetails['leasestructure'];?></td>
                             <td data-label="Occupancy"><?=$propertyDetails['occupancy'];?>%</td>
                         </tr>
                     </tbody>
                     <thead>
                         <tr>
+                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <th>Price Per SF</th>
+                            <?php endif; ?>
                             <th>Year Built</th>
                             <th>Building Size</th>
                             <th>Property Type</th>
@@ -118,7 +124,9 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <td data-label="Price Per SF">$<?=number_format($propertyDetails['price_per_sf'], 0);?></td>
+                            <?php endif; ?>
                             <td data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
                             <td data-label="Building Size"><?=$propertyDetails['buildingsize'];?></td>
                             <td data-label="Property Type"><?=$propertyDetails['property_type'];?></td>
@@ -269,6 +277,7 @@
                         </li>
                     </ul>
                 </div>
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <div class="agent-list">
                     <h5>ADDITIONAL LISTING AGENT</h5>
                     <ul>
@@ -287,8 +296,9 @@
                         <?php endif; ?>
                     </ul>
                 </div>
+                <?php endif; ?>
                 <form class="prop-form desktop" id="sendMessage">
-                    <h5>Interested in this property?</h5>
+                    <h5>Interested in selling a property?</h5>
                     <div class="input-form">
                         <input type="hidden" name="link" id="link" value="<?=base_url().'/'.$propertyDetails['slug'];?>">
                         <input type="hidden" name="property" id="property" value="<?=$propertyDetails['property_name'];?>">

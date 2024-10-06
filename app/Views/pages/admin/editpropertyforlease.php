@@ -48,6 +48,12 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <?php if($property['solddate'] == 'sold') : ?>
+                                <div class="form-group">
+                                    <label for="inputDate">Sold Date</label>
+                                    <input type="date" class="form-control" name="solddate" id="solddate" value="<?=$property['solddate'];?>">
+                                </div>
+                                <?php endif; ?>
                                 <div class="form-group">
                                     <label for="propertyname">Property Name</label>
                                     <input type="text" name="propertyname" id="propertyname" class="form-control" placeholder="Enter Property Name" value="<?=$property['property_name'];?>">

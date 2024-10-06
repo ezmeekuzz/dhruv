@@ -82,7 +82,6 @@ class EditPropertyController extends SessionController
         $investmentHighlightsModel = new InvestmentHighlightsModel();
         $propertyGalleriesModel = new PropertyGalleriesModel();
         $files = $this->request->getFiles();
-    
         // Handle form data
         $propertyName = $this->request->getPost('propertyname');
         $propertyData = [
@@ -111,7 +110,9 @@ class EditPropertyController extends SessionController
             'occupancy' => $this->request->getPost('occupancy'),
             'publishstatus' => ($this->request->getPost('publishstatus') == 'Yes') ? 'Published' : 'Draft'
         ];
-    
+        if($this->request->getPost('solddate')) {
+            $propertyData['solddate'] = $this->request->getPost('solddate');
+        }
         // Handle background image upload
         $file = $this->request->getFile('backgroundimage');
         if ($file && $file->isValid() && !$file->hasMoved()) {

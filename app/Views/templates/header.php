@@ -199,6 +199,7 @@
             cursor: pointer;
             z-index: 1001; /* Higher z-index for visibility */
             font-size: 20px;
+            opacity: 0.6; /* Reduced opacity */
         }
 
         /* Left arrow positioning */
@@ -215,24 +216,24 @@
         .owl-carousel .owl-nav button.owl-prev:hover,
         .owl-carousel .owl-nav button.owl-next:hover {
             background-color: rgba(0, 0, 0, 0.8);
+            opacity: 1; /* Fully visible on hover */
         }
 
         /* Arrow symbols (Font Awesome) */
         .owl-carousel .owl-nav button.owl-prev::before,
         .owl-carousel .owl-nav button.owl-next::before {
-            content: '';
+            content: ''; /* Add arrow content here */
         }
 
-        .owl-carousel .owl-nav button.owl-prev::before {
-            content: ''; /* Left arrow icon */
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-        }
-
-        .owl-carousel .owl-nav button.owl-next::before {
-            content: ''; /* Right arrow icon */
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
+        /* Mobile View: Make arrows smaller */
+        @media (max-width: 767px) {
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel .owl-nav button.owl-next {
+                width: 25px; /* Smaller arrow size */
+                height: 25px;
+                font-size: 14px; /* Smaller font size */
+                opacity: 0.3; /* Slightly reduced opacity */
+            }
         }
         #ex1.modal {
             width: 100%; /* Wider width */
@@ -265,6 +266,143 @@
             border-radius: 50%;
             z-index: 1001;
         }
+        .prop-type {
+            width: 40%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .prop-name {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .input-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .transparent-input {
+            width: 90%; /* Input width relative to the .prop-type width */
+            padding: 10px;
+            background-color: transparent; /* Transparent background */
+            border: none; /* Remove the border completely */
+            border-radius: 0; /* Remove any border radius */
+            color: #333; /* Text color */
+            font-size: 16px;
+            outline: none; /* Remove default focus outline */
+        }
+
+        .transparent-input::placeholder {
+            color: black; /* Placeholder color set to black */
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            gap: 20px; /* Space between cards */
+        }
+
+        .card {
+            position: relative;
+            width: 380px; /* Fixed width for cards */
+            height: 380px; /* Adjust the height as needed */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 70%; /* Image takes up 70% of the card height */
+            object-fit: cover;
+        }
+
+        .card-details {
+            position: relative; /* To position the overlay within this section */
+            width: 100%;
+            height: 30%; /* Details take up 30% of the card height */
+            background-color: transparent;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            z-index: 1; /* Make sure the text is above the overlay */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden; /* To hide the overlay before hover */
+        }
+
+        .card-details h2,
+        .card-details p {
+            margin: 0;
+            z-index: 2; /* Ensure the text stays above the overlay */
+        }
+
+        /* Overlay specifically for the card-details */
+        .hover-overlay {
+            position: absolute;
+            top: -100%; /* Initially hidden above the card details */
+            left: 0;
+            width: 100%;
+            height: 100%; /* Overlay covers the card details */
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: top 0.3s ease; /* Slide effect for overlay */
+            z-index: 0; /* Keep overlay behind the text */
+        }
+
+        /* Hover effect on card */
+        .card:hover .hover-overlay {
+            top: 0; /* Slide down to cover the card details */
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .card h2 {
+            font-weight: bold !important;
+            font-size: 20px;
+        }
+
+        .card h3 {
+            font-weight: normal;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        /* Media Query for smaller screens */
+        @media (max-width: 600px) {
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 90vw; /* Make the card narrower on mobile */
+                height: auto; /* Let the height be dynamic */
+            }
+
+            .card-details {
+                padding: 12px;
+            }
+
+            .card-details h2 {
+                font-size: 1.2rem;
+            }
+
+            .card-details p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -286,7 +424,7 @@
                         <ul class="menu-dropdown">
                             <li><a href="/">For Sale</a></li>
                             <li><a href="/leasing">For Lease</a></li>
-                            <li><a href="/sold-listings">Recently Sold</a></li>
+                            <li><a href="/sold-listings">Recent Transactions</a></li>
                         </ul>
                     </li>
                     <li>

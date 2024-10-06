@@ -111,7 +111,9 @@ class EditPropertyForLeaseController extends SessionController
             'sf_yr' => $this->request->getPost('sf_yr'),
             'publishstatus' => ($this->request->getPost('publishstatus') == 'Yes') ? 'Published' : 'Draft',
         ];
-    
+        if($this->request->getPost('solddate')) {
+            $data['solddate'] = $this->request->getPost('solddate');
+        }
         // Handle background image upload
         $file = $this->request->getFile('backgroundimage');
         if ($file && $file->isValid() && !$file->hasMoved()) {

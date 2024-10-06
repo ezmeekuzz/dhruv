@@ -500,7 +500,7 @@ class PropertyForLeaseMasterlistController extends SessionController
         }
 
         // Update the property's status to "sold"
-        $propertyModel->update($propertyId, ['soldstatus' => 'sold']);
+        $propertyModel->update($propertyId, ['soldstatus' => 'sold', 'solddate' => date('Y-m-d')]);
 
         // Return success response
         return $this->response->setJSON([

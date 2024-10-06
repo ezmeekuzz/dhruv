@@ -103,7 +103,9 @@
                     </div>
                     <div class="prop-price">
                         <i class="fas fa-download" id="copyURL"></i>
+                        <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                         <h3><span class="askinPrice">SF/YR Pricing</span> $<?=number_format($propertyDetails['starting_sf_yr'], 0);?></h3>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <table class="list-table">
@@ -125,16 +127,20 @@
                     </tbody>
                     <thead>
                         <tr>
+                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <th>SF/YR</th>
-                            <th>Year Built</th>
+                            <?php endif; ?>
+                            <th <?= ($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?> >Year Built</th>
                             <th>Building Size</th>
                             <th>Space Use</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                             <td data-label="SF/YR"><?=$propertyDetails['sf_yr'];?></td>
-                            <td data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
+                            <?php endif; ?>
+                            <td <?= ($propertyDetails['soldstatus'] == 'sold') ? 'colspan="2"' : ''; ?>  data-label="Year Built"><?=$propertyDetails['yearbuilt'];?></td>
                             <td data-label="Building Size"><?=$propertyDetails['buildingsize'];?> SF</td>
                             <td data-label="Space Use"><?=$propertyDetails['spacetype'];?></td>
                         </tr>
@@ -156,10 +162,14 @@
                     <?php endif; ?>
                     </ul>
                 </div>
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
+                <?php if($propertyDetails['leasing_flyer'] != "" || $propertyDetails['leasing_flyer'] != NULL) : ?>
                 <button class="offer-btn mobile" >
                     <p>Leasing Flyer</p>
                     <img src="images/colored-btn.png">
                 </button>
+                <?php endif; ?>
+                <?php endif; ?>
                     <!-- <form class="prop-form mobile">
                         <h5>Interested in this property?</h5>
                         <div class="input-form">
@@ -242,11 +252,13 @@
                 </div>
             </div>
             <div class="listing-sidebar">
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <?php if($propertyDetails['leasing_flyer'] != "" || $propertyDetails['leasing_flyer'] != NULL) : ?>
                 <a href="<?=$propertyDetails['leasing_flyer'];?>" target="_blank" class="offer-btn desktop">
                     <p>Leasing Flyer</p>
                     <img src="images/colored-btn.png">
                 </a>
+                <?php endif; ?>
                 <?php endif; ?>
                 <div class="list-agent-info">
                     <h5>LEAD LEASING AGENT</h5>
@@ -289,6 +301,7 @@
                         </li>
                     </ul>
                 </div>
+                <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <div class="agent-list">
                     <h5>ADDITIONAL LEASING AGENT</h5>
                     <ul>
@@ -307,8 +320,9 @@
                     <?php endif; ?>
                     </ul>
                 </div>
+                <?php endif; ?>
                 <form class="prop-form desktop" id="sendMessage">
-                    <h5>Interested in this property?</h5>
+                    <h5>Interested in selling a property?</h5>
                     <div class="input-form">
                         <input type="hidden" name="link" id="link" value="<?=base_url().'/'.$propertyDetails['slug'];?>">
                         <input type="hidden" name="property" id="property" value="<?=$propertyDetails['property_name'];?>">

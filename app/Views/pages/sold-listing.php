@@ -108,21 +108,26 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=General+Sans:wght@600&display=swap');
 
+.image-container {
+    position: relative; /* Position relative to center the SOLD label on the image */
+}
+
 .sold-watermark {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); /* Centers the text */
     color: rgba(255, 255, 255, 0.7); /* Semi-transparent white text */
     font-family: 'General Sans', sans-serif; /* Apply General Sans font */
     font-weight: 600; /* Semi-bold */
-    font-size: 74px;
+    font-size: 74px; /* Adjust the font size as needed */
     text-transform: uppercase; /* Uppercase text */
-    z-index: 10;
+    z-index: 10; /* Ensure it appears above other elements */
     pointer-events: none; /* Ensure watermark doesn't block interactions */
     text-align: center;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Black shadow behind text */
 }
+
 .prop-orderBy {
     width: 100%; /* Ensure container takes up full width */
     position: relative;
@@ -167,7 +172,7 @@
 </style>
 <section class="main-section banner" style="background-image: url('images/Floridanight.png');">
     <div class="main-inner-sec inner-banner-sec leasingbannerSec">
-        <h2 class="banner-title">Recently Sold</h2>
+        <h2 class="banner-title">Recent Transactions</h2>
         <div class="search-section leasingSearchBanner">
             <button class="banner-search activeBtn" id="forsalebtn">
                 Sold Units
@@ -196,6 +201,11 @@
                                 <option value="Cap_Asc">Cap Rate : Low to High</option>
                                 <option value="Cap_Desc">Cap Rate : High to Low</option>
                             </select>
+                        </div>
+                        <div class="prop-type" style="width: 40%; position: relative;">
+                            <div class="input-wrapper">
+                                <input type="date" class="transparent-input" name="solddate" id="solddate" placeholder="Select Date Sold">
+                            </div>
                         </div>
                         <div class="prop-type" style="width: 40%;">
                             <div class="prop-name">
@@ -231,6 +241,11 @@
                                 <option value="Rental_Asc">Rental Rate : Low to High</option>
                                 <option value="Rental_Desc">Rental Rate : High to Low</option>
                             </select>
+                        </div>
+                        <div class="prop-type" style="width: 40%; position: relative;">
+                            <div class="input-wrapper">
+                                <input type="date" class="transparent-input" name="leaseddate" id="leaseddate" placeholder="Select Date Sold">
+                            </div>
                         </div>
                         <div class="prop-type" style="width: 40%;">
                             <div class="prop-name">
@@ -506,6 +521,20 @@
             const formData = { orderBy: orderBy };
 
             // Load the properties based on the selected order
+            loadForLeasingProperties(formData);
+            loadForLeasingTabularProperties(formData);
+        });
+        $('#solddate').on('change', function() {
+            const soldDate = $(this).val();
+            const formData = { solddate: soldDate };
+            loadForSaleProperties(formData);
+            loadForSaleTabularProperties(formData);
+        });
+
+        // Load properties on date change for "For Lease"
+        $('#leaseddate').on('change', function() {
+            const leasedDate = $(this).val();
+            const formData = { leaseddate: leasedDate };
             loadForLeasingProperties(formData);
             loadForLeasingTabularProperties(formData);
         });
