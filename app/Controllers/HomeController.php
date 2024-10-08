@@ -291,57 +291,57 @@ class HomeController extends BaseController
     {
         if ($this->request->isAJAX()) {
             $filters = $this->request->getPost();
-
+    
             $propertiesModel = new PropertiesModel();
+            $propertyGalleryModel = new PropertyGalleriesModel();
             $builder = $propertiesModel
                 ->join('states', 'states.state_id = properties.state_id', 'left')
                 ->join('cities', 'cities.city_id = properties.city_id', 'left')
-                ->join('property_types', 'property_types.property_type_id = properties.property_type_id', 'left')
-                ->where('purpose', 'For Sale');
-
+                ->join('property_types', 'property_types.property_type_id = properties.property_type_id', 'left');
+    
             // Apply filters
             if (!empty($filters['property_type_id'])) {
                 $builder->whereIn('properties.property_type_id', $filters['property_type_id']);
             }
-
+    
             if (!empty($filters['state_id'])) {
                 $builder->where('properties.state_id', $filters['state_id']);
             }
-
+    
             if (!empty($filters['location'])) {
                 $builder->like('properties.location', $filters['location'], 'both');
             }
-
+    
             if (!empty($filters['city_id'])) {
                 $builder->where('properties.city_id', $filters['city_id']);
             }
-
+    
             if (!empty($filters['zip_code'])) {
                 $builder->where('properties.zipcode', $filters['zip_code']);
             }
-
+    
             if (!empty($filters['min_price'])) {
                 $builder->where('properties.price >=', $filters['min_price']);
             }
-
+    
             if (!empty($filters['max_price'])) {
                 $builder->where('properties.price <=', $filters['max_price']);
             }
-
+    
             if (!empty($filters['min_cr'])) {
                 $builder->where('properties.caprate >=', $filters['min_cr']);
             }
-
+    
             if (!empty($filters['max_cr'])) {
                 $builder->where('properties.caprate <=', $filters['max_cr']);
             }
-
+    
             if (!empty($filters['tenancy'])) {
                 $builder->whereIn('properties.tenancy', $filters['tenancy']);
             }
-    
+            
             $builder->where('properties.publishstatus', 'Published');
-            $builder->where('properties.purpose', 'For Leasing');
+            $builder->where('properties.purpose', 'For Sale');
             $builder->where('properties.soldstatus !=', 'sold');
             $properties = $builder->findAll();
             

@@ -130,6 +130,12 @@ class SoldListingsController extends BaseController
                     case 'Cap_Desc':
                         $builder->orderBy('properties.caprate', 'DESC');
                         break;
+                    case 'Date_Asc':
+                        $builder->orderBy('properties.datesold', 'ASC');
+                        break;
+                    case 'Date_Desc':
+                        $builder->orderBy('properties.datesold', 'DESC');
+                        break;
                     default:
                         $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
                         break;
@@ -228,6 +234,12 @@ class SoldListingsController extends BaseController
                     case 'Rental_Desc':
                         $builder->orderBy('properties.rental_rate', 'DESC');
                         break;
+                    case 'Date_Asc':
+                        $builder->orderBy('properties.datesold', 'ASC');
+                        break;
+                    case 'Date_Desc':
+                        $builder->orderBy('properties.datesold', 'DESC');
+                        break;
                     default:
                         $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
                         break;
@@ -324,6 +336,12 @@ class SoldListingsController extends BaseController
                     case 'Cap_Desc':
                         $builder->orderBy('properties.caprate', 'DESC');
                         break;
+                    case 'Date_Asc':
+                        $builder->orderBy('properties.datesold', 'ASC');
+                        break;
+                    case 'Date_Desc':
+                        $builder->orderBy('properties.datesold', 'DESC');
+                        break;
                     default:
                         $builder->orderBy('properties.property_id', 'ASC'); // Default ordering
                         break;
@@ -389,6 +407,12 @@ class SoldListingsController extends BaseController
                         break;
                     case 'Rental_Desc':
                         $builder->orderBy('properties.rental_rate', 'DESC');
+                        break;
+                    case 'Date_Asc':
+                        $builder->orderBy('properties.datesold', 'ASC');
+                        break;
+                    case 'Date_Desc':
+                        $builder->orderBy('properties.datesold', 'DESC');
                         break;
                     default:
                         $builder->orderBy('properties.property_id', 'ASC'); // Default ordering

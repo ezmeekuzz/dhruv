@@ -30,12 +30,13 @@
             }).format(locations.price);
 
             // Set the purposeUnit conditionally based on purpose and sold status
-            if (locations.purpose === 'For Leasing' && locations.soldstatus === 'sold') {
-                purposeUnit = 'Leased Unit';
+            if (locations.purpose === 'For Sale' && locations.soldstatus === 'sold') {
+                purposeUnit = 'Sold Unit';
             }
 
             const contentString = `
                 <div style="text-align: center; width: 200px;">
+                    <div style="padding: 12px;"><center><h3>${purposeUnit}</h3></center></div>
                     <img src="${locations.image_url}" alt="State Image" style="width: 100%; height: auto;" />
                     <div class="info-window-content">
                         <label class="label-info">${formattedPrice}</label>
@@ -100,7 +101,11 @@
                     <thead>
                         <tr>
                             <th>Asking Cap Rate</th>
+                            <?php if($propertyDetails['soldstatus'] == 'sold') : ?>
+                            <th>Recorded Date</th>
+                            <?php else : ?>
                             <th>NOI</th>
+                            <?php endif; ?>
                             <th>Lease structure</th>
                             <th>Occupancy</th>
                         </tr>
@@ -108,7 +113,11 @@
                     <tbody>
                         <tr>
                             <td data-label="Asking Cap Rate"><?=$propertyDetails['askingcaprate'];?>%</td>
+                            <?php if($propertyDetails['soldstatus'] == 'sold') : ?>
+                            <td data-label="Recorded Date"><?=date('F d, Y', strtotime($propertyDetails['solddate']));?></td>
+                            <?php else : ?>
                             <td data-label="NOI">$<?=number_format($propertyDetails['noi'], 0);?></td>
+                            <?php endif; ?>
                             <td data-label="Lease structure"><?=$propertyDetails['leasestructure'];?></td>
                             <td data-label="Occupancy"><?=$propertyDetails['occupancy'];?>%</td>
                         </tr>
@@ -192,11 +201,6 @@
                             <img src="images/colored-btn.png">
                         </div>
                     </div>
-                    <?php if($propertyDetails['soldstatus'] == 'sold') : ?>
-                    <div class="prop-listing-map desktop">
-                        <div class="map"></div>
-                    </div>
-                    <?php endif; ?>
                 </form>
                 <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <div class="prop-listing-map desktop">
@@ -326,6 +330,11 @@
                         </div>
                     </div>
                 </form>
+                    <?php if($propertyDetails['soldstatus'] == 'sold') : ?>
+                    <div class="prop-listing-map desktop">
+                        <div class="map"></div>
+                    </div>
+                    <?php endif; ?>
                 <div class="list-record mobile">
                     <h4>Broker Of Record</h4>
                     <div class="record-items">

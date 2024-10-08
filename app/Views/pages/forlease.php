@@ -378,6 +378,7 @@
         </div>
     </div>
 </section>
+<?php if($propertyDetails['soldstatus'] != 'sold') : ?>
 <section class="main-section subs-section" >
     <div class="main-inner-sec subs-inner-sec" style="background-image: url(images/subs-img-bg.webp);">
         <div class="subs-sec-content">
@@ -392,6 +393,7 @@
         </div>
     </div>
 </section>
+<?php endif; ?>
 <?=$this->include('templates/footer');?>
 <script>
     $('#sendMessage').on('submit', function(event) {

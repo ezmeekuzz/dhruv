@@ -52,6 +52,7 @@ class PropertyDetailsController extends BaseController
         $leasingUnitsList = $leasingUnitsModel
         ->join('leasing_galleries', 'leasing_galleries.leasing_unit_id = leasing_units.leasing_unit_id AND leasing_galleries.order_arrangement = 1', 'left')
         ->where('property_id', $id)
+        ->orderBy('arrange_order', 'asc')
         ->findAll();
         
         $propertyGallery = $propertyGalleryModel
@@ -198,7 +199,7 @@ class PropertyDetailsController extends BaseController
             // Fetch gallery images for the given leasing_unit_id
             $galleryImages = $leasingGalleriesModel
                 ->where('leasing_unit_id', $leasingUnitId)
-                ->orderBy('order_arrangement')
+                ->orderBy('order_arrangement','ASC')
                 ->findAll();
 
             if (!empty($galleryImages)) {

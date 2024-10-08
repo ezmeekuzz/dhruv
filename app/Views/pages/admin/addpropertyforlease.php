@@ -52,11 +52,34 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="anchor_tenant">Anchor Tenant</label>
-                                    <select class="form-control chosen-select" name="anchor_tenant" id="anchor_tenant" data-placeholder="Choose a anchor tenant...">
+                                    <select class="form-control chosen-select" name="anchor_tenant" id="anchor_tenant" data-placeholder="Choose an anchor tenant...">
                                         <option hidden></option>
                                         <option disabled></option>
                                         <option value="Public">Public</option>
-                                        <option value="Private">Private</option>
+                                        <option value="Walmart">Walmart</option>
+                                        <option value="Target">Target</option>
+                                        <option value="Aldi">Aldi</option>
+                                        <option value="Winn-Dixie">Winn-Dixie</option>
+                                        <option value="Kohl’s">Kohl’s</option>
+                                        <option value="Harbor Freight">Harbor Freight</option>
+                                        <option value="Ross">Ross</option>
+                                        <option value="Best Buy">Best Buy</option>
+                                        <option value="Planet Fitness">Planet Fitness</option>
+                                        <option value="AMC">AMC</option>
+                                        <option value="Trader Joe’s">Trader Joe’s</option>
+                                        <option value="Sprouts Farmers Market">Sprouts Farmers Market</option>
+                                        <option value="Whole Foods Market">Whole Foods Market</option>
+                                        <option value="Petco">Petco</option>
+                                        <option value="Petsmart">Petsmart</option>
+                                        <option value="BJS">BJS</option>
+                                        <option value="Sam’s Club">Sam’s Club</option>
+                                        <option value="Bass Pro Shops">Bass Pro Shops</option>
+                                        <option value="Office Depot">Office Depot</option>
+                                        <option value="Hobby Lobby">Hobby Lobby</option>
+                                        <option value="Michaels">Michaels</option>
+                                        <option value="Five Below">Five Below</option>
+                                        <option value="N/A">N/A</option>
+                                        <option value="Major Tenant">Major Tenant</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

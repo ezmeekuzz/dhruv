@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <?php if($property['solddate'] == 'sold') : ?>
+                                <?php if($property['soldstatus'] == 'sold') : ?>
                                 <div class="form-group">
                                     <label for="inputDate">Sold Date</label>
                                     <input type="date" class="form-control" name="solddate" id="solddate" value="<?=$property['solddate'];?>">
@@ -59,12 +59,34 @@
                                     <input type="text" name="propertyname" id="propertyname" class="form-control" placeholder="Enter Property Name" value="<?=$property['property_name'];?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="anchor_tenant">Real Estate Type</label>
+                                    <label for="anchor_tenant">Anchor Tenant</label>
                                     <select class="form-control chosen-select" name="anchor_tenant" id="anchor_tenant" data-placeholder="Choose a Real Estate Type...">
                                         <option hidden></option>
-                                        <option disabled></option>
-                                        <option value="Public" <?php if ($property['anchor_tenant'] == 'Public') echo 'selected'; ?>>Public</option>
-                                        <option value="Private" <?php if ($property['anchor_tenant'] == 'Private') echo 'selected'; ?>>Private</option>
+                                        <option disabled></option><option value="Public" <?php if ($property['anchor_tenant'] == 'Public') echo 'selected'; ?>>Public</option>
+                                        <option value="Walmart" <?php if ($property['anchor_tenant'] == 'Walmart') echo 'selected'; ?>>Walmart</option>
+                                        <option value="Target" <?php if ($property['anchor_tenant'] == 'Target') echo 'selected'; ?>>Target</option>
+                                        <option value="Aldi" <?php if ($property['anchor_tenant'] == 'Aldi') echo 'selected'; ?>>Aldi</option>
+                                        <option value="Winn-Dixie" <?php if ($property['anchor_tenant'] == 'Winn-Dixie') echo 'selected'; ?>>Winn-Dixie</option>
+                                        <option value="Kohl’s" <?php if ($property['anchor_tenant'] == 'Kohl’s') echo 'selected'; ?>>Kohl’s</option>
+                                        <option value="Harbor Freight" <?php if ($property['anchor_tenant'] == 'Harbor Freight') echo 'selected'; ?>>Harbor Freight</option>
+                                        <option value="Ross" <?php if ($property['anchor_tenant'] == 'Ross') echo 'selected'; ?>>Ross</option>
+                                        <option value="Best Buy" <?php if ($property['anchor_tenant'] == 'Best Buy') echo 'selected'; ?>>Best Buy</option>
+                                        <option value="Planet Fitness" <?php if ($property['anchor_tenant'] == 'Planet Fitness') echo 'selected'; ?>>Planet Fitness</option>
+                                        <option value="AMC" <?php if ($property['anchor_tenant'] == 'AMC') echo 'selected'; ?>>AMC</option>
+                                        <option value="Trader Joe’s" <?php if ($property['anchor_tenant'] == 'Trader Joe’s') echo 'selected'; ?>>Trader Joe’s</option>
+                                        <option value="Sprouts Farmers Market" <?php if ($property['anchor_tenant'] == 'Sprouts Farmers Market') echo 'selected'; ?>>Sprouts Farmers Market</option>
+                                        <option value="Whole Foods Market" <?php if ($property['anchor_tenant'] == 'Whole Foods Market') echo 'selected'; ?>>Whole Foods Market</option>
+                                        <option value="Petco" <?php if ($property['anchor_tenant'] == 'Petco') echo 'selected'; ?>>Petco</option>
+                                        <option value="Petsmart" <?php if ($property['anchor_tenant'] == 'Petsmart') echo 'selected'; ?>>Petsmart</option>
+                                        <option value="BJS" <?php if ($property['anchor_tenant'] == 'BJS') echo 'selected'; ?>>BJS</option>
+                                        <option value="Sam’s Club" <?php if ($property['anchor_tenant'] == 'Sam’s Club') echo 'selected'; ?>>Sam’s Club</option>
+                                        <option value="Bass Pro Shops" <?php if ($property['anchor_tenant'] == 'Bass Pro Shops') echo 'selected'; ?>>Bass Pro Shops</option>
+                                        <option value="Office Depot" <?php if ($property['anchor_tenant'] == 'Office Depot') echo 'selected'; ?>>Office Depot</option>
+                                        <option value="Hobby Lobby" <?php if ($property['anchor_tenant'] == 'Hobby Lobby') echo 'selected'; ?>>Hobby Lobby</option>
+                                        <option value="Michaels" <?php if ($property['anchor_tenant'] == 'Michaels') echo 'selected'; ?>>Michaels</option>
+                                        <option value="Five Below" <?php if ($property['anchor_tenant'] == 'Five Below') echo 'selected'; ?>>Five Below</option>
+                                        <option value="N/A" <?php if ($property['anchor_tenant'] == 'N/A') echo 'selected'; ?>>N/A</option>
+                                        <option value="Major Tenant" <?php if ($property['anchor_tenant'] == 'Major Tenant') echo 'selected'; ?>>Major Tenant</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

@@ -348,13 +348,12 @@
                                 <h5>Space Use</h5>
                                 <img class="chevo" src="images/Polygon.png">
                             </div>
-                            <ul class="prop-list main-prop-list" style="width: 100% !important; padding: 20px; z-index: 99999;">
+                            <ul class="prop-list main-prop-list" style="width: 100%; padding: 20px; z-index: 99999;">
                                 <?php if($spaces) : ?>
                                     <?php foreach($spaces as $list) : ?>
                                         <li><label><input type="checkbox" value="<?=$list['space_id'];?>" name="property_type_id2[]"><?=$list['spacetype'];?></label></li>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
-                                <li><label><input type="checkbox" name="Other">Other</label></li>
                                 <input type="submit" class="apply" value="APPLY">
                             </ul>
                         </div>
