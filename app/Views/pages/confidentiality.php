@@ -212,7 +212,7 @@
                     <form class="footerForm" id="subscribe">
                         <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address">
                         <div class="result-btn">
-                            <input type="submit" value="Submit">
+                            <input type="submit" value="Subscribe">
                             <img src="images/colored-btn.png">
                         </div>
                     </form>

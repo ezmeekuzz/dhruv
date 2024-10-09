@@ -13,7 +13,7 @@
                     <form class="footerForm" id="subscribe">
                         <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address">
                         <div class="result-btn">
-                            <input type="submit" value="Submit">
+                            <input type="submit" value="Subscribe">
                             <img src="images/colored-btn.png">
                         </div>
                     </form>
@@ -27,9 +27,9 @@
                         <li>
                             <a class="menuList" >Properties <i class="fas fa-chevron-down"></i></a>
                             <ul class="menu-dropdown">
-                                <li><a href="/">Commercial Listings</a></li>
-                                <li><a href="/leasing">Leasing Listings</a></li>
-                                <li><a href="/sold-listings">Sold Listings</a></li>
+                                <li><a href="/">For Sale</a></li>
+                                <li><a href="/leasing">For Lease</a></li>
+                                <li><a href="/sold-listings">Recent Transactions</a></li>
                             </ul>
                         </li>
                         <li>
