@@ -52,7 +52,7 @@ class SoldListingsController extends BaseController
                     'location' => $state['location'],
                     'property_name' => $state['property_name'], 
                     'caprate' => $state['caprate'], 
-                    'rental_rate' => $state['rental_rate'], 
+                    'starting_sf_yr' => $state['starting_sf_yr'], 
                     'size_sf' => $state['size_sf'], 
                     'image_url' => $imageUrl,
                     'price' => $price,

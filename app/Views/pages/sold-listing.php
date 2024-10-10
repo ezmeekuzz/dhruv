@@ -43,7 +43,15 @@
                             <span>${location.caprate}%</span>
                         </div>`;
             } else if (location.purpose === 'For Leasing') {
-                moneyValue = formatCurrency(location.rental_rate) + ' PSF/Yr';
+
+                // Check if starting_sf_yr is a number
+                if (!isNaN(parseFloat(location.starting_sf_yr)) && isFinite(location.starting_sf_yr)) {
+                    // If it's a number, format it as currency
+                    moneyValue = formatCurrency(location.starting_sf_yr) + ' PSF/Yr';
+                } else {
+                    // If it's not a number, just append 'PSF/Yr'
+                    moneyValue = location.starting_sf_yr;
+                }
                 markerIcon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'; // Blue marker for leasing
                 purpose = 'Leased Unit';
                 dataPricing = `
@@ -251,7 +259,7 @@
         flex-direction: column;
         align-items: center;
         min-height: 600px !important;
-        padding: 20px !important;
+        padding: 5px !important;
     }
 
     .card {

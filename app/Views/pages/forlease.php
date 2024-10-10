@@ -27,14 +27,14 @@
                 currency: 'USD',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
-            }).format(locations.rental_rate);
+            }).format(locations.starting_sf_yr);
             let purposeUnit = locations.purpose;
             let leasedPricing = `<label class="label-info">${formattedPrice} PSF/Yr</label>`;
 
             // Set the purposeUnit conditionally based on purpose and sold status
             if (locations.purpose === 'For Leasing' && locations.soldstatus === 'sold') {
                 purposeUnit = 'Leased Unit';
-                leasedPricing = '';
+                leasedPricing = `${locations.starting_sf_yr}`;
             }
             
             const contentString = `
@@ -370,6 +370,9 @@
                             <li> FL 34653</li>
                         </ul>
                     </div>
+                </div>
+                <div class="prop-listing-map mobile">
+                    <div class="map"></div>
                 </div>
                 <form class="prop-form mobile" id="sendMessageMobile">
                     <h5>Interested in this property?</h5>

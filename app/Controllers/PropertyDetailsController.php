@@ -66,7 +66,7 @@ class PropertyDetailsController extends BaseController
             'location' => $propertyDetails['location'],
             'property_name' => $propertyDetails['property_name'], 
             'caprate' => $propertyDetails['caprate'], 
-            'rental_rate' => $propertyDetails['rental_rate'], 
+            'starting_sf_yr' => $propertyDetails['starting_sf_yr'], 
             'size_sf' => $propertyDetails['size_sf'], 
             'image_url' => $propertyDetails['backgroundimage'],
             'price' => $propertyDetails['price'],
