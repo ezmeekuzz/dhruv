@@ -29,10 +29,12 @@
                 maximumFractionDigits: 0
             }).format(locations.rental_rate);
             let purposeUnit = locations.purpose;
+            let leasedPricing = `<label class="label-info">${formattedPrice} PSF/Yr</label>`;
 
             // Set the purposeUnit conditionally based on purpose and sold status
             if (locations.purpose === 'For Leasing' && locations.soldstatus === 'sold') {
                 purposeUnit = 'Leased Unit';
+                leasedPricing = '';
             }
             
             const contentString = `
@@ -40,7 +42,7 @@
                     <div style="padding: 12px;"><center><h3>${purposeUnit}</h3></center></div>
                     <img src="${locations.image_url}" alt="State Image" style="width: 100%; height: auto;" />
                     <div class="info-window-content">
-                        <label class="label-info">${formattedPrice} PSF/Yr</label>
+                        ${leasedPricing}
                         <div class="location-name">${locations.location}</div>
                         <div class="property-name"><strong>${locations.property_name}</strong></div><br/>
                         <div class="cap-rate">
@@ -369,6 +371,31 @@
                         </ul>
                     </div>
                 </div>
+                <form class="prop-form mobile" id="sendMessageMobile">
+                    <h5>Interested in this property?</h5>
+                    <div class="input-form">
+                        <input type="hidden" name="link" id="linkMobile" value="<?=base_url().'/'.$propertyDetails['slug'];?>">
+                        <input type="hidden" name="property" id="propertyMobile" value="<?=$propertyDetails['property_name'];?>">
+                        <h6>First Name*</h6>
+                        <input type="text" name="fname" id="fnameMobile">
+                        <br>
+                        <h6>Last Name*</h6>
+                        <input type="text" name="lname" id="lnameMobile">
+                        <br>
+                        <h6>Email*</h6>
+                        <input type="email" name="email-prop" id="email-propMobile">
+                        <br>
+                        <h6>Phone Number*</h6>
+                        <input type="text" name="phonenumber" id="phonenumberMobile">
+                        <br>
+                        <h6>Note</h6>
+                        <textarea  rows="4" name="note" id="noteMobile"></textarea>
+                        <div class="prop-submit">
+                            <input type="submit" name="prop-submit" value="Send Message">
+                            <img src="images/colored-btn.png">
+                        </div>
+                    </div>
+                </form>
                 <?php if($propertyDetails['soldstatus'] != 'sold') : ?>
                 <div class="prop-listing-map desktop">
                     <div class="map"></div>

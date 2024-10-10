@@ -148,7 +148,7 @@ class SoldListingsController extends BaseController
             $properties = $builder->findAll();
     
             // Initialize HTML content
-            $htmlContent = '<div class="card-container">';
+            $htmlContent = '';
     
             foreach ($properties as $property) {
                 // Fetch property galleries
@@ -187,8 +187,6 @@ class SoldListingsController extends BaseController
     
                 $htmlContent .= '</div>'; // End card
             }
-    
-            $htmlContent .= '</div>'; // End card-container
     
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);
@@ -251,7 +249,7 @@ class SoldListingsController extends BaseController
             $properties = $builder->findAll();
     
             // Initialize HTML content
-            $htmlContent = '<div class="card-container">';
+            $htmlContent = '';
     
             foreach ($properties as $property) {
                 // Fetch property galleries
@@ -290,8 +288,6 @@ class SoldListingsController extends BaseController
     
                 $htmlContent .= '</div>'; // End card
             }
-    
-            $htmlContent .= '</div>'; // End card-container
     
             // Return the generated HTML content
             return $this->response->setBody($htmlContent);

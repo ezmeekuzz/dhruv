@@ -181,7 +181,7 @@
     height: 380px; /* Adjust the height as needed */
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .card-image {
@@ -255,6 +255,8 @@
     .card {
         width: 90vw; /* Make the card narrower on mobile */
         height: auto; /* Let the height be dynamic */
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), /* Outer shadow */
+        inset 0 4px 8px rgba(0, 0, 0, 0.3); /* Inner shadow */
     }
 
     .card-image {
@@ -304,6 +306,8 @@
                                 <option value="Price_Desc">Price : High to Low</option>
                                 <option value="Cap_Asc">Cap Rate : Low to High</option>
                                 <option value="Cap_Desc">Cap Rate : High to Low</option>
+                                <option value="Date_Asc">Date Ascending</option>
+                                <option value="Date_Desc">Date Descending</option>
                             </select>
                         </div>
                         <div class="prop-type" style="width: 40%;">
@@ -339,8 +343,8 @@
                                 <option value="PriceSF_Desc">Price Per SF : High to Low</option>
                                 <option value="Rental_Asc">Rental Rate : Low to High</option>
                                 <option value="Rental_Desc">Rental Rate : High to Low</option>
-                                <option value="Date_Asc">Date Ascending</option>
-                                <option value="Date_Desc">Date Descending</option>
+                                <!--<option value="Date_Asc">Date Ascending</option>
+                                <option value="Date_Desc">Date Descending</option>-->
                             </select>
                         </div>
                         <div class="prop-type" style="width: 40%;">
@@ -375,13 +379,13 @@
         </div>
         <div class="listing-result">
             <div class="list-items">
-                <div class="tblSale active">
+                <div class="tblSale card-container active">
                     <div class="card-items grid" id="forSaleGrid">
                             
                     </div>
                     <div class="pagination"></div>
                 </div>
-                <div class="tblLeas">
+                <div class="tblLeas card-container">
                     <div class="card-items grid" id="forLeasingGrid">
                         
                     </div>
