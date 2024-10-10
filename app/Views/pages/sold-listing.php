@@ -250,13 +250,14 @@
     .card-container {
         flex-direction: column;
         align-items: center;
+        min-height: 600px !important;
+        padding: 20px !important;
     }
 
     .card {
-        width: 90vw; /* Make the card narrower on mobile */
+        width: 100%; /* Make the card narrower on mobile */
         height: auto; /* Let the height be dynamic */
-        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), /* Outer shadow */
-        inset 0 4px 8px rgba(0, 0, 0, 0.3); /* Inner shadow */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
     }
 
     .card-image {
@@ -379,14 +380,14 @@
         </div>
         <div class="listing-result">
             <div class="list-items">
-                <div class="tblSale card-container active">
-                    <div class="card-items grid" id="forSaleGrid">
+                <div class="tblSale active">
+                    <div class="card-items grid card-container" id="forSaleGrid">
                             
                     </div>
                     <div class="pagination"></div>
                 </div>
-                <div class="tblLeas card-container">
-                    <div class="card-items grid" id="forLeasingGrid">
+                <div class="tblLeas">
+                    <div class="card-items grid card-container" id="forLeasingGrid">
                         
                     </div>
                     <div class="pagination"></div>
