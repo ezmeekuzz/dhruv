@@ -306,7 +306,7 @@
                     <li>
                         <a class="menuList" >Insights <i class="fas fa-chevron-down"></i></a>
                         <ul class="menu-dropdown">
-                            <li><a href="https://dhruv-realty.com/insigths/">Insights</a></li>
+                            <li><a href="https://dhruv-realty.com/insights/">Insights</a></li>
                         </ul>
                     </li>
                     <li>
