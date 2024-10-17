@@ -84,13 +84,14 @@ class EditPropertyController extends SessionController
         $files = $this->request->getFiles();
         // Handle form data
         $propertyName = $this->request->getPost('propertyname');
+        $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
         $propertyData = [
             'property_name' => $propertyName,
             'slug' => strtolower(str_replace(
                 [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"],
                 ["-", "and", "", "", "", "", "", "-", "", ""],
                 htmlentities($propertyName, ENT_QUOTES, 'UTF-8')
-            )),
+            )) . '-' . $randomString,
             'real_estate_type' => $this->request->getPost('real_estate_type'),
             'property_type_id' => $this->request->getPost('property_type_id'),
             'listing_agent_id' => $this->request->getPost('listing_agent_id'),

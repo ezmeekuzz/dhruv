@@ -51,6 +51,7 @@ class AddPropertyController extends SessionController
         $propertyGalleriesModel = new PropertyGalleriesModel();
         $files = $this->request->getFiles();
         $propertyName = $this->request->getPost('propertyname');
+        $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
         $propertyData = [
             'purpose' => 'For Sale',
             'property_name' => $propertyName,
@@ -58,7 +59,7 @@ class AddPropertyController extends SessionController
                 [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"], 
                 ["-", "and", "", "", "", "", "", "-", "", ""], 
                 htmlentities($propertyName, ENT_QUOTES, 'UTF-8')
-            )),
+            )) . '-' . $randomString,
             'real_estate_type' => $this->request->getPost('real_estate_type'),
             'property_type_id' => $this->request->getPost('property_type_id'),
             'listing_agent_id' => $this->request->getPost('listing_agent_id'),

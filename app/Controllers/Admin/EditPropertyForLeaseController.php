@@ -85,6 +85,7 @@ class EditPropertyForLeaseController extends SessionController
     
         // Handle form data
         $propertyName = $this->request->getPost('propertyname');
+        $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
         $propertyData = [
             'purpose' => 'For Leasing',
             'property_name' => $propertyName,
@@ -92,7 +93,7 @@ class EditPropertyForLeaseController extends SessionController
                 [" ", "&", "!", ",", "?", ":", ";", "/", "'", "(", ")"],
                 ["-", "and", "", "", "", "", "", "-", "", ""],
                 htmlentities($propertyName, ENT_QUOTES, 'UTF-8')
-            )),
+            )) . '-' . $randomString,
             'anchor_tenant' => $this->request->getPost('anchor_tenant'),
             'space_id' => $this->request->getPost('space_id'),
             'listing_agent_id' => $this->request->getPost('listing_agent_id'),

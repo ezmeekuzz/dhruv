@@ -1,7 +1,16 @@
 <?=$this->include('templates/header');?>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 <script type="text/javascript">
     const locations = <?php echo json_encode($locations); ?>;
     let currentInfoWindow = null; // Variable to track the currently open info window
+
+    // Function to apply a small random offset to avoid overlapping markers
+    function applyJitter(lat, lng) {
+        const jitterAmount = 0.0001; // Adjust the value as needed
+        const randomLat = lat + (Math.random() - 0.5) * jitterAmount;
+        const randomLng = lng + (Math.random() - 0.5) * jitterAmount;
+        return { lat: randomLat, lng: randomLng };
+    }
 
     function formatCurrency(amount) {
         return new Intl.NumberFormat('en-US', {
@@ -13,64 +22,57 @@
     }
 
     function initMap() {
-        // Create the map and set the initial zoom level
         const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 5,
         });
 
-        // Create a LatLngBounds object to store the bounds of all markers
         const bounds = new google.maps.LatLngBounds();
 
-        // Loop through the locations array and create markers
         locations.forEach(function(location) {
-            const markerPosition = { 
+            let markerPosition = { 
                 lat: parseFloat(location.latitude), 
                 lng: parseFloat(location.longitude) 
             };
-            
-            // Determine the marker color based on the purpose
+
+            // If there are multiple markers at the same location, jitter them slightly
+            if (locations.filter(l => l.latitude == location.latitude && l.longitude == location.longitude).length > 1) {
+                markerPosition = applyJitter(markerPosition.lat, markerPosition.lng);
+            }
+
             let markerIcon = '';
             let dataPricing = '';
             let moneyValue = '';
             let purpose = '';
+
             if (location.purpose === 'For Sale') {
                 moneyValue = formatCurrency(location.price);
-                markerIcon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'; // Red marker for sale
+                markerIcon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
                 purpose = 'Sold Unit';
-                dataPricing = `
-                        <div class="cap-rate">
-                            <label><strong>Cap Rate</strong></label><br/>
-                            <span>${location.caprate}%</span>
-                        </div>`;
+                dataPricing = `<div class="cap-rate">
+                                <label><strong>Cap Rate</strong></label><br/>
+                                <span>${location.caprate}%</span>
+                              </div>`;
             } else if (location.purpose === 'For Leasing') {
-
-                // Check if starting_sf_yr is a number
                 if (!isNaN(parseFloat(location.starting_sf_yr)) && isFinite(location.starting_sf_yr)) {
-                    // If it's a number, format it as currency
                     moneyValue = formatCurrency(location.starting_sf_yr) + ' PSF/Yr';
                 } else {
-                    // If it's not a number, just append 'PSF/Yr'
                     moneyValue = location.starting_sf_yr;
                 }
-                markerIcon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'; // Blue marker for leasing
+                markerIcon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
                 purpose = 'Leased Unit';
-                dataPricing = `
-                        <div class="cap-rate">
-                            <label><strong>Size SF</strong></label><br/>
-                            <span>${location.size_sf}</span>
-                        </div>`;
+                dataPricing = `<div class="cap-rate">
+                                <label><strong>Size SF</strong></label><br/>
+                                <span>${location.size_sf}</span>
+                              </div>`;
             }
 
-            // Add a marker for each location with a custom color based on purpose
             const marker = new google.maps.Marker({
                 position: markerPosition,
                 map: map,
                 icon: markerIcon
             });
 
-            // Create the content for the info window
-            const contentString = `
-                <div style="text-align: center; width: 200px;">
+            const contentString = `<div style="text-align: center; width: 200px;">
                     <div style="padding: 12px;"><center><h3>${purpose}</h3></center></div>
                     <img src="${location.image_url}" alt="State Image" style="width: 100%; height: auto;" />
                     <div class="info-window-content">
@@ -81,36 +83,24 @@
                     </div>
                 </div>`;
 
-            // Create an info window with the structured content
             const infowindow = new google.maps.InfoWindow({
                 content: contentString
             });
 
-            // Display the info window when the marker is clicked
             marker.addListener('click', function() {
-                // Close the previous info window if it's open
                 if (currentInfoWindow) {
                     currentInfoWindow.close();
                 }
-
-                // Open the new info window and set the map's center to the marker's position
                 infowindow.open(map, marker);
-                //map.panTo(markerPosition);
-                //map.setZoom(8); // Optional: Zoom in on the marker for a more focused view
-
-                // Set the current info window to the new one
                 currentInfoWindow = infowindow;
             });
 
-            // Extend the bounds to include each marker's position
             bounds.extend(markerPosition);
         });
 
-        // Adjust the map to fit all markers within view
         map.fitBounds(bounds);
     }
 
-    // Initialize the map when the page loads
     window.initMap = initMap;
 </script>
 <style>
@@ -389,7 +379,7 @@
         <div class="listing-result">
             <div class="list-items">
                 <div class="tblSale active">
-                    <div class="card-items grid card-container" id="forSaleGrid">
+                    <div class="card-items grid" id="forSaleGrid">
                             
                     </div>
                     <div class="pagination"></div>

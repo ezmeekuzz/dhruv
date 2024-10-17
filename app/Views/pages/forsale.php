@@ -28,7 +28,7 @@
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(locations.price);
-
+            let purposeUnit = locations.purpose;
             // Set the purposeUnit conditionally based on purpose and sold status
             if (locations.purpose === 'For Sale' && locations.soldstatus === 'sold') {
                 purposeUnit = 'Sold Unit';
