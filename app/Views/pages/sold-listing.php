@@ -171,6 +171,7 @@
     display: flex;
     flex-wrap: wrap; /* Allows wrapping on smaller screens */
     gap: 20px; /* Space between cards */
+    margin-bottom: 18px;
 }
 
 .card {

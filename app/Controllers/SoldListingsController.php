@@ -284,7 +284,7 @@ class SoldListingsController extends BaseController
                 // Card details
                 $htmlContent .= '<div class="card-details">';
                 $htmlContent .= '<h2><a href="' . base_url('/' . $property['slug']) . '">' . $property['property_name'] . '</a></h2>';
-                $htmlContent .= '<h3>Leased Price: $' . number_format($property['size_sf']) . '</h3>';
+                $htmlContent .= '<h3>Leased Price: ' . (is_numeric($property['size_sf']) ? '$' . number_format($property['size_sf']) : $property['size_sf']) . '</h3>';
                 $htmlContent .= '<h3>Location: ' . $property['location'] . '</h3>';
                 $htmlContent .= '</div>'; // End card-details
     
